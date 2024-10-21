@@ -1,0 +1,75 @@
+.root {
+    -fx-font-family: 'Arial';
+}
+
+#loginbutton {
+    -fx-background-color: purple;
+    -fx-text-fill: white;
+    -fx-font-size: 15px;
+    -fx-cursor: hand;
+}
+
+#loginbutton:hover {
+    -fx-background-color: rgb(51, 30, 51);
+}
+
+#registerbutton {
+    -fx-background-color: transparent;
+    -fx-text-fill: purple;
+    -fx-cursor: hand;
+}
+
+#registerbutton:hover {
+    -fx-background-color: lightgray;
+}
+
+#forget {
+    -fx-background-color: transparent;
+    -fx-text-fill: red;
+    -fx-cursor: hand;
+}
+
+#forget:hover {
+    -fx-text-fill: darkred;
+}
+
+#bemvindo {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+}
+
+#usuario, #senha {
+    -fx-font-size: 15px;
+}
+
+#usuario, #senha, #loginbutton, #registerbutton, #forget {
+    -fx-padding: 5px;
+}
+
+#usernameField, #passwordField {
+    -fx-font-size: 15px;
+    -fx-padding: 5px;
+    -fx-alignment: center-left;
+}
+
+#verBotao, #criarBotao {
+    -fx-background-color: transparent;
+    -fx-text-fill: purple;
+    -fx-cursor: hand;
+}
+
+#verBotao:hover, #criarBotao:hover {
+    -fx-background-color: lightgray;
+}
+
+#barraUp {
+    -fx-padding: 10px;
+
+}
+
+#Deslogar{
+    -fx-background-color: transparent;
+    -fx-text-fill: red;
+    -fx-cursor: hand;
+}
+
