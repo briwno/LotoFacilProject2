@@ -103,6 +103,42 @@
                </font>
             </Label>
             <Button layoutX="254.0" layoutY="559.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="92.0" text="Registrar" />
+            <Label layoutX="211.0" layoutY="464.0" prefHeight="33.0" prefWidth="41.0" text="CEP:">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <TextField layoutX="93.0" layoutY="374.0" prefHeight="27.0" prefWidth="249.0" />
+            <Label layoutX="49.0" layoutY="371.0" prefHeight="33.0" prefWidth="57.0" text="Rua:">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <TextField layoutX="193.0" layoutY="407.0" prefHeight="27.0" prefWidth="168.0" />
+            <Label layoutX="346.0" layoutY="371.0" prefHeight="33.0" prefWidth="79.0" text="Número:">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <TextField layoutX="429.0" layoutY="374.0" prefHeight="27.0" prefWidth="57.0" />
+            <Label layoutX="49.0" layoutY="404.0" prefHeight="33.0" prefWidth="57.0" text="UF:">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <TextField layoutX="82.0" layoutY="407.0" prefHeight="27.0" prefWidth="31.0" />
+            <Label layoutX="126.0" layoutY="404.0" prefHeight="33.0" prefWidth="67.0" text="Cidade:">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <TextField layoutX="256.0" layoutY="467.0" prefHeight="27.0" prefWidth="132.0" />
+            <Label layoutX="369.0" layoutY="404.0" prefHeight="33.0" prefWidth="67.0" text="Bairro:">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <TextField layoutX="429.0" layoutY="407.0" prefHeight="27.0" prefWidth="132.0" />
          </children>
     </AnchorPane>
   </children>
