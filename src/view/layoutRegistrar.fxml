@@ -1,144 +1,163 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!--
-  Copyright (c) 2015, 2019, Gluon and/or its affiliates.
-  All rights reserved. Use is subject to license terms.
-
-  This file is available and licensed under the following license:
-
-  Redistribution and use in source and binary forms, with or without
-  modification, are permitted provided that the following conditions
-  are met:
-
-  - Redistributions of source code must retain the above copyright
-    notice, this list of conditions and the following disclaimer.
-  - Redistributions in binary form must reproduce the above copyright
-    notice, this list of conditions and the following disclaimer in
-    the documentation and/or other materials provided with the distribution.
-  - Neither the name of Oracle Corporation nor the names of its
-    contributors may be used to endorse or promote products derived
-    from this software without specific prior written permission.
-
-  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-  "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-  A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
-  OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-  SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-  DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-  THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
--->
-
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.effect.ColorAdjust?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="641.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1">
+<VBox prefHeight="816.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1">
   <children>
-    <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
+    <AnchorPane layoutY="1.0" maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
          <children>
-            <Label alignment="CENTER" contentDisplay="CENTER" layoutX="140.0" layoutY="36.0" prefHeight="54.0" prefWidth="343.0" text="Registro de Usuário ">
+            <Label alignment="CENTER" contentDisplay="CENTER" layoutX="140.0" layoutY="26.0" prefHeight="54.0" prefWidth="343.0" text="Registro de Usuário ">
                <font>
-                  <Font size="24.0" />
+                  <Font size="30.0" />
                </font>
             </Label>
-            <Label layoutX="36.0" layoutY="126.0" text="Informações Pessoais">
+            <Label layoutX="40.0" layoutY="90.0" text="Informações Pessoais">
                <font>
-                  <Font size="14.0" />
+                  <Font size="16.0" />
                </font>
             </Label>
-            <Separator layoutX="33.0" layoutY="142.0" prefHeight="14.0" prefWidth="567.0">
+            <Separator layoutX="37.0" layoutY="110.0" prefHeight="14.0" prefWidth="567.0">
                <effect>
                   <ColorAdjust brightness="0.12" contrast="-1.0" saturation="-0.02" />
                </effect>
             </Separator>
-            <Label layoutX="49.0" layoutY="156.0" prefHeight="33.0" prefWidth="57.0" text="Nome:">
-               <font>
-                  <Font size="18.0" />
-               </font>
-            </Label>
-            <TextField layoutX="114.0" layoutY="160.0" prefHeight="27.0" prefWidth="343.0" />
-            <Label layoutX="49.0" layoutY="189.0" prefHeight="33.0" prefWidth="57.0" text="E-mail:">
-               <font>
-                  <Font size="18.0" />
-               </font>
-            </Label>
-            <Label layoutX="49.0" layoutY="222.0" prefHeight="33.0" prefWidth="57.0" text="CPF:">
-               <font>
-                  <Font size="18.0" />
-               </font>
-            </Label>
-            <Label layoutX="49.0" layoutY="255.0" prefHeight="33.0" prefWidth="79.0" text="Telefone:">
-               <font>
-                  <Font size="18.0" />
-               </font>
-            </Label>
-            <Label layoutX="49.0" layoutY="288.0" prefHeight="33.0" prefWidth="168.0" text="Data de Nascimento:">
-               <font>
-                  <Font size="18.0" />
-               </font>
-            </Label>
-            <TextField layoutX="114.0" layoutY="192.0" prefHeight="27.0" prefWidth="343.0" />
-            <TextField layoutX="114.0" layoutY="225.0" prefHeight="27.0" prefWidth="343.0" />
-            <TextField layoutX="128.0" layoutY="258.0" prefHeight="27.0" prefWidth="31.0" />
-            <DatePicker layoutX="221.0" layoutY="292.0" prefHeight="27.0" prefWidth="181.0" />
-            <TextField layoutX="168.0" layoutY="258.0" prefHeight="27.0" prefWidth="132.0" />
-            <Separator layoutX="37.0" layoutY="357.0" prefHeight="14.0" prefWidth="567.0">
-               <effect>
-                  <ColorAdjust brightness="0.12" contrast="-1.0" saturation="-0.02" />
-               </effect>
-            </Separator>
-            <Label layoutX="36.0" layoutY="342.0" text="Endereço:">
+            <Label id="nomeLabel" layoutX="219.0" layoutY="129.0" prefHeight="27.0" prefWidth="57.0" text="Nome">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <Button layoutX="254.0" layoutY="559.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="92.0" text="Registrar" />
-            <Label layoutX="211.0" layoutY="464.0" prefHeight="33.0" prefWidth="41.0" text="CEP:">
+            <TextField id="nomeField" layoutX="217.0" layoutY="155.0" prefHeight="27.0" prefWidth="181.0" />
+            <Separator layoutX="38.0" layoutY="334.0" prefHeight="14.0" prefWidth="567.0">
+               <effect>
+                  <ColorAdjust brightness="0.12" contrast="-1.0" saturation="-0.02" />
+               </effect>
+            </Separator>
+            <ComboBox id="generoField" layoutX="414.0" layoutY="155.0" prefWidth="150.0" />
+            <ImageView fitHeight="172.0" fitWidth="169.0" layoutX="41.0" layoutY="126.0">
+               <image>
+                  <Image url="@../../../../../Downloads/Screenshot_11.png" />
+               </image>
+            </ImageView>
+            <TextField id="emailField" layoutX="217.0" layoutY="207.0" prefHeight="27.0" prefWidth="181.0" />
+            <Label id="generoLabel" layoutX="415.0" layoutY="129.0" prefHeight="27.0" prefWidth="57.0" text="Gênero">
                <font>
-                  <Font size="18.0" />
+                  <Font size="14.0" />
                </font>
             </Label>
-            <TextField layoutX="93.0" layoutY="374.0" prefHeight="27.0" prefWidth="249.0" />
-            <Label layoutX="49.0" layoutY="371.0" prefHeight="33.0" prefWidth="57.0" text="Rua:">
+            <Label id="emailLabel" layoutX="219.0" layoutY="180.0" prefHeight="27.0" prefWidth="57.0" text="E-mail">
                <font>
-                  <Font size="18.0" />
+                  <Font size="14.0" />
                </font>
             </Label>
-            <TextField layoutX="193.0" layoutY="407.0" prefHeight="27.0" prefWidth="168.0" />
-            <Label layoutX="346.0" layoutY="371.0" prefHeight="33.0" prefWidth="79.0" text="Número:">
+            <Label id="cpfLabel" layoutX="415.0" layoutY="180.0" prefHeight="27.0" prefWidth="57.0" text="CPF">
                <font>
-                  <Font size="18.0" />
+                  <Font size="14.0" />
                </font>
             </Label>
-            <TextField layoutX="429.0" layoutY="374.0" prefHeight="27.0" prefWidth="57.0" />
-            <Label layoutX="49.0" layoutY="404.0" prefHeight="33.0" prefWidth="57.0" text="UF:">
+            <TextField id="cpfField" layoutX="414.0" layoutY="207.0" prefHeight="27.0" prefWidth="181.0" />
+            <Label id="telefoneLabel" layoutX="219.0" layoutY="234.0" prefHeight="27.0" prefWidth="57.0" text="Telefone">
                <font>
-                  <Font size="18.0" />
+                  <Font size="14.0" />
                </font>
             </Label>
-            <TextField layoutX="82.0" layoutY="407.0" prefHeight="27.0" prefWidth="31.0" />
-            <Label layoutX="126.0" layoutY="404.0" prefHeight="33.0" prefWidth="67.0" text="Cidade:">
+            <Label id="dataLabel" layoutX="415.0" layoutY="234.0" prefHeight="27.0" prefWidth="131.0" text="Data de Nascimento">
                <font>
-                  <Font size="18.0" />
+                  <Font size="14.0" />
                </font>
             </Label>
-            <TextField layoutX="256.0" layoutY="467.0" prefHeight="27.0" prefWidth="132.0" />
-            <Label layoutX="369.0" layoutY="404.0" prefHeight="33.0" prefWidth="67.0" text="Bairro:">
+            <TextField id="telefoneField" layoutX="217.0" layoutY="260.0" prefHeight="27.0" prefWidth="181.0" />
+            <ImageView fitHeight="172.0" fitWidth="169.0" layoutX="40.0" layoutY="351.0">
+               <image>
+                  <Image url="@../../../../../Downloads/Screenshot_12.png" />
+               </image>
+            </ImageView>
+            <Label layoutX="40.0" layoutY="316.0" text="Endereço">
                <font>
-                  <Font size="18.0" />
+                  <Font size="16.0" />
                </font>
             </Label>
-            <TextField layoutX="429.0" layoutY="407.0" prefHeight="27.0" prefWidth="132.0" />
+            <Label id="ufLabel" layoutX="221.0" layoutY="351.0" prefHeight="27.0" prefWidth="57.0" text="UF">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <TextField id="ufField" layoutX="221.0" layoutY="378.0" prefHeight="27.0" prefWidth="40.0" />
+            <Label id="cidadeLabel" layoutX="273.0" layoutY="351.0" prefHeight="27.0" prefWidth="57.0" text="Cidade">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <TextField id="cidadeFiel" layoutX="273.0" layoutY="378.0" prefHeight="27.0" prefWidth="181.0" />
+            <Label id="cepLabel" layoutX="471.0" layoutY="351.0" prefHeight="27.0" prefWidth="57.0" text="CEP">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <TextField id="cepField" layoutX="471.0" layoutY="378.0" prefHeight="27.0" prefWidth="122.0" />
+            <DatePicker id="dataField" layoutX="413.0" layoutY="261.0" prefHeight="25.0" prefWidth="181.0" />
+            <Label id="ruaLabel" layoutX="221.0" layoutY="405.0" prefHeight="27.0" prefWidth="57.0" text="Rua">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <TextField id="ruaField" layoutX="221.0" layoutY="432.0" prefHeight="27.0" prefWidth="232.0" />
+            <Label id="numeroLabel" layoutX="471.0" layoutY="405.0" prefHeight="27.0" prefWidth="57.0" text="Número">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <TextField id="numeroField" layoutX="473.0" layoutY="432.0" prefHeight="27.0" prefWidth="57.0" />
+            <Separator layoutX="39.0" layoutY="556.0" prefHeight="14.0" prefWidth="567.0">
+               <effect>
+                  <ColorAdjust brightness="0.12" contrast="-1.0" saturation="-0.02" />
+               </effect>
+            </Separator>
+            <Label layoutX="40.0" layoutY="538.0" text="Dados de Login">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Label>
+            <ImageView fitHeight="172.0" fitWidth="169.0" layoutX="40.0" layoutY="570.0">
+               <image>
+                  <Image url="@../../../../../Downloads/pngtree-lock-vector-icon-png-image_963331.jpg" />
+               </image>
+            </ImageView>
+            <Label id="userLabel" layoutX="221.0" layoutY="595.0" prefHeight="27.0" prefWidth="111.0" text="Nome de usuário">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <TextField id="userField" layoutX="221.0" layoutY="622.0" prefHeight="27.0" prefWidth="181.0" />
+            <Label id="senhaLabel" layoutX="425.0" layoutY="595.0" prefHeight="27.0" prefWidth="111.0" text="Senha">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <TextField id="senhaField" layoutX="425.0" layoutY="622.0" prefHeight="27.0" prefWidth="181.0" />
+            <CheckBox id="termosCheck" layoutX="282.0" layoutY="692.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="241.0" text="Li e Aceito os Termos e Condições">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </CheckBox>
+            <Button id="registrarButton" layoutX="247.0" layoutY="754.0" mnemonicParsing="false" prefHeight="54.0" prefWidth="150.0" text="Registrar-se" />
+            <Hyperlink layoutX="388.0" layoutY="693.0" text="Termos e Condições">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Hyperlink>
          </children>
     </AnchorPane>
   </children>
