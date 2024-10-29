@@ -5,17 +5,21 @@ public class Apostador {
     private String nome;
     private String email;
     private String cpf;
-    private int telefone;
+    private String telefone;
     private Endereco endereco;
     private String dataNascimento;
+    private String genero;
+    private String user;
+    private String senha;
 
     // Getters and Setters
-    public int getId() {
-        return id;
-    }
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public String getNome() {
@@ -42,11 +46,11 @@ public class Apostador {
         this.cpf = cpf;
     }
 
-    public int getTelefone() {
+    public String getTelefone() {
         return telefone;
     }
 
-    public void setTelefone(int telefone) {
+    public void setTelefone(String telefone) {
         this.telefone = telefone;
     }
 
@@ -65,62 +69,79 @@ public class Apostador {
     public void setDataNascimento(String dataNascimento) {
         this.dataNascimento = dataNascimento;
     }
-}
 
-class Endereco {
-    private String rua;
-    private int numero;
-    private String bairro;
-    private String cidade;
-    private String estado;
-    private int cep;
-
-    // Getters and Setters
-    public String getRua() {
-        return rua;
+    public String getGenero() {
+        return genero;
     }
 
-    public void setRua(String rua) {
-        this.rua = rua;
+    public void setGenero(String genero) {
+        this.genero = genero;
     }
 
-    public int getNumero() {
-        return numero;
+    public String getUser() {
+        return user;
     }
 
-    public void setNumero(int numero) {
-        this.numero = numero;
+    public void setUser(String user) {
+        this.user = user;
     }
 
-    public String getBairro() {
-        return bairro;
+    public String getSenha() {
+        return senha;
     }
 
-    public void setBairro(String bairro) {
-        this.bairro = bairro;
+    public void setSenha(String senha) {
+        this.senha = senha;
     }
 
-    public String getCidade() {
-        return cidade;
-    }
+    public class Endereco {
+        private String rua;
 
-    public void setCidade(String cidade) {
-        this.cidade = cidade;
-    }
+        private String bairro;
+        private String cidade;
+        private String estado;
+        private int cep;
 
-    public String getEstado() {
-        return estado;
-    }
+        // Getters and Setters
+        public String getRua() {
+            return rua;
+        }
 
-    public void setEstado(String estado) {
-        this.estado = estado;
-    }
+        public void setRua(String rua) {
+            this.rua = rua;
+        }
 
-    public int getCep() {
-        return cep;
-    }
 
-    public void setCep(int cep) {
-        this.cep = cep;
+        public String getBairro() {
+            return bairro;
+        }
+
+        public void setBairro(String bairro) {
+            this.bairro = bairro;
+        }
+
+        public String getCidade() {
+            return cidade;
+        }
+
+        public void setCidade(String cidade) {
+            this.cidade = cidade;
+        }
+
+        public String getUF() {
+            return estado;
+        }
+
+        public void setUF(String estado) {
+            this.estado = estado;
+        }
+
+        public int getCep() {
+            return cep;
+        }
+
+        public void setCep(int cep) {
+            this.cep = cep;
+        }
     }
 }

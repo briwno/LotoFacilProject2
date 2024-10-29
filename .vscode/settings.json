@@ -8,6 +8,10 @@
         "c:\\Program Files\\Java\\javafx-sdk-22.0.2\\lib\\javafx.media.jar",
         "c:\\Program Files\\Java\\javafx-sdk-22.0.2\\lib\\javafx.swing.jar",
         "c:\\Program Files\\Java\\javafx-sdk-22.0.2\\lib\\javafx.web.jar",
-        "c:\\Program Files\\Java\\javafx-sdk-22.0.2\\lib\\javafx-swt.jar"
+        "c:\\Program Files\\Java\\javafx-sdk-22.0.2\\lib\\javafx-swt.jar",
+        "c:\\Users\\bruno\\Downloads\\dom4j-2.1.4.jar",
+        "c:\\Users\\bruno\\Downloads\\json-20240303.jar",
+        "libs/javax.mail-1.6.2.jar",
+        "libs/javax.activation.jar"
     ]
 }

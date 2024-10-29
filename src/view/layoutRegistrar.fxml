@@ -48,7 +48,7 @@
             <ComboBox id="generoField" layoutX="414.0" layoutY="155.0" prefWidth="150.0" />
             <ImageView fitHeight="172.0" fitWidth="169.0" layoutX="41.0" layoutY="126.0">
                <image>
-                  <Image url="@../../../../../Downloads/Screenshot_11.png" />
+                  <Image url="@../resources/usericon.png" />
                </image>
             </ImageView>
             <TextField id="emailField" layoutX="217.0" layoutY="207.0" prefHeight="27.0" prefWidth="181.0" />
@@ -81,7 +81,7 @@
             <TextField id="telefoneField" layoutX="217.0" layoutY="260.0" prefHeight="27.0" prefWidth="181.0" />
             <ImageView fitHeight="172.0" fitWidth="169.0" layoutX="40.0" layoutY="351.0">
                <image>
-                  <Image url="@../../../../../Downloads/Screenshot_12.png" />
+                  <Image url="@../resources/localicon.png" />
                </image>
             </ImageView>
             <Label layoutX="40.0" layoutY="316.0" text="Endereço">
@@ -100,7 +100,7 @@
                   <Font size="14.0" />
                </font>
             </Label>
-            <TextField id="cidadeFiel" layoutX="273.0" layoutY="378.0" prefHeight="27.0" prefWidth="181.0" />
+            <TextField id="cidadeField" layoutX="273.0" layoutY="378.0" prefHeight="27.0" prefWidth="181.0" />
             <Label id="cepLabel" layoutX="471.0" layoutY="351.0" prefHeight="27.0" prefWidth="57.0" text="CEP">
                <font>
                   <Font size="14.0" />
@@ -114,12 +114,12 @@
                </font>
             </Label>
             <TextField id="ruaField" layoutX="221.0" layoutY="432.0" prefHeight="27.0" prefWidth="232.0" />
-            <Label id="numeroLabel" layoutX="471.0" layoutY="405.0" prefHeight="27.0" prefWidth="57.0" text="Número">
+            <Label id="bairroLabel" layoutX="471.0" layoutY="405.0" prefHeight="27.0" prefWidth="57.0" text="Bairro">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <TextField id="numeroField" layoutX="473.0" layoutY="432.0" prefHeight="27.0" prefWidth="57.0" />
+            <TextField id="bairroField" layoutX="473.0" layoutY="432.0" prefHeight="27.0" prefWidth="122.0" />
             <Separator layoutX="39.0" layoutY="556.0" prefHeight="14.0" prefWidth="567.0">
                <effect>
                   <ColorAdjust brightness="0.12" contrast="-1.0" saturation="-0.02" />
@@ -132,7 +132,7 @@
             </Label>
             <ImageView fitHeight="172.0" fitWidth="169.0" layoutX="40.0" layoutY="570.0">
                <image>
-                  <Image url="@../../../../../Downloads/pngtree-lock-vector-icon-png-image_963331.jpg" />
+                  <Image url="@../resources/cadeadoicon.jpg" />
                </image>
             </ImageView>
             <Label id="userLabel" layoutX="221.0" layoutY="595.0" prefHeight="27.0" prefWidth="111.0" text="Nome de usuário">
@@ -152,6 +152,7 @@
                   <Font size="14.0" />
                </font>
             </CheckBox>
+            <Button id="verificarCEPButton" layoutX="595.0" layoutY="378.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="10.0" text="?" />
             <Button id="registrarButton" layoutX="247.0" layoutY="754.0" mnemonicParsing="false" prefHeight="54.0" prefWidth="150.0" text="Registrar-se" />
             <Hyperlink layoutX="388.0" layoutY="693.0" text="Termos e Condições">
                <font>
