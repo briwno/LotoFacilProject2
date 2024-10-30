@@ -5,6 +5,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import model.Apostador;
+
 import java.util.Properties;
 
 import javax.mail.*;
@@ -89,7 +91,7 @@ public class LoginController extends Application {
             dialog.setHeaderText("Digite seu email para recuperação de senha");
             dialog.setContentText("Email:");
             String emailRec = dialog.showAndWait().get();
-            int codigoEmail = autenticador.gerarCodigoRecuperacao();
+            String codigoEmail = autenticador.gerarCodigoRecuperacao();
 
             dialog.showAndWait().ifPresent(email -> {
                 try {
@@ -124,6 +126,8 @@ public class LoginController extends Application {
                     dialog3.setHeaderText("Digite a nova senha");
                     dialog3.setContentText("Nova senha:");
                     String novaSenha = dialog3.showAndWait().get();
+                    Apostador apostador = new Apostador();
+                    apostador.setSenha(novaSenha);
 
                 } else {
                     Alert alerta = new Alert(Alert.AlertType.ERROR);

@@ -39,6 +39,8 @@ public class RegistrarController extends Application {
         Button registrarButton = (Button) root.lookup("#registrarButton");
         Button verificarCEPButton = (Button) root.lookup("#verificarCEPButton");
 
+        generoField.getItems().addAll("Masculino", "Feminino", "Outro");
+
         verificarCEPButton.setOnAction(e -> {
             String logradouro = "";
             String uf = "";

@@ -46,6 +46,7 @@
                </effect>
             </Separator>
             <ComboBox id="generoField" layoutX="414.0" layoutY="155.0" prefWidth="150.0" />
+            
             <ImageView fitHeight="172.0" fitWidth="169.0" layoutX="41.0" layoutY="126.0">
                <image>
                   <Image url="@../resources/usericon.png" />

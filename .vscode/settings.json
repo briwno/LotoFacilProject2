@@ -1,17 +1,9 @@
 {
     "java.project.referencedLibraries": [
-        "lib/**/*.jar",
-        "c:\\Program Files\\Java\\javafx-sdk-22.0.2\\lib\\javafx.base.jar",
-        "c:\\Program Files\\Java\\javafx-sdk-22.0.2\\lib\\javafx.controls.jar",
-        "c:\\Program Files\\Java\\javafx-sdk-22.0.2\\lib\\javafx.fxml.jar",
-        "c:\\Program Files\\Java\\javafx-sdk-22.0.2\\lib\\javafx.graphics.jar",
-        "c:\\Program Files\\Java\\javafx-sdk-22.0.2\\lib\\javafx.media.jar",
-        "c:\\Program Files\\Java\\javafx-sdk-22.0.2\\lib\\javafx.swing.jar",
-        "c:\\Program Files\\Java\\javafx-sdk-22.0.2\\lib\\javafx.web.jar",
-        "c:\\Program Files\\Java\\javafx-sdk-22.0.2\\lib\\javafx-swt.jar",
-        "c:\\Users\\bruno\\Downloads\\dom4j-2.1.4.jar",
-        "c:\\Users\\bruno\\Downloads\\json-20240303.jar",
+        "libs/**/*.jar",
         "libs/javax.mail-1.6.2.jar",
-        "libs/javax.activation.jar"
+        "libs/javax.activation.jar",
+        "libs/json-20240303.jar",
+        "libs/javafx-sdk-22.0.2/lib/*.jar"
     ]
 }

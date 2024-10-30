@@ -70,11 +70,12 @@ public class Autenticador {
         }
     }
 
-    public int gerarCodigoRecuperacao(){
+    public String gerarCodigoRecuperacao(){
         System.out.println("Código de recuperação gerado com sucesso");
 
 
         int codigo = (int) (Math.random() * 10000);
-        return codigo;
+        String codigoStr = String.format("%04d", codigo);
+        return codigoStr;
     }
 }
