@@ -98,6 +98,7 @@ public class RegistrarController extends Application {
                 alert.setHeaderText("Usuário registrado com sucesso");
                 alert.setContentText("Seu usuário foi registrado com sucesso, você já pode fazer login");
                 alert.show();
+                tela.close();
             } else {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Erro");

@@ -42,6 +42,7 @@
             <Button fx:id="forget" layoutX="166.0" layoutY="208.0" mnemonicParsing="false" text="Esqueceu a senha?" />
             <TextField fx:id="usernameField" layoutX="72.0" layoutY="99.0" />
             <PasswordField id="senhaField" fx:id="senhaField" layoutX="72.0" layoutY="167.0" />
+            <Button id="entrarAdmin" layoutX="382.0" layoutY="343.0" mnemonicParsing="false" text="Admin" />
          </children>
     </AnchorPane>
   </children>

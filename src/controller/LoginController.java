@@ -5,14 +5,20 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import model.Apostador;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Properties;
 
 import javax.mail.*;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class LoginController extends Application {
     private Autenticador autenticador = new Autenticador();
@@ -30,33 +36,41 @@ public class LoginController extends Application {
         Button loginButton = (Button) root.lookup("#loginbutton");
         Button registerButton = (Button) root.lookup("#registerbutton");
         Button forgetButton = (Button) root.lookup("#forget");
+        Button logarAdmin = (Button) root.lookup("#entrarAdmin");
         CheckBox remember = (CheckBox) root.lookup("#lembrar");
         TextField user = (TextField) root.lookup("#usernameField");
         PasswordField password = (PasswordField) root.lookup("#senhaField");
 
+        logarAdmin.setOnAction(e -> {
+            System.out.println("Logar como admin");
+            AdminController admin = new AdminController();
+            try {
+                admin.start(new Stage());
+                tela.close();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        });
+
         loginButton.setOnAction(e -> {
             String username = user.getText();
             String senha = password.getText();
-            String role = autenticador.autenticarUsuario();
-            if (role != null) {
-                Alert alerta = new Alert(Alert.AlertType.INFORMATION);
-                alerta.setHeaderText("Login efetuado com sucesso como " + role);
-                tela.close();
-                if (role.equals("admin")) {
-                    AdminController admin = new AdminController();
-                    try {
-                        admin.start(new Stage());
-                        alerta.show();
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-                } else if (role.equals("apostador")) {
-                    // ApostadorController apostador = new ApostadorController();
-                    // apostador.start(new Stage());
+        
+            String usuarioLogado = autenticador.autenticarUsuario(username, senha);
+        
+            // abrir tela de apostador daquele usuario
+            if (usuarioLogado != null) {
+                ApostadorController apostador = new ApostadorController();
+                apostador.setUsuarioLogado(usuarioLogado);
+                try {
+                    apostador.start(new Stage());
+                    tela.close();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
                 }
             } else {
                 Alert alerta = new Alert(Alert.AlertType.ERROR);
-                alerta.setHeaderText("Nome de usuário ou senha incorretos");
+                alerta.setHeaderText("Usuário ou senha inválidos");
                 alerta.show();
             }
         });
@@ -90,18 +104,17 @@ public class LoginController extends Application {
             dialog.setTitle("Recuperação de senha");
             dialog.setHeaderText("Digite seu email para recuperação de senha");
             dialog.setContentText("Email:");
-            String emailRec = dialog.showAndWait().get();
-            String codigoEmail = autenticador.gerarCodigoRecuperacao();
+            String emailRec = dialog.showAndWait().orElse(null);
 
-            dialog.showAndWait().ifPresent(email -> {
+            if (emailRec != null && autenticador.verificarEmailCadastrado(emailRec)) {
+                String codigoEmail = autenticador.gerarCodigoRecuperacao();
+
                 try {
                     Message msg = new MimeMessage(session);
                     msg.setFrom(new InternetAddress("esqueletodoclash@gmail.com"));
-                    msg.addRecipient(Message.RecipientType.TO,
-                            new InternetAddress(emailRec, "Mr. User"));
+                    msg.addRecipient(Message.RecipientType.TO, new InternetAddress(emailRec));
                     msg.setSubject("Recuperação de senha");
-
-                    msg.setText("Seu codigo de recuperação é: " + codigoEmail);
+                    msg.setText("Seu código de recuperação é: " + codigoEmail);
 
                     Transport.send(msg);
                     System.out.println("Email enviado com sucesso");
@@ -120,22 +133,51 @@ public class LoginController extends Application {
                 dialog2.setTitle("Recuperação de senha");
                 dialog2.setHeaderText("Digite o código de recuperação enviado para o email");
                 dialog2.setContentText("Código:");
-                if (dialog2.showAndWait().get().equals(codigoEmail)) {
+                if (dialog2.showAndWait().orElse("").equals(codigoEmail)) {
                     TextInputDialog dialog3 = new TextInputDialog();
                     dialog3.setTitle("Recuperação de senha");
                     dialog3.setHeaderText("Digite a nova senha");
                     dialog3.setContentText("Nova senha:");
-                    String novaSenha = dialog3.showAndWait().get();
-                    Apostador apostador = new Apostador();
-                    apostador.setSenha(novaSenha);
+                    String novaSenha = dialog3.showAndWait().orElse("");
 
+                    try {
+                        String content = new String(Files.readAllBytes(Paths.get("src/db/users.json")),
+                                StandardCharsets.UTF_8);
+                        JSONArray usersArray = new JSONArray(content);
+
+                        boolean userFound = false;
+                        for (int i = 0; i < usersArray.length(); i++) {
+                            JSONObject usuario = usersArray.getJSONObject(i);
+                            if (usuario.getString("email").equals(emailRec)) {
+                                usuario.put("senha", novaSenha);
+                                userFound = true;
+                                break;
+                            }
+                        }
+
+                        if (userFound) {
+
+                            Files.write(Paths.get("src/db/users.json"),
+                                    usersArray.toString(4).getBytes(StandardCharsets.UTF_8));
+                            System.out.println("Senha alterada com sucesso");
+                        } else {
+                            System.out.println("Usuário não encontrado");
+                        }
+                    } catch (IOException ioException) {
+                        ioException.printStackTrace();
+                        System.out
+                                .println("Erro ao ler ou escrever no arquivo users.json: " + ioException.getMessage());
+                    }
                 } else {
                     Alert alerta = new Alert(Alert.AlertType.ERROR);
                     alerta.setHeaderText("Código de recuperação inválido");
                     alerta.show();
                 }
-            });
-
+            } else {
+                Alert alerta = new Alert(Alert.AlertType.ERROR);
+                alerta.setHeaderText("Email não cadastrado");
+                alerta.show();
+            }
         });
 
         remember.setOnAction(e -> {
@@ -143,5 +185,4 @@ public class LoginController extends Application {
             // Implementar lógica de lembrar credenciais
         });
     }
-
 }

@@ -6,6 +6,13 @@
             "name": "App",
             "request": "launch",
             "mainClass": "App",
+            "projectName": "LotoFacilProject2_3f324859"
+        },
+        {
+            "type": "java",
+            "name": "App",
+            "request": "launch",
+            "mainClass": "App",
             "projectName": "LotoFacilProject2_89dd3dbf"
         },
         {

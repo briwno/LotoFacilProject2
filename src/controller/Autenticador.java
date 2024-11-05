@@ -12,10 +12,29 @@ import model.Apostador.Endereco;
 
 public class Autenticador {
     private static final String USERS_FILE = "src/db/users.json";
+    private String usuarioLogado;
 
-    public String autenticarUsuario() {
+    public String autenticarUsuario(String user, String senha) {
+        try {
+            String content = new String(Files.readAllBytes(Paths.get(USERS_FILE)));
+            JSONArray usersArray = new JSONArray(content);
+
+            for (int i = 0; i < usersArray.length(); i++) {
+                JSONObject usuario = usersArray.getJSONObject(i);
+                if (usuario.getString("user").equals(user) && usuario.getString("senha").equals(senha)) {
+                    String usuarioLogado = usuario.getString("nome");
+                    System.out.println("Usuário autenticado com sucesso: " + usuarioLogado);
+                    return usuarioLogado;
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return null;
     }
+
+    
+
 
     public void registrarUsuario(Apostador apostador) {
 
@@ -70,12 +89,29 @@ public class Autenticador {
         }
     }
 
-    public String gerarCodigoRecuperacao(){
+    public String gerarCodigoRecuperacao() {
         System.out.println("Código de recuperação gerado com sucesso");
-
 
         int codigo = (int) (Math.random() * 10000);
         String codigoStr = String.format("%04d", codigo);
         return codigoStr;
+    }
+
+    public boolean verificarEmailCadastrado(String email) {
+        try {
+            String content = new String(Files.readAllBytes(Paths.get(USERS_FILE)));
+            JSONArray usersArray = new JSONArray(content);
+
+            for (int i = 0; i < usersArray.length(); i++) {
+                JSONObject user = usersArray.getJSONObject(i);
+                if (user.getString("email").equals(email)) {
+                    return true;
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return false;
     }
 }
