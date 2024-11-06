@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #f4f4f4;" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #f4f4f4;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
     <children>
         
         <!-- Barra de Navegação Superior -->
@@ -58,10 +58,12 @@
             <Label layoutX="96.0" layoutY="151.0" text="ID:" />
             <TextField id="idField" editable="false" layoutX="113.0" layoutY="147.0" prefHeight="25.0" prefWidth="37.0" />
             <Label layoutX="204.0" layoutY="151.0" text="NUMEROS:" />
-            <TextField id="numerosField" editable="false" layoutX="267.0" layoutY="147.0" prefHeight="25.0" prefWidth="259.0" />
+            <TextField id="numerosField" editable="false" layoutX="267.0" layoutY="147.0" prefHeight="25.0" prefWidth="311.0" />
             <Label layoutX="96.0" layoutY="228.0" text="DATA SORTEIO:" />
             <TextField id="dataField" editable="false" layoutX="184.0" layoutY="224.0" prefHeight="25.0" prefWidth="220.0" />
             <Button id="apostarButton" layoutX="311.0" layoutY="363.0" mnemonicParsing="false" prefHeight="82.0" prefWidth="171.0" text="Apostar" />
+            <Button id="gerarButton" layoutX="576.0" layoutY="147.0" mnemonicParsing="false" text="Gerar Numeros Aleatorios" />
+            <Button id="escolherNumerosButton" layoutX="320.0" layoutY="172.0" mnemonicParsing="false" text="Escolher Numeros" />
             </children>
         </AnchorPane>
         

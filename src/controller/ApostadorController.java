@@ -1,6 +1,8 @@
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -15,6 +17,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
@@ -48,6 +51,8 @@ public class ApostadorController extends Application {
         TextField idField = (TextField) root.lookup("#idField");
         TextField numerosField = (TextField) root.lookup("#numerosField");
         TextField dataField = (TextField) root.lookup("#dataField");
+        Button gerarButton = (Button) root.lookup("#gerarButton");
+        Button escolherButton = (Button) root.lookup("#escolherNumerosButton");
         Button apostarButton = (Button) root.lookup("#apostarButton");
 
         JSONArray concursos = new JSONArray(new String(Files.readAllBytes(Paths.get(CONCURSOS_FILE))));
@@ -64,11 +69,70 @@ public class ApostadorController extends Application {
                 JSONObject concurso = concursos.getJSONObject(i);
                 if (concurso.getInt("id") == concursoId) {
                     idField.setText(String.valueOf(concurso.getInt("id")));
-                    numerosField.setText(concurso.getString("numeros"));
                     dataField.setText(concurso.getString("data"));
                 }
 
             }
+
+            gerarButton.setOnAction(e1 -> {
+                List<Integer> numeroGerados = new ArrayList<>();
+
+                while (numeroGerados.size() < 15) {
+                    int numero = (int) (Math.random() * 25) + 1;
+                    if (!numeroGerados.contains(numero)) {
+                        numeroGerados.add(numero);
+                    }
+                }
+
+                StringBuilder numeros = new StringBuilder();
+                for (int i = 0; i < numeroGerados.size(); i++) {
+                    numeros.append(numeroGerados.get(i));
+                    if (i < numeroGerados.size() - 1) {
+                        numeros.append(", ");
+                    }
+                }
+                numerosField.setText(numeros.toString());
+                
+            });
+
+            escolherButton.setOnAction(e2 -> {
+                try {
+                    FXMLLoader escolherLoader = new FXMLLoader(getClass().getResource("/view/escolherNumerosTela.fxml"));
+                    Parent escolherRoot = escolherLoader.load();
+                    Stage escolherStage = new Stage();
+                    escolherStage.setScene(new Scene(escolherRoot));
+                    escolherStage.setTitle("Escolher Números");
+                    escolherStage.show();
+
+                    Button okButton = (Button) escolherRoot.lookup("#okButton");
+
+                    okButton.setOnAction(e3 -> {
+                        escolherStage.close();
+                    });
+                    
+
+
+                    
+                    for (int i = 1; i <= 15; i++) {
+                        final int numero = i;
+                        RadioButton botao = (RadioButton) escolherRoot.lookup("#numero" + numero);
+                        botao.setOnAction(e3 -> {
+                            if (botao.isSelected()) {
+                                numerosField.setText(numerosField.getText() + String.valueOf(numero) + ", ");
+                            } else {
+                                numerosField.setText(numerosField.getText().replace(numero + ", ", ""));
+                            }
+                        });
+                    }
+
+                
+
+                    
+                } catch (IOException e3) {
+                    e3.printStackTrace();
+                }
+                
+            });
 
             apostarButton.setOnAction(e2 -> {
 
