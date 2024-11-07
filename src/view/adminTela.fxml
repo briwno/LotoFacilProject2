@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
@@ -14,14 +15,15 @@
    <children>
       <AnchorPane id="painelCriar" layoutY="47.0" prefHeight="260.0" prefWidth="643.0" style="-fx-background-color: pink;">
          <children>
-            <Label id="idLabel" layoutX="22.0" layoutY="14.0" prefHeight="25.0" prefWidth="100.0" text="ID DO CONCURSO" />
-            <TextField id="idField" layoutX="125.0" layoutY="14.0" prefHeight="25.0" prefWidth="100.0" />
-            <Button id="salvarButton" layoutX="290.0" layoutY="190.0" mnemonicParsing="false" text="Salvar" />
-            <Label id="dataLabel" layoutX="258.0" layoutY="14.0" prefHeight="25.0" prefWidth="148.0" text="DATA DE ENCERRAMENTO" />
-            <DatePicker id="dataField" layoutX="411.0" layoutY="14.0" />
-            <TextField id="numerosField" layoutX="164.0" layoutY="96.0" prefHeight="25.0" prefWidth="347.0" />
-            <Button id="gerarButton" layoutX="501.0" layoutY="96.0" mnemonicParsing="false" text="Gerar" />
-            <Label id="numerosLabel" layoutX="50.0" layoutY="96.0" prefHeight="25.0" prefWidth="109.0" text="Números Sorteados" />
+            <Label id="idLabel" layoutX="52.0" layoutY="14.0" prefHeight="25.0" prefWidth="100.0" text="ID DO CONCURSO" />
+            <TextField id="idField" layoutX="155.0" layoutY="14.0" prefHeight="25.0" prefWidth="100.0" />
+            <Button id="salvarButton" layoutX="280.0" layoutY="190.0" mnemonicParsing="false" text="Salvar" />
+            <Label id="dataLabel" layoutX="288.0" layoutY="14.0" prefHeight="25.0" prefWidth="71.0" text="Data Sorteio" />
+            <DatePicker id="dataField" layoutX="361.0" layoutY="14.0" />
+            <TextField id="numerosField" layoutX="158.0" layoutY="58.0" prefHeight="25.0" prefWidth="347.0" />
+            <Button id="gerarButton" layoutX="492.0" layoutY="58.0" mnemonicParsing="false" text="Gerar" />
+            <Label id="numerosLabel" layoutX="52.0" layoutY="58.0" prefHeight="25.0" prefWidth="108.0" text="Números Sorteados" />
+            <CheckBox id="ativarCheck" layoutX="276.0" layoutY="120.0" mnemonicParsing="false" text="Ativo" />
          </children>
       </AnchorPane>
       <AnchorPane id="painelVer" layoutY="47.0" prefHeight="260.0" prefWidth="643.0" style="-fx-background-color: red;" visible="false" />

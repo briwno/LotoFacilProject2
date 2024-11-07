@@ -9,6 +9,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import model.Apostador;
 import model.Apostador.Endereco;
+import model.Concurso;
 
 public class Autenticador {
     private static final String USERS_FILE = "src/db/users.json";
@@ -87,6 +88,47 @@ public class Autenticador {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static void salvarConcurso(Concurso concurso){
+        final String CONCURSOS_FILE = "src/db/concursos.json";
+
+        JSONObject json = new JSONObject();
+        json.put("id", concurso.getId());
+        json.put("dataCriacao", concurso.getDataCriacao());
+        json.put("dataSorteio", concurso.getDataSorteio());
+        json.put("numerosSorteados", concurso.getNumerosSorteados());
+        json.put("situacao", concurso.getSituacao());
+        json.put("apostas", concurso.getApostas());
+
+        try{
+            String content = new String(Files.readAllBytes(Paths.get(CONCURSOS_FILE)));
+            JSONArray concursosArray;
+
+            if(content.isEmpty()){
+                concursosArray = new JSONArray();
+            } else {
+                concursosArray = new JSONArray(content);
+            }
+
+            concursosArray.put(json);
+
+            try(BufferedWriter writer = new BufferedWriter(new FileWriter(CONCURSOS_FILE))){
+                writer.write(concursosArray.toString(4));
+                writer.newLine();
+                System.out.println("Concurso salvo com sucesso: " + json.toString(4));
+            }
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+
+    public void salvarAposta(){
+        final String APOSTAS_FILE = "src/db/apostas.json";
+
+        JSONObject json = new JSONObject();
+        
+        
     }
 
     public String gerarCodigoRecuperacao() {

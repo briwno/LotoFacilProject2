@@ -21,6 +21,7 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import model.Aposta;
 
 public class ApostadorController extends Application {
     private String usuarioLogado;
@@ -140,24 +141,8 @@ public class ApostadorController extends Application {
                 alert.setHeaderText("Aposta realizada com sucesso");
                 alert.show();
 
-                try {
-                    JSONObject aposta = new JSONObject();
-                    aposta.put("id", idField.getText());
-                    aposta.put("numeros", numerosField.getText());
-                    aposta.put("data", dataField.getText());
-                    aposta.put("apostador", usuarioLogado);
-
-
-                    String apostasContent = new String(Files.readAllBytes(Paths.get(APOSTAS_FILE)));
-                    JSONArray apostas = apostasContent.isEmpty() ? new JSONArray() : new JSONArray(apostasContent);
-                    apostas.put(aposta);
-
-                    Files.write(Paths.get(APOSTAS_FILE), apostas.toString(4).getBytes());
-
-                } catch (JSONException | IOException e3) {
-                    e3.printStackTrace();
-                    
-                } 
+                Aposta aposta = new Aposta();
+                
             });
         });
 
