@@ -155,7 +155,7 @@
             </CheckBox>
             <Button id="verificarCEPButton" layoutX="595.0" layoutY="378.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="10.0" text="?" />
             <Button id="registrarButton" layoutX="247.0" layoutY="754.0" mnemonicParsing="false" prefHeight="54.0" prefWidth="150.0" text="Registrar-se" />
-            <Hyperlink layoutX="388.0" layoutY="693.0" text="Termos e Condições">
+            <Hyperlink id="termosLink" layoutX="388.0" layoutY="693.0" text="Termos e Condições">
                <font>
                   <Font size="14.0" />
                </font>

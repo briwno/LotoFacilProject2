@@ -1,6 +1,9 @@
 import org.json.JSONObject;
 import java.net.HttpURLConnection;
 import java.net.URL;
+
+import javax.management.openmbean.OpenType;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -38,8 +41,17 @@ public class RegistrarController extends Application {
         CheckBox termosCheck = (CheckBox) root.lookup("#termosCheck");
         Button registrarButton = (Button) root.lookup("#registrarButton");
         Button verificarCEPButton = (Button) root.lookup("#verificarCEPButton");
+        Hyperlink termosLink = (Hyperlink) root.lookup("#termosLink");
 
         generoField.getItems().addAll("Masculino", "Feminino", "Outro");
+
+        termosLink.setOnAction(e -> {
+            try {
+                java.awt.Desktop.getDesktop().browse(new java.net.URI("https://www.caixa.gov.br/Downloads/circulares-caixa-loterias/circular_caixa_lotericas.pdf"));
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        });
 
         verificarCEPButton.setOnAction(e -> {
             String logradouro = "";

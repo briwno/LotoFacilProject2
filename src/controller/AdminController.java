@@ -92,9 +92,16 @@ public class AdminController {
                 Autenticador.salvarConcurso(concurso);
             });
 
+            //painel de ver e editar concursos
             verBotao.setOnAction(e2 -> {
                 painelCriar.setVisible(false);
                 painelVer.setVisible(true);
+
+                
+                
+
+
+
 
             });
 
