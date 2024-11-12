@@ -10,6 +10,7 @@ public class Concurso {
     private List<Integer> numerosSorteados;
     private String situacao;
     private List<Aposta> apostas;
+    private double premioAcumulado;
 
     // Getters and Setters
     public int getId() {
@@ -58,5 +59,13 @@ public class Concurso {
 
     public void setApostas(List<Aposta> apostas) {
         this.apostas = apostas;
+    }
+
+    public double getPremioAcumulado() {
+        return premioAcumulado;
+    }
+
+    public void setPremioAcumulado(double premioAcumulado) {
+        this.premioAcumulado = premioAcumulado;
     }
 }
