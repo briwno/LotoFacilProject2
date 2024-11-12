@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #f4f4f4;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #f4f4f4;" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1">
     <children>
         
         <!-- Barra de Navegação Superior -->
@@ -62,8 +62,9 @@
             <Label layoutX="96.0" layoutY="228.0" text="DATA SORTEIO:" />
             <TextField id="dataField" editable="false" layoutX="184.0" layoutY="224.0" prefHeight="25.0" prefWidth="220.0" />
             <Button id="apostarButton" layoutX="311.0" layoutY="363.0" mnemonicParsing="false" prefHeight="82.0" prefWidth="171.0" text="Apostar" />
-            <Button id="gerarButton" layoutX="576.0" layoutY="147.0" mnemonicParsing="false" text="Gerar Numeros Aleatorios" />
-            <Button id="escolherNumerosButton" layoutX="320.0" layoutY="172.0" mnemonicParsing="false" text="Escolher Numeros" />
+            <Button id="escolherNumerosButton" layoutX="367.0" layoutY="172.0" mnemonicParsing="false" text="Escolher Numeros" />
+            <Label layoutX="535.0" layoutY="228.0" text="Custo da Aposta em R$:" />
+            <TextField id="custoField" editable="false" layoutX="666.0" layoutY="224.0" prefHeight="25.0" prefWidth="84.0" promptText="R$ 36.512,00" />
             </children>
         </AnchorPane>
         

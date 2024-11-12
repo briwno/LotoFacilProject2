@@ -4,6 +4,8 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.plaf.basic.BasicOptionPaneUI.ButtonAreaLayout;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -19,7 +21,10 @@ import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Toggle;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.image.Image;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import model.Aposta;
 
@@ -55,6 +60,7 @@ public class ApostadorController extends Application {
         Button gerarButton = (Button) root.lookup("#gerarButton");
         Button escolherButton = (Button) root.lookup("#escolherNumerosButton");
         Button apostarButton = (Button) root.lookup("#apostarButton");
+        TextField custoField = (TextField) root.lookup("#custoField");
 
         JSONArray concursos = new JSONArray(new String(Files.readAllBytes(Paths.get(CONCURSOS_FILE))));
 
@@ -75,64 +81,113 @@ public class ApostadorController extends Application {
 
             }
 
-            gerarButton.setOnAction(e1 -> {
-                List<Integer> numeroGerados = new ArrayList<>();
-
-                while (numeroGerados.size() < 15) {
-                    int numero = (int) (Math.random() * 25) + 1;
-                    if (!numeroGerados.contains(numero)) {
-                        numeroGerados.add(numero);
-                    }
-                }
-
-                StringBuilder numeros = new StringBuilder();
-                for (int i = 0; i < numeroGerados.size(); i++) {
-                    numeros.append(numeroGerados.get(i));
-                    if (i < numeroGerados.size() - 1) {
-                        numeros.append(", ");
-                    }
-                }
-                numerosField.setText(numeros.toString());
-                
-            });
-
             escolherButton.setOnAction(e2 -> {
+
                 try {
-                    FXMLLoader escolherLoader = new FXMLLoader(getClass().getResource("/view/escolherNumerosTela.fxml"));
+                    FXMLLoader escolherLoader = new FXMLLoader(
+                            getClass().getResource("/view/escolherNumerosTela.fxml"));
                     Parent escolherRoot = escolherLoader.load();
                     Stage escolherStage = new Stage();
                     escolherStage.setScene(new Scene(escolherRoot));
                     escolherStage.setTitle("Escolher Números");
                     escolherStage.show();
-
+                    TextField qtdeSelecionados = (TextField) escolherRoot.lookup("#selecionadosField");
+                    qtdeSelecionados.setText("0");
+                    Button autoSelect = (Button) escolherRoot.lookup("#autoselectButton");
+                    Button limpar = (Button) escolherRoot.lookup("#limparButton");
                     Button okButton = (Button) escolherRoot.lookup("#okButton");
 
-                    okButton.setOnAction(e3 -> {
-                        escolherStage.close();
-                    });
-                    
-
-
-                    
-                    for (int i = 1; i <= 15; i++) {
-                        final int numero = i;
-                        RadioButton botao = (RadioButton) escolherRoot.lookup("#numero" + numero);
-                        botao.setOnAction(e3 -> {
-                            if (botao.isSelected()) {
-                                numerosField.setText(numerosField.getText() + String.valueOf(numero) + ", ");
+                    ToggleButton[] numeros = new ToggleButton[25];
+                    for (int i = 0; i < 25; i++) {
+                        numeros[i] = (ToggleButton) escolherRoot.lookup("#num" + (i + 1));
+                        final int index = i;
+                        numeros[index].setOnAction(e3 -> {
+                            if (numeros[index].isSelected()) {
+                                numeros[index].setStyle("-fx-background-color: #00ff00");
+                                qtdeSelecionados
+                                        .setText(String.valueOf(Integer.parseInt(qtdeSelecionados.getText()) + 1));
                             } else {
-                                numerosField.setText(numerosField.getText().replace(numero + ", ", ""));
+                                numeros[index].setStyle("");
                             }
                         });
                     }
 
-                
+                    autoSelect.setOnAction(e3 -> {
+                        ChoiceDialog<Integer> dialog = new ChoiceDialog<>(15, 15, 16, 17, 18, 19, 20);
+                        dialog.setTitle("Quantidade de Números");
+                        dialog.setHeaderText("Seleção Automática");
+                        dialog.setContentText("Escolha a quantidade de números:");
 
-                    
+                        dialog.showAndWait().ifPresent(qtde -> {
+                            for (int i = 0; i < 25; i++) {
+                                numeros[i].setSelected(false);
+                                numeros[i].setStyle("");
+                            }
+                            List<Integer> selecionados = new ArrayList<>();
+                            for (selecionados.size(); selecionados.size() < qtde; selecionados.size()) {
+                                int num = (int) (Math.random() * 25);
+                                if (!selecionados.contains(num)) {
+                                    selecionados.add(num);
+                                    numeros[num].setSelected(true);
+                                    numeros[num].setStyle("-fx-background-color: #00ff00");
+                                }
+                            }
+                            qtdeSelecionados.setText(String.valueOf(selecionados.size()));
+                        });
+                    });
+
+                    limpar.setOnAction(e3 -> {
+                        for (int i = 0; i < 25; i++) {
+                            numeros[i].setSelected(false);
+                            numeros[i].setStyle("");
+                        }
+                        qtdeSelecionados.setText("0");
+                    });
+
+                    okButton.setOnAction(e4 -> {
+                        if (Integer.parseInt(qtdeSelecionados.getText()) < 15) {
+                            Alert alert = new Alert(Alert.AlertType.ERROR);
+                            alert.setHeaderText("Selecione ao menos 15 números");
+                            alert.show();
+                            return;
+                        }
+                        escolherStage.close();
+                        List<Integer> selecionados = new ArrayList<>();
+                        for (int i = 0; i < 25; i++) {
+                            if (numeros[i].isSelected()) {
+                                selecionados.add(i + 1);
+                            }
+                        }
+                        numerosField.setText(selecionados.toString());
+
+                        String custoAposta = "0,00";
+                        switch (Integer.parseInt(qtdeSelecionados.getText())) {
+                            case 15:
+                                custoAposta = "3,00";
+                                break;
+                            case 16:
+                                custoAposta = "44,00";
+                                break;
+                            case 17:
+                                custoAposta = "408,00";
+                                break;
+                            case 18:
+                                custoAposta = "2.448,00";
+                                break;
+                            case 19:
+                                custoAposta = "11.628,00";
+                                break;
+                            case 20:
+                                custoAposta = "36.512,00";
+                                break;
+                        }
+                        custoField.setText(custoAposta);
+                    });
+
                 } catch (IOException e3) {
                     e3.printStackTrace();
                 }
-                
+
             });
 
             apostarButton.setOnAction(e2 -> {
@@ -142,7 +197,7 @@ public class ApostadorController extends Application {
                 alert.show();
 
                 Aposta aposta = new Aposta();
-                
+
             });
         });
 

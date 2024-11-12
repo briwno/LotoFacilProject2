@@ -131,6 +131,42 @@ public class Autenticador {
         
     }
 
+    public boolean cpfJaRegistrado(String cpf){
+        try{
+            String content = new String(Files.readAllBytes(Paths.get(USERS_FILE)));
+            JSONArray usersArray = new JSONArray(content);
+
+            for(int i = 0; i < usersArray.length(); i++){
+                JSONObject usuario = usersArray.getJSONObject(i);
+                if(usuario.getString("cpf").equals(cpf)){
+                    System.out.println("CPF já cadastrado");
+                    return true;
+                }
+            }
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean usuarioJaRegistrado(String user){
+        try{
+            String content = new String(Files.readAllBytes(Paths.get(USERS_FILE)));
+            JSONArray usersArray = new JSONArray(content);
+
+            for(int i = 0; i < usersArray.length(); i++){
+                JSONObject usuario = usersArray.getJSONObject(i);
+                if(usuario.getString("user").equals(user)){
+                    System.out.println("Usuário já cadastrado");
+                    return true;
+                }
+            }
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     public String gerarCodigoRecuperacao() {
         System.out.println("Código de recuperação gerado com sucesso");
 

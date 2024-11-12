@@ -71,6 +71,41 @@ public class RegistrarController extends Application {
         });
 
         registrarButton.setOnAction(event -> {
+
+            if(autenticador.cpfJaRegistrado(cpfField.getText())) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Erro");
+                alert.setHeaderText("CPF já registrado");
+                alert.setContentText("O CPF informado já está registrado no sistema");
+                alert.show();
+                return;
+            }
+
+            if(autenticador.usuarioJaRegistrado(userField.getText())) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Erro");
+                alert.setHeaderText("Usuário já registrado");
+                alert.setContentText("O usuário informado já está registrado no sistema");
+                alert.show();
+                return;
+            }
+
+            if(cpfField.getText().isEmpty() || nomeField.getText().isEmpty() || emailField.getText().isEmpty() || telefoneField.getText().isEmpty() || generoField.getValue() == null || userField.getText().isEmpty() || senhaField.getText().isEmpty() || dataField.getValue() == null || ruaField.getText().isEmpty() || bairroField.getText().isEmpty() || cidadeField.getText().isEmpty() || ufField.getText().isEmpty() || cepField.getText().isEmpty()) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Erro");
+                alert.setHeaderText("Campos obrigatórios não preenchidos");
+                alert.setContentText("Todos os campos devem ser preenchidos");
+                alert.show();
+                return;
+            }
+            if(cpfField.getText().length() != 11) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Erro");
+                alert.setHeaderText("CPF inválido");
+                alert.setContentText("O CPF deve conter 11 dígitos");
+                alert.show();
+                return;
+            }
             if (termosCheck.isSelected()) {
                 Apostador apostador = new Apostador();
                 apostador.setNome(nomeField.getText());
