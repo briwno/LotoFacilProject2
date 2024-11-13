@@ -100,6 +100,8 @@ public class Autenticador {
         json.put("numerosSorteados", concurso.getNumerosSorteados());
         json.put("situacao", concurso.getSituacao());
         json.put("apostas", concurso.getApostas());
+        json.put("premioAcumulado", concurso.getPremioAcumulado());
+        
 
         try{
             String content = new String(Files.readAllBytes(Paths.get(CONCURSOS_FILE)));
