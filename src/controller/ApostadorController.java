@@ -23,6 +23,7 @@ import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
@@ -98,6 +99,8 @@ public class ApostadorController extends Application {
             PerfilPane.setVisible(false);
 
             JSONArray concursos = Autenticador.carregarConcursos();
+
+            concursosBox.getItems().clear();
 
             for (int i = 0; i < concursos.length(); i++) {
                 JSONObject concurso = concursos.getJSONObject(i);
@@ -260,12 +263,46 @@ public class ApostadorController extends Application {
             ApostarPane.setVisible(false);
             ApostasPane.setVisible(true);
             ResultadosPane.setVisible(false);
+
+            ListView<String> apostasList = (ListView<String>) root.lookup("#apostasList");
+            apostasList.getItems().clear();
+
+            try {
+                String content = new String(Files.readAllBytes(Paths.get(APOSTAS_FILE)));
+                JSONArray apostasArray = new JSONArray(content);
+
+                for (int i = 0; i < apostasArray.length(); i++) {
+                    JSONObject aposta = apostasArray.getJSONObject(i);
+                    if (aposta.getString("apostador").equals(usuarioLogado)) {
+                        String apostaInfo = "Concurso: " + aposta.getInt("id") + ", Números: " + aposta.getJSONArray("numerosSelecionados").toString() + ", Data: " + aposta.getString("dataCriacao") + ", Valor Pago: " + aposta.getDouble("valorPago");
+                        apostasList.getItems().add(apostaInfo);
+                    }
+                }
+            } catch (IOException | JSONException e2) {
+                e2.printStackTrace();
+            }
         });
 
         btnResultados.setOnAction(e -> {
             ApostarPane.setVisible(false);
             ApostasPane.setVisible(false);
             ResultadosPane.setVisible(true);
+
+            ListView<String> resultadosList = (ListView<String>) root.lookup("#resultadosList");
+            resultadosList.getItems().clear();
+
+            try {
+                String concursos = new String(Files.readAllBytes(Paths.get(CONCURSOS_FILE)));
+                JSONArray concursosArray = new JSONArray(concursos);
+
+                for (int i = 0; i < concursosArray.length(); i++) {
+                    JSONObject concurso = concursosArray.getJSONObject(i);
+                    String resultadoInfo = "Concurso: " + concurso.getInt("id") + ", Data: " + concurso.getString("dataSorteio") + ", Números: " + concurso.getJSONArray("numerosSorteados").toString() + ", Ganhadores: Bruno Alves Bezerra";
+                    resultadosList.getItems().add(resultadoInfo);
+                }
+            } catch (IOException | JSONException e2) {
+                e2.printStackTrace();
+            }
         });
 
         btnPerfil.setOnAction(e -> {

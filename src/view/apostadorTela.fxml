@@ -5,6 +5,7 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToolBar?>
@@ -72,9 +73,15 @@
             <TextField id="custoField" editable="false" layoutX="666.0" layoutY="224.0" prefHeight="25.0" prefWidth="84.0" promptText="R$ 36.512,00" />
             </children>
         </AnchorPane>
-      <AnchorPane id="ApostasPane" layoutY="60.0" prefHeight="540.0" prefWidth="800.0" style="-fx-background-color: pink;" visible="false" />
-      <AnchorPane id="ResultadosPane" layoutX="-2.0" layoutY="60.0" prefHeight="540.0" prefWidth="806.0" style="-fx-background-color: orange;" visible="false" />
-      <AnchorPane id="PerfilPane" layoutX="-4.0" layoutY="60.0" prefHeight="540.0" prefWidth="806.0" style="-fx-background-color: gray;">
+      <AnchorPane id="ApostasPane" layoutY="60.0" prefHeight="540.0" prefWidth="800.0" style="-fx-background-color: pink;" visible="false">
+         <children>
+            <ListView id="apostasList" layoutX="135.0" layoutY="24.0" prefHeight="442.0" prefWidth="564.0" />
+         </children></AnchorPane>
+      <AnchorPane id="ResultadosPane" layoutX="-2.0" layoutY="60.0" prefHeight="540.0" prefWidth="806.0" style="-fx-background-color: orange;">
+         <children>
+            <ListView id="resultadosList" layoutX="52.0" layoutY="39.0" prefHeight="464.0" prefWidth="713.0" />
+         </children></AnchorPane>
+      <AnchorPane id="PerfilPane" layoutX="-4.0" layoutY="60.0" prefHeight="540.0" prefWidth="806.0" style="-fx-background-color: gray;" visible="false">
          <children>
             <Label layoutX="328.0" layoutY="24.0" text="Informaçoes de Apostador">
                <font>
