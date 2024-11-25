@@ -1,21 +1,28 @@
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
+
+import javafx.scene.control.Alert;
+import model.Aposta;
 import model.Apostador;
 import model.Apostador.Endereco;
 import model.Concurso;
 
 public class Autenticador {
     private static final String USERS_FILE = "src/db/users.json";
+    private static final String CONCURSOS_FILE = "src/db/concursos.json";
     private String usuarioLogado;
+    private String idLogado;
 
-    public String autenticarUsuario(String user, String senha) {
+    public StringBuilder autenticarUsuario(String user, String senha) {
         try {
             String content = new String(Files.readAllBytes(Paths.get(USERS_FILE)));
             JSONArray usersArray = new JSONArray(content);
@@ -24,8 +31,14 @@ public class Autenticador {
                 JSONObject usuario = usersArray.getJSONObject(i);
                 if (usuario.getString("user").equals(user) && usuario.getString("senha").equals(senha)) {
                     String usuarioLogado = usuario.getString("nome");
+                    int idLogado = usuario.getInt("id");
                     System.out.println("Usuário autenticado com sucesso: " + usuarioLogado);
-                    return usuarioLogado;
+                    StringBuilder sb = new StringBuilder();
+                    sb.append(usuarioLogado);
+                    sb.append(";");
+                    sb.append(idLogado);
+                    return sb;
+
                 }
             }
         } catch (IOException e) {
@@ -33,7 +46,6 @@ public class Autenticador {
         }
         return null;
     }
-
     
 
 
@@ -125,10 +137,66 @@ public class Autenticador {
         }
     }
 
-    public void salvarAposta(){
+    public static JSONArray carregarConcursos() {
+        try {
+            return new JSONArray(new String(Files.readAllBytes(Paths.get(CONCURSOS_FILE)), StandardCharsets.UTF_8));
+        } catch (IOException | JSONException e) {
+            e.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Erro ao carregar dados");
+            alert.setHeaderText("Não foi possível carregar os dados dos concursos.");
+            alert.setContentText("Verifique se o arquivo 'concursos.json' está acessível.");
+            alert.showAndWait();
+            return new JSONArray();
+        }
+    }
+
+    public static JSONArray carregarApostas() {
+        try {
+            return new JSONArray(new String(Files.readAllBytes(Paths.get("src/db/apostas.json")), StandardCharsets.UTF_8));
+        } catch (IOException | JSONException e) {
+            e.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Erro ao carregar dados");
+            alert.setHeaderText("Não foi possível carregar os dados das apostas.");
+            alert.setContentText("Verifique se o arquivo 'apostas.json' está acessível.");
+            alert.showAndWait();
+            return new JSONArray();
+        }
+    }
+
+    public static void salvarAposta(Aposta aposta){
         final String APOSTAS_FILE = "src/db/apostas.json";
 
         JSONObject json = new JSONObject();
+        json.put("id", aposta.getId());
+        json.put("valorPago", aposta.getValorPago());
+        json.put("dataCriacao", aposta.getDataCriacao());
+        json.put("numerosSelecionados", aposta.getNumerosSelecionados());
+        json.put("qtdeAcertos", aposta.getQtdeAcertos());
+        json.put("apostador", aposta.getApostador());
+        json.put("valorGanho", aposta.getValorGanho());
+
+        try{
+            String content = new String(Files.readAllBytes(Paths.get(APOSTAS_FILE)));
+            JSONArray apostasArray;
+
+            if(content.isEmpty()){
+                apostasArray = new JSONArray();
+            } else {
+                apostasArray = new JSONArray(content);
+            }
+
+            apostasArray.put(json);
+
+            try(BufferedWriter writer = new BufferedWriter(new FileWriter(APOSTAS_FILE))){
+                writer.write(apostasArray.toString(4));
+                writer.newLine();
+                System.out.println("Aposta salva com sucesso: " + json.toString(4));
+            }
+        } catch (IOException e){
+            e.printStackTrace();
+        }
         
         
     }

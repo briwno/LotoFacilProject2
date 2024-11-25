@@ -32,6 +32,8 @@ public class LoginController extends Application {
         tela.setTitle("Login");
         tela.getIcons().add(new Image(getClass().getResourceAsStream("/resources/icon.png")));
         tela.show();
+        tela.setResizable(false);
+
 
         Button loginButton = (Button) root.lookup("#loginbutton");
         Button registerButton = (Button) root.lookup("#registerbutton");
@@ -56,12 +58,20 @@ public class LoginController extends Application {
             String username = user.getText();
             String senha = password.getText();
         
-            String usuarioLogado = autenticador.autenticarUsuario(username, senha);
+            StringBuilder sb = autenticador.autenticarUsuario(username, senha);
+            String usuarioLogado = sb.substring(0, sb.indexOf(";"));
+            String idLogado = sb.substring(sb.indexOf(";") + 1);
+
+            
         
             // abrir tela de apostador daquele usuario
             if (usuarioLogado != null) {
                 ApostadorController apostador = new ApostadorController();
+
                 apostador.setUsuarioLogado(usuarioLogado);
+                apostador.setIdLogado(idLogado);
+
+                
                 try {
                     apostador.start(new Stage());
                     tela.close();

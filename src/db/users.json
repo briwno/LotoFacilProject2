@@ -1,59 +1,59 @@
-[{
-    "senha": "1234",
-    "telefone": "1111111",
-    "endereco": {
-        "cidade": "Araucária",
-        "estado": "PR",
-        "bairro": "Costeira",
-        "rua": "Rua Isidoro Ksiazkiewicz",
-        "cep": 83708750
+[
+    {
+        "senha": "1234",
+        "telefone": "123456789",
+        "endereco": {
+            "cidade": "Araucária",
+            "estado": "PR",
+            "bairro": "Costeira",
+            "rua": "Rua Isidoro Ksiazkiewicz",
+            "cep": 83708750
+        },
+        "genero": "Masculino",
+        "cpf": "10861552970",
+        "nome": "Bruno Alves Bezerra",
+        "id": 0,
+        "dataNascimento": "2006-10-07",
+        "user": "briuno",
+        "email": "brunoalvesbezerra.ba@gmail.com",
+        "timestamp": "2024/10/31 14:42:07"
     },
-    "genero": "Masculino",
-    "cpf": "10861552970",
-    "nome": "Bruno",
-    "id": 0,
-    "dataNascimento": "2006-10-07",
-    "user": "briuno",
-    "email": "brunoalvesbezerra.ba@gmail.com",
-    "timestamp": "2024/10/31 14:42:07"
-},
-
-{
-    "senha": "5678",
-    "telefone": "2222222",
-    "endereco": {
-        "cidade": "Curitiba",
-        "estado": "PR",
-        "bairro": "Centro",
-        "rua": "Rua XV de Novembro",
-        "cep": 80020000
+    {
+        "senha": "5678",
+        "telefone": "2222222",
+        "endereco": {
+            "cidade": "Curitiba",
+            "estado": "PR",
+            "bairro": "Centro",
+            "rua": "Rua XV de Novembro",
+            "cep": 80020000
+        },
+        "genero": "Feminino",
+        "cpf": "12345678901",
+        "nome": "Ana",
+        "id": 1,
+        "dataNascimento": "1990-05-15",
+        "user": "ana123",
+        "email": "ana@example.com",
+        "timestamp": "2024/10/31 15:00:00"
     },
-    "genero": "Feminino",
-    "cpf": "12345678901",
-    "nome": "Ana",
-    "id": 1,
-    "dataNascimento": "1990-05-15",
-    "user": "ana123",
-    "email": "ana@example.com",
-    "timestamp": "2024/10/31 15:00:00"
-},
-{
-    "senha": "91011",
-    "telefone": "3333333",
-    "endereco": {
-        "cidade": "São Paulo",
-        "estado": "SP",
-        "bairro": "Jardins",
-        "rua": "Avenida Paulista",
-        "cep": 11311000
-    },
-    "genero": "Masculino",
-    "cpf": "98765432100",
-    "nome": "Carlos",
-    "id": 2,
-    "dataNascimento": "1985-08-20",
-    "user": "carlos85",
-    "email": "carlos@example.com",
-    "timestamp": "2024/10/31 15:30:00"
-}
+    {
+        "senha": "91011",
+        "telefone": "3333333",
+        "endereco": {
+            "cidade": "São Paulo",
+            "estado": "SP",
+            "bairro": "Jardins",
+            "rua": "Avenida Paulista",
+            "cep": 11311000
+        },
+        "genero": "Masculino",
+        "cpf": "98765432100",
+        "nome": "Carlos",
+        "id": 2,
+        "dataNascimento": "1985-08-20",
+        "user": "carlos85",
+        "email": "carlos@example.com",
+        "timestamp": "2024/10/31 15:30:00"
+    }
 ]

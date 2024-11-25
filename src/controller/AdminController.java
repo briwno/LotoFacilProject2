@@ -7,9 +7,15 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ComboBoxBase;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import model.Aposta;
 import model.Concurso;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
@@ -18,6 +24,7 @@ import java.util.ArrayList;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.nio.charset.StandardCharsets;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -37,7 +44,7 @@ public class AdminController {
     @SuppressWarnings("unchecked")
     public void start(Stage tela) throws Exception {
 
-        JSONArray concursos = new JSONArray(new String(Files.readAllBytes(Paths.get(CONCURSOS_FILE))));
+        JSONArray concursos = Autenticador.carregarConcursos();
 
         Parent root = FXMLLoader.load(getClass().getResource("/view/adminTela.fxml"));
         Scene scene = new Scene(root);
@@ -90,13 +97,14 @@ public class AdminController {
 
         // painel de ver e editar concursos
         verBotao.setOnAction(e2 -> {
+
             painelCriar.setVisible(false);
             painelVer.setVisible(true);
 
+            JSONArray concursosatualizado = Autenticador.carregarConcursos();
             concursosBox.getItems().clear();
-
-            for (int i = 0; i < concursos.length(); i++) {
-                JSONObject concurso = concursos.getJSONObject(i);
+            for (int i = 0; i < concursosatualizado.length(); i++) {
+                JSONObject concurso = concursosatualizado.getJSONObject(i);
                 concursosBox.getItems().add(concurso.getInt("id"));
             }
 
@@ -104,6 +112,7 @@ public class AdminController {
             Button editarConcursoButton = (Button) root.lookup("#editarConcursoButton");
             Button concluirEdicaoButton = (Button) root.lookup("#concluirEdicaoButton");
             Button sortearButton = (Button) root.lookup("#sortearButton");
+            Button verificarGanhadorButton = (Button) root.lookup("#verificarButton");
 
             concluirEdicaoButton.setVisible(false);
 
@@ -117,19 +126,53 @@ public class AdminController {
             TextField dataCriacaoField = (TextField) root.lookup("#datacriacaoField");
 
             concursosBox.setOnAction(e -> {
-                
-                int concursoId = (int) concursosBox.getValue();
+                Integer concursoId = (Integer) concursosBox.getValue();
+                if (concursoId != null) {
+                    for (int i = 0; i < concursosatualizado.length(); i++) {
+                        JSONObject concurso = concursosatualizado.getJSONObject(i);
+                        if (concurso.getInt("id") == concursoId) {
+                            dataSorteioField.setText(concurso.getString("dataSorteio"));
+                            dataCriacaoField.setText(concurso.getString("dataCriacao"));
+                            situacaoCheckBox.setSelected(concurso.getString("situacao").equals("Ativo"));
+                            premioAcumuladoField.setText(String.valueOf(concurso.getInt("premioAcumulado")));
+                            numerosSorteadosField.setText(concurso.getJSONArray("numerosSorteados").toString());
 
-                for (int i = 0; i < concursos.length(); i++) {
-                    JSONObject concurso = concursos.getJSONObject(i);
-                    if (concurso.getInt("id") == concursoId) {
-                        dataSorteioField.setText(concurso.getString("dataSorteio"));
-                        dataCriacaoField.setText(concurso.getString("dataCriacao"));
-                        situacaoCheckBox.setSelected(concurso.getString("situacao").equals("Ativo"));
-                        premioAcumuladoField.setText(String.valueOf(concurso.getInt("premioAcumulado")));
-                        numerosSorteadosField.setText(concurso.getJSONArray("numerosSorteados").toString());
+                            TableView<Aposta> tabelaApostadores = (TableView<Aposta>) root.lookup("#tabelaApostadores");
+
+                            TableColumn<Aposta, String> nomeApostadores = (TableColumn<Aposta, String>) ((TableView<?>) root
+                                    .lookup("#tabelaApostadores")).getColumns().get(0);
+                            TableColumn<Aposta, String> numerosApostadores = (TableColumn<Aposta, String>) ((TableView<?>) root
+                                    .lookup("#tabelaApostadores")).getColumns().get(1);
+                            TableColumn<Aposta, LocalDate> dataAposta = (TableColumn<Aposta, LocalDate>) ((TableView<?>) root
+                                    .lookup("#tabelaApostadores")).getColumns().get(2);
+                            TableColumn<Aposta, Double> valorAposta = (TableColumn<Aposta, Double>) ((TableView<?>) root
+                                    .lookup("#tabelaApostadores")).getColumns().get(3);
+
+                            JSONArray apostas = Autenticador.carregarApostas();
+                            ObservableList<Aposta> apostasList = FXCollections.observableArrayList();
+                            for (int j = 0; j < apostas.length(); j++) {
+                                JSONObject apostaJson = apostas.getJSONObject(i);
+                                Aposta aposta = new Aposta();
+                                aposta.setApostador(apostaJson.getString("apostador"));
+                                aposta.setNumerosSelecionados(new ArrayList<>());
+                                for (Object numero : apostaJson.getJSONArray("numerosSelecionados")) {
+                                    aposta.getNumerosSelecionados().add((Integer) numero);
+                                }
+                                aposta.setDataCriacao(LocalDate.parse(apostaJson.getString("dataCriacao")));
+                                aposta.setValorPago(apostaJson.getDouble("valorPago"));
+                                apostasList.add(aposta);
+                            }
+
+                            nomeApostadores.setCellValueFactory(new PropertyValueFactory<>("apostador"));
+                            numerosApostadores.setCellValueFactory(new PropertyValueFactory<>("numerosSelecionados"));
+                            dataAposta.setCellValueFactory(new PropertyValueFactory<>("dataCriacao"));
+                            valorAposta.setCellValueFactory(new PropertyValueFactory<>("valorPago"));
+
+                            tabelaApostadores.setItems(apostasList);
+                        }
                     }
                 }
+
             });
 
             editarConcursoButton.setOnAction(e3 -> {
@@ -151,8 +194,8 @@ public class AdminController {
 
                 int concursoId = (int) concursosBox.getValue();
 
-                for (int i = 0; i < concursos.length(); i++) {
-                    JSONObject concurso = concursos.getJSONObject(i);
+                for (int i = 0; i < concursosatualizado.length(); i++) {
+                    JSONObject concurso = concursosatualizado.getJSONObject(i);
                     if (concurso.getInt("id") == concursoId) {
                         concurso.put("dataSorteio", dataSorteioField.getText());
                         concurso.put("situacao", situacaoCheckBox.isSelected() ? "Ativo" : "Inativo");
@@ -160,7 +203,7 @@ public class AdminController {
 
                         try {
                             BufferedWriter writer = new BufferedWriter(new FileWriter(CONCURSOS_FILE));
-                            writer.write(concursos.toString());
+                            writer.write(concursosatualizado.toString());
                             writer.close();
                         } catch (IOException ex) {
                             ex.printStackTrace();
@@ -190,7 +233,6 @@ public class AdminController {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Concurso encerrado");
                 alert.setHeaderText("Concurso encerrado com sucesso");
-
                 alert.showAndWait();
 
                 sortearButton.setDisable(false);
@@ -228,6 +270,86 @@ public class AdminController {
                     }
                 }
 
+            });
+
+            verificarGanhadorButton.setOnAction(e7 -> {
+                int concursoId = (int) concursosBox.getValue();
+                JSONArray apostas = Autenticador.carregarApostas();
+
+                for (int i = 0; i < apostas.length(); i++) {
+                    JSONObject aposta = apostas.getJSONObject(i);
+                    if (aposta.getInt("id") == concursoId) {
+                        List<Object> numerosSorteados = new ArrayList<>();
+                        for (int j = 0; j < concursosatualizado.length(); j++) {
+                            JSONObject concurso = concursosatualizado.getJSONObject(j);
+                            if (concurso.getInt("id") == concursoId) {
+                                numerosSorteados = concurso.getJSONArray("numerosSorteados").toList();
+                            }
+                        }
+
+                        List<Object> numerosApostados = aposta.getJSONArray("numerosSelecionados").toList();
+                        int qtdeAcertos = 0;
+                        for (Object numero : numerosApostados) {
+                            if (numerosSorteados.contains(numero)) {
+                                qtdeAcertos++;
+                            }
+                        }
+
+                        aposta.put("qtdeAcertos", qtdeAcertos);
+
+                        try {
+                            BufferedWriter writer = new BufferedWriter(new FileWriter(APOSTAS_FILE));
+                            writer.write(apostas.toString(4));
+                            writer.close();
+                        } catch (IOException ex) {
+                            ex.printStackTrace();
+                        }
+                    }
+                }
+
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Apostas verificadas");
+                alert.setHeaderText("Apostas verificadas com sucesso");
+                alert.showAndWait();
+                for (int i = 0; i < apostas.length(); i++) {
+                    JSONObject aposta = apostas.getJSONObject(i);
+                    if (aposta.getInt("id") == concursoId) {
+                        int qtdeAcertos = aposta.getInt("qtdeAcertos");
+                        if (qtdeAcertos >= 11) {
+                            double valorGanho = 0;
+                            switch (qtdeAcertos) {
+                                case 15:
+                                    valorGanho = 520192.42;
+                                    break;
+                                case 14:
+                                    valorGanho = 2038.74;
+                                    break;
+                                case 13:
+                                    valorGanho = 30.00;
+                                    break;
+                                case 12:
+                                    valorGanho = 12.00;
+                                    break;
+                                case 11:
+                                    valorGanho = 6.00;
+                                    break;
+                            }
+
+                            aposta.put("valorGanho", valorGanho);
+
+                            StringBuilder valorReceber = new StringBuilder();
+                            valorReceber.append(String.format("R$ %,.2f", valorGanho));
+
+                            
+                            Alert alert2 = new Alert(Alert.AlertType.INFORMATION);
+                            alert2.setTitle("Ganhador encontrado");
+                            alert2.setHeaderText("Aposta ganhadora encontrada");
+                            alert2.setContentText("Apostador: " + aposta.getString("apostador") + "\nQuantidade de acertos: " + qtdeAcertos + "\nValor ganho: " + valorReceber);
+                            alert2.showAndWait();
+                        }
+                    }
+                }
+                
             });
 
         });
