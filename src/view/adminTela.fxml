@@ -52,6 +52,8 @@
             </TableView>
             <Button id="verificarButton" layoutX="164.0" layoutY="14.0" mnemonicParsing="false" text="Verificar Ganhador" />
             <ChoiceBox id="concursosBox" layoutX="14.0" layoutY="14.0" prefWidth="150.0" />
+            <TextField id="valoresApostadosField" editable="false" layoutX="655.0" layoutY="129.0" />
+            <Label layoutX="618.0" layoutY="133.0" text="Lucro" />
          </children></AnchorPane>
     <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="48.0" prefWidth="643.0">
          <children>

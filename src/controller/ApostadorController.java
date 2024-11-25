@@ -316,6 +316,12 @@ public class ApostadorController extends Application {
                         editarNumerosField.setText(aposta.getJSONArray("numerosSelecionados").toString());
 
                         editarNumerosButton.setOnAction(e2 -> {
+                            if (aposta.getString("situacao").equals("Encerrado")) {
+                                Alert alert = new Alert(Alert.AlertType.ERROR);
+                                alert.setHeaderText("Concurso já realizado, impossivel editar");
+                                alert.show();
+                                return;
+                            }
                         try {
                             FXMLLoader escolherLoader = new FXMLLoader(getClass().getResource("/view/escolherNumerosTela.fxml"));
                             Parent escolherRoot = escolherLoader.load();

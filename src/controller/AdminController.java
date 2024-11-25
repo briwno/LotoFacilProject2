@@ -20,6 +20,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.ArrayList;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -145,6 +146,7 @@ public class AdminController {
 
             TextField dataSorteioField = (TextField) root.lookup("#dataSorteioField");
             TextField dataCriacaoField = (TextField) root.lookup("#datacriacaoField");
+            TextField valoresApostadosField = (TextField) root.lookup("#valoresApostadosField");
 
             concursosBox.setOnAction(e -> {
                 Integer concursoId = (Integer) concursosBox.getValue();
@@ -190,6 +192,13 @@ public class AdminController {
                             valorAposta.setCellValueFactory(new PropertyValueFactory<>("valorPago"));
 
                             tabelaApostadores.setItems(apostasList);
+
+                            double totalValoresApostados = 0;
+                            for (Aposta aposta : apostasList) {
+                                totalValoresApostados += aposta.getValorPago();
+                            }
+                            valoresApostadosField.setText(String.format("R$ %,.2f", totalValoresApostados));
+
                         }
                     }
                 }
@@ -210,7 +219,6 @@ public class AdminController {
 
                 dataSorteioField.setEditable(false);
                 situacaoCheckBox.setDisable(true);
-                
 
                 int concursoId = (int) concursosBox.getValue();
 
@@ -257,7 +265,6 @@ public class AdminController {
 
                 sortearButton.setDisable(false);
 
-
             });
 
             sortearButton.setOnAction(e6 -> {
@@ -299,55 +306,35 @@ public class AdminController {
                 JSONArray apostas = Autenticador.carregarApostas();
 
                 JSONObject concurso = null;
+                List<Integer> numerosSorteados = new ArrayList<>();
+                for (int i = 0; i < concursosatualizado.length(); i++) {
+                    concurso = concursosatualizado.getJSONObject(i);
+                    if (concurso.getInt("id") == concursoId) {
+                        numerosSorteados = concurso.getJSONArray("numerosSorteados").toList().stream()
+                                .map(num -> (Integer) num).collect(Collectors.toList());
+                        break;
+                    }
+                }
+
+                StringBuilder resultado = new StringBuilder();
+                boolean hasWinners = false;
+
                 for (int i = 0; i < apostas.length(); i++) {
                     JSONObject aposta = apostas.getJSONObject(i);
                     if (aposta.getInt("id") == concursoId) {
-                        List<Object> numerosSorteados = new ArrayList<>();
-                        for (int j = 0; j < concursosatualizado.length(); j++) {
-                            concurso = concursosatualizado.getJSONObject(j);
-                            if (concurso.getInt("id") == concursoId) {
-                                numerosSorteados = concurso.getJSONArray("numerosSorteados").toList();
-                            }
-                        }
-
-                        List<Object> numerosApostados = aposta.getJSONArray("numerosSelecionados").toList();
+                        List<Integer> numerosApostados = aposta.getJSONArray("numerosSelecionados").toList().stream()
+                                .map(num -> (Integer) num).collect(Collectors.toList());
                         int qtdeAcertos = 0;
-                        for (Object numero : numerosApostados) {
+                        for (Integer numero : numerosApostados) {
                             if (numerosSorteados.contains(numero)) {
                                 qtdeAcertos++;
                             }
                         }
 
-                        if (qtdeAcertos >= 15) {
-                            concurso.put("situacao", "Finalizado");
-                        } else {
-                            concurso.put("situacao", "Acumulado");
-                            concurso.put("premioAcumulado", concurso.getInt("premioAcumulado") + 520192.42);
-                        }
-
-                        premioAcumuladoField.setText(String.valueOf(concurso.getInt("premioAcumulado")));
-
                         aposta.put("qtdeAcertos", qtdeAcertos);
 
-                        try {
-                            BufferedWriter writer = new BufferedWriter(new FileWriter(APOSTAS_FILE));
-                            writer.write(apostas.toString(4));
-                            writer.close();
-                        } catch (IOException ex) {
-                            ex.printStackTrace();
-                        }
-                    }
-                }
-
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Apostas verificadas");
-                alert.setHeaderText("Apostas verificadas com sucesso");
-                alert.showAndWait();
-                for (int i = 0; i < apostas.length(); i++) {
-                    JSONObject aposta = apostas.getJSONObject(i);
-                    if (aposta.getInt("id") == concursoId) {
-                        int qtdeAcertos = aposta.getInt("qtdeAcertos");
                         if (qtdeAcertos >= 11) {
+                            hasWinners = true;
                             double valorGanho = 0;
                             switch (qtdeAcertos) {
                                 case 15:
@@ -369,17 +356,33 @@ public class AdminController {
 
                             aposta.put("valorGanho", valorGanho);
 
-                            StringBuilder valorReceber = new StringBuilder();
-                            valorReceber.append(String.format("R$ %,.2f", valorGanho));
-
-                            Alert alert2 = new Alert(Alert.AlertType.INFORMATION);
-                            alert2.setTitle("Ganhador encontrado");
-                            alert2.setHeaderText("Aposta ganhadora encontrada");
-                            alert2.setContentText("Apostador: " + aposta.getString("apostador")
-                                    + "\nQuantidade de acertos: " + qtdeAcertos + "\nValor ganho: " + valorReceber);
-                            alert2.showAndWait();
+                            resultado.append("Apostador: ").append(aposta.getString("apostador"))
+                                    .append("\nQuantidade de acertos: ").append(qtdeAcertos)
+                                    .append("\nValor ganho: R$ ").append(String.format("%,.2f", valorGanho))
+                                    .append("\n\n");
                         }
                     }
+                }
+
+                try {
+                    BufferedWriter writer = new BufferedWriter(new FileWriter(APOSTAS_FILE));
+                    writer.write(apostas.toString(4));
+                    writer.close();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+
+                if (hasWinners) {
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Apostas verificadas");
+                    alert.setHeaderText("Apostas verificadas com sucesso");
+                    alert.setContentText(resultado.toString());
+                    alert.showAndWait();
+                } else {
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Apostas verificadas");
+                    alert.setHeaderText("Nenhum ganhador encontrado");
+                    alert.showAndWait();
                 }
 
             });

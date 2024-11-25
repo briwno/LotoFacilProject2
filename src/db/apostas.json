@@ -1,25 +1,123 @@
-[{
-    "qtdeAcertos": 15,
-    "apostador": "Bruno Alves Bezerra",
-    "valorPago": 3,
-    "id": 1,
-    "numerosSelecionados": [
-        2,
-        4,
-        7,
-        8,
-        9,
-        13,
-        14,
-        15,
-        16,
-        18,
-        20,
-        22,
-        23,
-        24,
-        25
-    ],
-    "dataCriacao": "2024-11-24",
-    "valorGanho": 0
-}]
+[
+    {
+        "qtdeAcertos": 0,
+        "apostador": "Bruno Alves Bezerra",
+        "valorPago": 3,
+        "id": 1,
+        "numerosSelecionados": [
+            2,
+            4,
+            7,
+            8,
+            9,
+            13,
+            14,
+            15,
+            16,
+            18,
+            20,
+            22,
+            23,
+            24,
+            25
+        ],
+        "dataCriacao": "2024-11-24",
+        "valorGanho": 0
+    },
+    {
+        "qtdeAcertos": 0,
+        "apostador": "Ana Silva",
+        "valorPago": 3,
+        "id": 2,
+        "numerosSelecionados": [
+            1,
+            3,
+            5,
+            6,
+            7,
+            10,
+            12,
+            14,
+            17,
+            19,
+            21,
+            23,
+            25
+        ],
+        "dataCriacao": "2024-11-25",
+        "valorGanho": 0
+    },
+    {
+        "qtdeAcertos": 0,
+        "apostador": "Carlos Souza",
+        "valorPago": 3,
+        "id": 3,
+        "numerosSelecionados": [
+            2,
+            4,
+            6,
+            8,
+            10,
+            11,
+            13,
+            15,
+            17,
+            19,
+            21,
+            22,
+            24,
+            25
+        ],
+        "dataCriacao": "2024-11-26",
+        "valorGanho": 0
+    },
+    {
+        "qtdeAcertos": 0,
+        "apostador": "Maria Oliveira",
+        "valorPago": 3,
+        "id": 4,
+        "numerosSelecionados": [
+            1,
+            2,
+            3,
+            5,
+            7,
+            9,
+            11,
+            13,
+            15,
+            17,
+            20,
+            22,
+            24,
+            25
+        ],
+        "dataCriacao": "2024-11-27",
+        "valorGanho": 0
+    },
+    {
+        "qtdeAcertos": 0,
+        "apostador": "João Pereira",
+        "valorPago": 3,
+        "id": 5,
+        "numerosSelecionados": [
+            1,
+            2,
+            4,
+            6,
+            8,
+            10,
+            12,
+            14,
+            16,
+            18,
+            20,
+            21,
+            23,
+            24,
+            25
+        ],
+        "dataCriacao": "2024-11-28",
+        "valorGanho": 0
+    }
+]
