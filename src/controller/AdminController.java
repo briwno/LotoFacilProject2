@@ -76,6 +76,27 @@ public class AdminController {
             Button salvarConcurso = (Button) root.lookup("#salvarButton");
 
             salvarConcurso.setOnAction(e2 -> {
+
+                if (idConcurso.getText().isEmpty() || dataConcurso.getValue() == null) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Erro ao salvar concurso");
+                    alert.setHeaderText("Todos os campos devem ser preenchidos");
+                    alert.showAndWait();
+                    return;
+                }
+
+                for (int i = 0; i < concursos.length(); i++) {
+                    JSONObject concursoExistente = concursos.getJSONObject(i);
+                    LocalDate dataExistente = LocalDate.parse(concursoExistente.getString("dataSorteio"));
+                    if (dataExistente.equals(dataConcurso.getValue())) {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Erro ao salvar concurso");
+                        alert.setHeaderText("Já existe um concurso na data selecionada");
+                        alert.showAndWait();
+                        return;
+                    }
+                }
+
                 Concurso concurso = new Concurso();
                 concurso.setId(Integer.parseInt(idConcurso.getText()));
                 concurso.setDataCriacao(new Date());
@@ -236,6 +257,8 @@ public class AdminController {
                 alert.showAndWait();
 
                 sortearButton.setDisable(false);
+
+
             });
 
             sortearButton.setOnAction(e6 -> {
@@ -276,12 +299,13 @@ public class AdminController {
                 int concursoId = (int) concursosBox.getValue();
                 JSONArray apostas = Autenticador.carregarApostas();
 
+                JSONObject concurso = null;
                 for (int i = 0; i < apostas.length(); i++) {
                     JSONObject aposta = apostas.getJSONObject(i);
                     if (aposta.getInt("id") == concursoId) {
                         List<Object> numerosSorteados = new ArrayList<>();
                         for (int j = 0; j < concursosatualizado.length(); j++) {
-                            JSONObject concurso = concursosatualizado.getJSONObject(j);
+                            concurso = concursosatualizado.getJSONObject(j);
                             if (concurso.getInt("id") == concursoId) {
                                 numerosSorteados = concurso.getJSONArray("numerosSorteados").toList();
                             }
@@ -293,6 +317,13 @@ public class AdminController {
                             if (numerosSorteados.contains(numero)) {
                                 qtdeAcertos++;
                             }
+                        }
+
+                        if (qtdeAcertos >= 15) {
+                            concurso.put("situacao", "Finalizado");
+                        } else {
+                            concurso.put("situacao", "Acumulado");
+                            concurso.put("premioAcumulado", concurso.getInt("premioAcumulado") + 520192.42);
                         }
 
                         aposta.put("qtdeAcertos", qtdeAcertos);
@@ -340,16 +371,16 @@ public class AdminController {
                             StringBuilder valorReceber = new StringBuilder();
                             valorReceber.append(String.format("R$ %,.2f", valorGanho));
 
-                            
                             Alert alert2 = new Alert(Alert.AlertType.INFORMATION);
                             alert2.setTitle("Ganhador encontrado");
                             alert2.setHeaderText("Aposta ganhadora encontrada");
-                            alert2.setContentText("Apostador: " + aposta.getString("apostador") + "\nQuantidade de acertos: " + qtdeAcertos + "\nValor ganho: " + valorReceber);
+                            alert2.setContentText("Apostador: " + aposta.getString("apostador")
+                                    + "\nQuantidade de acertos: " + qtdeAcertos + "\nValor ganho: " + valorReceber);
                             alert2.showAndWait();
                         }
                     }
                 }
-                
+
             });
 
         });

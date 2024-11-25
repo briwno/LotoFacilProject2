@@ -108,13 +108,21 @@ public class ApostadorController extends Application {
             }
 
             concursosBox.setOnAction(e6 -> {
-
                 Integer concursoId = (Integer) concursosBox.getValue();
                 for (int i = 0; i < concursos.length(); i++) {
                     JSONObject concurso = concursos.getJSONObject(i);
                     if (concurso.getInt("id") == concursoId) {
-                        idField.setText(String.valueOf(concurso.getInt("id")));
-                        dataField.setText(concurso.getString("dataSorteio"));
+                        if(concurso.getString("situacao").equals("Encerrado")) {
+                            Alert alert = new Alert(Alert.AlertType.ERROR);
+                            alert.setHeaderText("Concurso já realizado");
+                            alert.show();
+                            concursosBox.getSelectionModel().clearSelection();
+                            return;
+                        }
+                        if (concurso.getString("situacao").equals("Ativo")) {
+                            idField.setText(String.valueOf(concurso.getInt("id")));
+                            dataField.setText(concurso.getString("dataSorteio"));
+                        }
                     }
                 }
 
@@ -268,19 +276,164 @@ public class ApostadorController extends Application {
             apostasList.getItems().clear();
 
             try {
-                String content = new String(Files.readAllBytes(Paths.get(APOSTAS_FILE)));
-                JSONArray apostasArray = new JSONArray(content);
+            String content = new String(Files.readAllBytes(Paths.get(APOSTAS_FILE)));
+            JSONArray apostasArray = new JSONArray(content);
 
-                for (int i = 0; i < apostasArray.length(); i++) {
-                    JSONObject aposta = apostasArray.getJSONObject(i);
-                    if (aposta.getString("apostador").equals(usuarioLogado)) {
-                        String apostaInfo = "Concurso: " + aposta.getInt("id") + ", Números: " + aposta.getJSONArray("numerosSelecionados").toString() + ", Data: " + aposta.getString("dataCriacao") + ", Valor Pago: " + aposta.getDouble("valorPago");
-                        apostasList.getItems().add(apostaInfo);
-                    }
+            for (int i = 0; i < apostasArray.length(); i++) {
+                JSONObject aposta = apostasArray.getJSONObject(i);
+                if (aposta.getString("apostador").equals(usuarioLogado)) {
+                String apostaInfo = "Concurso: " + aposta.getInt("id") + ", Números: " + aposta.getJSONArray("numerosSelecionados").toString() + ", Data: " + aposta.getString("dataCriacao") + ", Valor Pago: " + aposta.getDouble("valorPago");
+                apostasList.getItems().add(apostaInfo);
                 }
-            } catch (IOException | JSONException e2) {
-                e2.printStackTrace();
             }
+            } catch (IOException | JSONException e2) {
+            e2.printStackTrace();
+            }
+
+            apostasList.setOnMouseClicked(event -> {
+            if (event.getClickCount() == 2) {
+                String selectedAposta = apostasList.getSelectionModel().getSelectedItem();
+                if (selectedAposta != null) {
+                try {
+                    String content = new String(Files.readAllBytes(Paths.get(APOSTAS_FILE)));
+                    JSONArray apostasArray = new JSONArray(content);
+
+                    for (int i = 0; i < apostasArray.length(); i++) {
+                    JSONObject aposta = apostasArray.getJSONObject(i);
+                    if (selectedAposta.contains("Concurso: " + aposta.getInt("id"))) {
+                        FXMLLoader editarLoader = new FXMLLoader(getClass().getResource("/view/editarApostaTela.fxml"));
+                        Parent editarRoot = editarLoader.load();
+                        Stage editarStage = new Stage();
+                        editarStage.setScene(new Scene(editarRoot));
+                        editarStage.setTitle("Editar Aposta");
+                        editarStage.show();
+
+                        TextField editarNumerosField = (TextField) editarRoot.lookup("#numerosField");
+                        Button editarNumerosButton = (Button) editarRoot.lookup("#editarNumerosButton");
+                        Button salvarButton = (Button) editarRoot.lookup("#salvarButton");
+                        Button excluirButton = (Button) editarRoot.lookup("#excluirButton");
+
+                        editarNumerosField.setText(aposta.getJSONArray("numerosSelecionados").toString());
+
+                        editarNumerosButton.setOnAction(e2 -> {
+                        try {
+                            FXMLLoader escolherLoader = new FXMLLoader(getClass().getResource("/view/escolherNumerosTela.fxml"));
+                            Parent escolherRoot = escolherLoader.load();
+                            Stage escolherStage = new Stage();
+                            escolherStage.setScene(new Scene(escolherRoot));
+                            escolherStage.setTitle("Escolher Números");
+                            escolherStage.show();
+                            TextField qtdeSelecionados = (TextField) escolherRoot.lookup("#selecionadosField");
+                            qtdeSelecionados.setText("0");
+                            Button autoSelect = (Button) escolherRoot.lookup("#autoselectButton");
+                            Button limpar = (Button) escolherRoot.lookup("#limparButton");
+                            Button okButton = (Button) escolherRoot.lookup("#okButton");
+
+                            ToggleButton[] numeros = new ToggleButton[25];
+                            for (int j = 0; j < 25; j++) {
+                            numeros[j] = (ToggleButton) escolherRoot.lookup("#num" + (j + 1));
+                            final int index = j;
+                            numeros[index].setOnAction(e3 -> {
+                                if (numeros[index].isSelected()) {
+                                numeros[index].setStyle("-fx-background-color: #00ff00");
+                                qtdeSelecionados.setText(String.valueOf(Integer.parseInt(qtdeSelecionados.getText()) + 1));
+                                } else {
+                                numeros[index].setStyle("");
+                                }
+                            });
+                            }
+
+                            autoSelect.setOnAction(e3 -> {
+                            ChoiceDialog<Integer> dialog = new ChoiceDialog<>(15, 15, 16, 17, 18, 19, 20);
+                            dialog.setTitle("Quantidade de Números");
+                            dialog.setHeaderText("Seleção Automática");
+                            dialog.setContentText("Escolha a quantidade de números:");
+
+                            dialog.showAndWait().ifPresent(qtde -> {
+                                for (int k = 0; k < 25; k++) {
+                                numeros[k].setSelected(false);
+                                numeros[k].setStyle("");
+                                }
+                                List<Integer> selecionados = new ArrayList<>();
+                                while (selecionados.size() < qtde) {
+                                int num = (int) (Math.random() * 25);
+                                if (!selecionados.contains(num)) {
+                                    selecionados.add(num);
+                                    numeros[num].setSelected(true);
+                                    numeros[num].setStyle("-fx-background-color: #00ff00");
+                                }
+                                }
+                                qtdeSelecionados.setText(String.valueOf(selecionados.size()));
+                            });
+                            });
+
+                            limpar.setOnAction(e3 -> {
+                            for (int k = 0; k < 25; k++) {
+                                numeros[k].setSelected(false);
+                                numeros[k].setStyle("");
+                            }
+                            qtdeSelecionados.setText("0");
+                            });
+
+                            okButton.setOnAction(e4 -> {
+                            if (Integer.parseInt(qtdeSelecionados.getText()) < 15) {
+                                Alert alert = new Alert(Alert.AlertType.ERROR);
+                                alert.setHeaderText("Selecione ao menos 15 números");
+                                alert.show();
+                                return;
+                            }
+                            escolherStage.close();
+                            List<Integer> selecionados = new ArrayList<>();
+                            for (int k = 0; k < 25; k++) {
+                                if (numeros[k].isSelected()) {
+                                selecionados.add(k + 1);
+                                }
+                            }
+                            editarNumerosField.setText(selecionados.toString());
+                            });
+
+                        } catch (IOException e3) {
+                            e3.printStackTrace();
+                        }
+                        });
+
+                        salvarButton.setOnAction(e2 -> {
+                        try {
+                            aposta.put("numerosSelecionados", new JSONArray(editarNumerosField.getText()));
+                            Files.write(Paths.get(APOSTAS_FILE), apostasArray.toString(4).getBytes());
+
+                            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                            alert.setHeaderText("Aposta atualizada com sucesso");
+                            alert.show();
+                            editarStage.close();
+                        } catch (IOException | JSONException e3) {
+                            e3.printStackTrace();
+                        }
+                        });
+
+                        final int index = i;
+                        excluirButton.setOnAction(e2 -> {
+                        try {
+                            apostasArray.remove(index);
+                            Files.write(Paths.get(APOSTAS_FILE), apostasArray.toString(4).getBytes());
+
+                            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                            alert.setHeaderText("Aposta excluída com sucesso");
+                            alert.show();
+                            editarStage.close();
+                            apostasList.getItems().remove(selectedAposta);
+                        } catch (IOException | JSONException e3) {
+                            e3.printStackTrace();
+                        }
+                        });
+                    }
+                    }
+                } catch (IOException | JSONException e1) {
+                    e1.printStackTrace();
+                }
+                }
+            }
+            });
         });
 
         btnResultados.setOnAction(e -> {
