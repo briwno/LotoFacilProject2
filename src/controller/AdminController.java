@@ -202,7 +202,6 @@ public class AdminController {
 
                 dataSorteioField.setEditable(true);
                 situacaoCheckBox.setDisable(false);
-                premioAcumuladoField.setEditable(true);
             });
 
             concluirEdicaoButton.setOnAction(e4 -> {
@@ -211,7 +210,7 @@ public class AdminController {
 
                 dataSorteioField.setEditable(false);
                 situacaoCheckBox.setDisable(true);
-                premioAcumuladoField.setEditable(false);
+                
 
                 int concursoId = (int) concursosBox.getValue();
 
@@ -325,6 +324,8 @@ public class AdminController {
                             concurso.put("situacao", "Acumulado");
                             concurso.put("premioAcumulado", concurso.getInt("premioAcumulado") + 520192.42);
                         }
+
+                        premioAcumuladoField.setText(String.valueOf(concurso.getInt("premioAcumulado")));
 
                         aposta.put("qtdeAcertos", qtdeAcertos);
 
