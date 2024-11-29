@@ -55,5 +55,43 @@
         "user": "carlos85",
         "email": "carlos@example.com",
         "timestamp": "2024/10/31 15:30:00"
+    },
+    {
+        "senha": "12345",
+        "telefone": "1111111111",
+        "endereco": {
+            "cidade": "Araucária",
+            "estado": "PR",
+            "bairro": "Costeira",
+            "rua": "Rua Isidoro Ksiazkiewicz",
+            "cep": 83708750
+        },
+        "genero": "Feminino",
+        "cpf": "11111111111",
+        "nome": "alaoaoao",
+        "id": 0,
+        "dataNascimento": "2024-11-10",
+        "user": "bruno123",
+        "email": "dajsidasdsadsajdas",
+        "timestamp": "2024/11/25 21:00:40"
+    },
+    {
+        "senha": "12345",
+        "telefone": "419999999",
+        "endereco": {
+            "cidade": "Araucária",
+            "estado": "PR",
+            "bairro": "Costeira",
+            "rua": "Rua Isidoro Ksiazkiewicz",
+            "cep": 83708750
+        },
+        "genero": "Feminino",
+        "cpf": "12345678911",
+        "nome": "fjdhgkdjhgd",
+        "id": 0,
+        "dataNascimento": "2024-11-05",
+        "user": "bruno1234",
+        "email": "cjbsjkdjsjsgj",
+        "timestamp": "2024/11/25 21:02:01"
     }
 ]

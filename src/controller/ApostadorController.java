@@ -92,6 +92,44 @@ public class ApostadorController extends Application {
         Button btnResultados = (Button) root.lookup("#btnResultados");
         Button btnPerfil = (Button) root.lookup("#btnPerfil");
 
+        btnResultados.setOnAction(e -> {
+            ApostarPane.setVisible(false);
+            ApostasPane.setVisible(false);
+            ResultadosPane.setVisible(true);
+
+            ListView<String> resultadosList = (ListView<String>) root.lookup("#resultadosList");
+            resultadosList.getItems().clear();
+
+            try {
+                String concursos = new String(Files.readAllBytes(Paths.get(CONCURSOS_FILE)));
+                JSONArray concursosArray = new JSONArray(concursos);
+
+                for (int i = 0; i < concursosArray.length(); i++) {
+                    JSONObject concurso = concursosArray.getJSONObject(i);
+                    String resultadoInfo = "Concurso: " + concurso.getInt("id") + ", Data: " + concurso.getString("dataSorteio") + ", Números: " + concurso.getJSONArray("numerosSorteados").toString();
+                    resultadosList.getItems().add(resultadoInfo);
+                }
+
+                String apostas = new String(Files.readAllBytes(Paths.get(APOSTAS_FILE)));
+                JSONArray apostasArray = new JSONArray(apostas);
+
+                for (int i = 0; i < apostasArray.length(); i++) {
+                    JSONObject aposta = apostasArray.getJSONObject(i);
+                    if (aposta.getString("apostador").equals(usuarioLogado)) {
+                        int qtdeAcertos = aposta.getInt("qtdeAcertos");
+                        if (qtdeAcertos >= 15) {
+                            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                            alert.setHeaderText("Parabéns! Você ganhou com " + qtdeAcertos + " acertos.");
+                            alert.setContentText("Valor ganho: " + aposta.getDouble("valorGanho"));
+                            alert.show();
+                        }
+                    }
+                }
+            } catch (IOException | JSONException e2) {
+                e2.printStackTrace();
+            }
+        });
+
         btnApostar.setOnAction(e -> {
             ApostarPane.setVisible(true);
             ApostasPane.setVisible(false);
@@ -106,6 +144,8 @@ public class ApostadorController extends Application {
                 JSONObject concurso = concursos.getJSONObject(i);
                 concursosBox.getItems().add(concurso.getInt("id"));
             }
+
+            
 
             concursosBox.setOnAction(e6 -> {
                 Integer concursoId = (Integer) concursosBox.getValue();
@@ -440,28 +480,6 @@ public class ApostadorController extends Application {
                 }
             }
             });
-        });
-
-        btnResultados.setOnAction(e -> {
-            ApostarPane.setVisible(false);
-            ApostasPane.setVisible(false);
-            ResultadosPane.setVisible(true);
-
-            ListView<String> resultadosList = (ListView<String>) root.lookup("#resultadosList");
-            resultadosList.getItems().clear();
-
-            try {
-                String concursos = new String(Files.readAllBytes(Paths.get(CONCURSOS_FILE)));
-                JSONArray concursosArray = new JSONArray(concursos);
-
-                for (int i = 0; i < concursosArray.length(); i++) {
-                    JSONObject concurso = concursosArray.getJSONObject(i);
-                    String resultadoInfo = "Concurso: " + concurso.getInt("id") + ", Data: " + concurso.getString("dataSorteio") + ", Números: " + concurso.getJSONArray("numerosSorteados").toString() + ", Ganhadores: Bruno Alves Bezerra";
-                    resultadosList.getItems().add(resultadoInfo);
-                }
-            } catch (IOException | JSONException e2) {
-                e2.printStackTrace();
-            }
         });
 
         btnPerfil.setOnAction(e -> {

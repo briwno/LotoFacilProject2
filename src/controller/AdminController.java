@@ -174,7 +174,7 @@ public class AdminController {
                             JSONArray apostas = Autenticador.carregarApostas();
                             ObservableList<Aposta> apostasList = FXCollections.observableArrayList();
                             for (int j = 0; j < apostas.length(); j++) {
-                                JSONObject apostaJson = apostas.getJSONObject(i);
+                                JSONObject apostaJson = apostas.getJSONObject(j);
                                 Aposta aposta = new Aposta();
                                 aposta.setApostador(apostaJson.getString("apostador"));
                                 aposta.setNumerosSelecionados(new ArrayList<>());
@@ -310,20 +310,27 @@ public class AdminController {
                 for (int i = 0; i < concursosatualizado.length(); i++) {
                     concurso = concursosatualizado.getJSONObject(i);
                     if (concurso.getInt("id") == concursoId) {
-                        numerosSorteados = concurso.getJSONArray("numerosSorteados").toList().stream()
-                                .map(num -> (Integer) num).collect(Collectors.toList());
+                        numerosSorteados = new ArrayList<>();
+                        JSONArray numerosArray = concurso.getJSONArray("numerosSorteados");
+                        for (int j = 0; j < numerosArray.length(); j++) {
+                            numerosSorteados.add(numerosArray.getInt(j));
+                        }
                         break;
                     }
                 }
 
                 StringBuilder resultado = new StringBuilder();
-                boolean hasWinners = false;
+                boolean TemGanhadore = false;
+                
 
                 for (int i = 0; i < apostas.length(); i++) {
                     JSONObject aposta = apostas.getJSONObject(i);
                     if (aposta.getInt("id") == concursoId) {
-                        List<Integer> numerosApostados = aposta.getJSONArray("numerosSelecionados").toList().stream()
-                                .map(num -> (Integer) num).collect(Collectors.toList());
+                        List<Integer> numerosApostados = new ArrayList<>();
+                        JSONArray numerosArray = aposta.getJSONArray("numerosSelecionados");
+                        for (int j = 0; j < numerosArray.length(); j++) {
+                            numerosApostados.add(numerosArray.getInt(j));
+                        }
                         int qtdeAcertos = 0;
                         for (Integer numero : numerosApostados) {
                             if (numerosSorteados.contains(numero)) {
@@ -334,11 +341,12 @@ public class AdminController {
                         aposta.put("qtdeAcertos", qtdeAcertos);
 
                         if (qtdeAcertos >= 11) {
-                            hasWinners = true;
+                            TemGanhadore = true;
                             double valorGanho = 0;
                             switch (qtdeAcertos) {
                                 case 15:
-                                    valorGanho = 520192.42;
+                                    valorGanho = 520192.42 + 
+                                    concurso.getDouble("premioAcumulado");
                                     break;
                                 case 14:
                                     valorGanho = 2038.74;
@@ -372,7 +380,7 @@ public class AdminController {
                     ex.printStackTrace();
                 }
 
-                if (hasWinners) {
+                if (TemGanhadore) {
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle("Apostas verificadas");
                     alert.setHeaderText("Apostas verificadas com sucesso");
@@ -383,7 +391,23 @@ public class AdminController {
                     alert.setTitle("Apostas verificadas");
                     alert.setHeaderText("Nenhum ganhador encontrado");
                     alert.showAndWait();
+
+                    boolean nenhumAcertou15 = true;
+                    for (int i = 0; i < apostas.length(); i++) {
+                        JSONObject aposta = apostas.getJSONObject(i);
+                        if (aposta.getInt("id") == concursoId && aposta.getInt("qtdeAcertos") == 15) {
+                            nenhumAcertou15 = false;
+                            break;
+                        }
+                    }
+
+                    if (nenhumAcertou15) {
+                        Double valorAcumulado = concurso.getDouble("premioAcumulado") + 520192.42;
+                        concurso.put("premioAcumulado", valorAcumulado);
+                    }
                 }
+
+
 
             });
 

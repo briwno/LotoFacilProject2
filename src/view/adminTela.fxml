@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 
-<Pane prefHeight="564.0" prefWidth="946.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1">
+<Pane prefHeight="564.0" prefWidth="946.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <AnchorPane id="painelCriar" layoutY="47.0" prefHeight="520.0" prefWidth="945.0" style="-fx-background-color: pink;" visible="false">
          <children>
@@ -68,7 +68,7 @@
                   <Button id="verBotao" mnemonicParsing="false" text="Visualizar Concursos" />
                   <Button id="Deslogar" contentDisplay="CENTER" disable="true" mnemonicParsing="false" text="Deslogar" textAlignment="CENTER" visible="false" />
                   <Button id="Deslogar" contentDisplay="CENTER" disable="true" layoutX="426.0" layoutY="16.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="40.0" text="Deslogar" textAlignment="CENTER" visible="false" />
-                  <Button id="Deslogar" alignment="CENTER_RIGHT" contentDisplay="CENTER" layoutX="494.0" layoutY="16.0" mnemonicParsing="false" text="Deslogar" textAlignment="CENTER" />
+                  <Button id="DeslogarButton" alignment="CENTER_RIGHT" contentDisplay="CENTER" layoutX="494.0" layoutY="16.0" mnemonicParsing="false" text="Deslogar" textAlignment="CENTER" />
               </items>
             </ToolBar>
          </children>
