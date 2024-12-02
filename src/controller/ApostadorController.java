@@ -115,9 +115,9 @@ public class ApostadorController extends Application {
 
                 for (int i = 0; i < apostasArray.length(); i++) {
                     JSONObject aposta = apostasArray.getJSONObject(i);
-                    if (aposta.getString("apostador").equals(usuarioLogado)) {
+                    if (aposta.getInt("idApostador") == Integer.parseInt(idLogado)) {
                         int qtdeAcertos = aposta.getInt("qtdeAcertos");
-                        if (qtdeAcertos >= 15) {
+                        if (qtdeAcertos >= 11) {
                             Alert alert = new Alert(Alert.AlertType.INFORMATION);
                             alert.setHeaderText("Parabéns! Você ganhou com " + qtdeAcertos + " acertos.");
                             alert.setContentText("Valor ganho: " + aposta.getDouble("valorGanho"));

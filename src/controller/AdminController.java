@@ -554,22 +554,27 @@ public class AdminController {
                                     case 11:
                                     aposta.put("valorGanho", 6.00);
                                     aposta.put("qtdeAcertos", 11);
+                                    Files.write(Paths.get(APOSTAS_FILE), apostas.toString(4).getBytes(StandardCharsets.UTF_8));
                                     break;
                                     case 12:
                                     aposta.put("valorGanho", 12.00);
                                     aposta.put("qtdeAcertos", 12);
+                                    Files.write(Paths.get(APOSTAS_FILE), apostas.toString(4).getBytes(StandardCharsets.UTF_8));
                                     break;
                                     case 13:
                                     aposta.put("valorGanho", 30.00);
                                     aposta.put("qtdeAcertos", 13);
+                                    Files.write(Paths.get(APOSTAS_FILE), apostas.toString(4).getBytes(StandardCharsets.UTF_8));
                                     break;
                                     case 14:
                                         aposta.put("valorGanho", concurso.getInt("premioAcumulado") * 0.13);
                                         aposta.put("qtdeAcertos", 14);
+                                        Files.write(Paths.get(APOSTAS_FILE), apostas.toString(4).getBytes(StandardCharsets.UTF_8));
                                         break;
                                     case 15:
                                         aposta.put("valorGanho", concurso.getInt("premioAcumulado") * 0.62);
                                         aposta.put("qtdeAcertos", 15);
+                                        Files.write(Paths.get(APOSTAS_FILE), apostas.toString(4).getBytes(StandardCharsets.UTF_8));
                                         break;
                                 }
 
