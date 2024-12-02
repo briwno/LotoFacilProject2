@@ -165,7 +165,7 @@ public class ApostadorController extends Application {
                     Button autoSelect = (Button) escolherRoot.lookup("#autoselectButton");
                     Button limpar = (Button) escolherRoot.lookup("#limparButton");
                     Button okButton = (Button) escolherRoot.lookup("#okButton");
-                    
+
 
                     ToggleButton[] numeros = new ToggleButton[25];
                     for (int i = 0; i < 25; i++) {
@@ -320,9 +320,7 @@ public class ApostadorController extends Application {
             });
 
             apostarButton.setOnAction(e2 -> {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setHeaderText("Aposta realizada com sucesso");
-                alert.show();
+                
 
                 Aposta aposta = new Aposta();
                 aposta.setIdConcurso(Integer.parseInt(idField.getText()));

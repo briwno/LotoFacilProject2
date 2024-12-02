@@ -111,7 +111,7 @@
       </GridPane>
       <ListView id="13numerosList" layoutX="696.0" layoutY="326.0" prefHeight="184.0" prefWidth="200.0" />
       <ListView id="12numerosList" layoutX="228.0" layoutY="549.0" prefHeight="210.0" prefWidth="200.0" />
-      <Button layoutX="385.0" layoutY="777.0" mnemonicParsing="false" text="Encerrar Concurso">
+      <Button id="encerrarConcursoButton" layoutX="385.0" layoutY="777.0" mnemonicParsing="false" text="Encerrar Concurso">
          <font>
             <Font size="14.0" />
          </font>

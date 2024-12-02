@@ -205,7 +205,27 @@ public class AdminController {
 
             concursosBox.setOnAction(e -> {
 
+
                 Integer concursoId = (Integer) concursosBox.getValue();
+                if (concursoId != null) {
+                    for (int i = 0; i < concursosatualizado.length(); i++) {
+                        JSONObject concurso = concursosatualizado.getJSONObject(i);
+                        if (concurso.getInt("id") == concursoId) {
+                            if (!concurso.getString("situacao").equals("Ativo")) {
+                                Alert alert = new Alert(Alert.AlertType.WARNING);
+                                alert.setTitle("Concurso Inativo");
+                                alert.setHeaderText("O concurso selecionado não está ativo.");
+                                alert.setContentText("Por favor, selecione um concurso ativo.");
+                                alert.showAndWait();
+                                return;
+                            }
+                            dataSorteioField.setText(concurso.getString("dataSorteio"));
+                            dataCriacaoField.setText(concurso.getString("dataCriacao"));
+                            premioAcumuladoField.setText(String.valueOf(concurso.getInt("premioAcumulado")));
+                            numerosSorteadosField.setText(concurso.getJSONArray("numerosSorteados").toString());}
+                        };
+
+                    }
                 if (concursoId != null) {
                     for (int i = 0; i < concursosatualizado.length(); i++) {
                         JSONObject concurso = concursosatualizado.getJSONObject(i);
@@ -253,6 +273,7 @@ public class AdminController {
                                 totalValoresApostados += aposta.getValorPago();
                             }
                             valoresApostadosField.setText(String.format("R$ %,.2f", totalValoresApostados));
+                            
 
                         }
                     }
@@ -283,12 +304,12 @@ public class AdminController {
                     JSONObject concurso = concursosatualizado.getJSONObject(i);
                     if (concurso.getInt("id") == concursoId) {
                         concurso.put("dataSorteio", dataSorteioField.getText());
-                        concurso.put("premioAcumulado", Integer.parseInt(premioAcumuladoField.getText()));
+                        concurso.put("premioAcumulado", Double.parseDouble(premioAcumuladoField.getText()));
                         concurso.put("numerosSorteados", new JSONArray(numerosSorteadosField.getText()));
 
                         try {
                             BufferedWriter writer = new BufferedWriter(new FileWriter(CONCURSOS_FILE));
-                            writer.write(concursosatualizado.toString());
+                            writer.write(concursosatualizado.toString(4));
                             writer.close();
                         } catch (IOException ex) {
                             ex.printStackTrace();
@@ -421,6 +442,8 @@ public class AdminController {
                     return;
                 }
 
+                
+
                 for (int i = 0; i < concursos.length(); i++) {
                     JSONObject concurso = concursos.getJSONObject(i);
                     
@@ -438,6 +461,27 @@ public class AdminController {
                             TextField dataSorteioField2 = (TextField) ganhadoresRoot.lookup("#dataSorteioField2");
                             dataSorteioField2.setText(concurso.getString("dataSorteio"));
                             AnchorPane infoPane2 = (AnchorPane) ganhadoresRoot.lookup("#infoPane2");
+                        
+                            Button encerrarConcursoButton = (Button) ganhadoresRoot.lookup("#encerrarConcursoButton");
+
+                            encerrarConcursoButton.setOnAction(e8 -> {
+                                concurso.put("situacao", "Encerrado");
+
+                                try {
+                                    BufferedWriter writer = new BufferedWriter(new FileWriter(CONCURSOS_FILE));
+                                    writer.write(concursos.toString());
+                                    writer.close();
+                                } catch (IOException ex) {
+                                    ex.printStackTrace();
+                                }
+
+                                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                                alert.setTitle("Concurso encerrado");
+                                alert.setHeaderText("Concurso encerrado com sucesso");
+                                alert.showAndWait();
+
+                                encerrarConcursoButton.setDisable(true);
+                            });
 
                             ListView<String> numerosList15 = (ListView<String>) ganhadoresRoot.lookup("#15numerosList");
                             ListView<String> numerosList14 = (ListView<String>) ganhadoresRoot.lookup("#14numerosList");
@@ -505,31 +549,56 @@ public class AdminController {
 
                                 int ApostadorId = aposta.getInt("idApostador");
 
+                                
+                                switch (acertos){
+                                    case 11:
+                                    aposta.put("valorGanho", 6.00);
+                                    aposta.put("qtdeAcertos", 11);
+                                    break;
+                                    case 12:
+                                    aposta.put("valorGanho", 12.00);
+                                    aposta.put("qtdeAcertos", 12);
+                                    break;
+                                    case 13:
+                                    aposta.put("valorGanho", 30.00);
+                                    aposta.put("qtdeAcertos", 13);
+                                    break;
+                                    case 14:
+                                        aposta.put("valorGanho", concurso.getInt("premioAcumulado") * 0.13);
+                                        aposta.put("qtdeAcertos", 14);
+                                        break;
+                                    case 15:
+                                        aposta.put("valorGanho", concurso.getInt("premioAcumulado") * 0.62);
+                                        aposta.put("qtdeAcertos", 15);
+                                        break;
+                                }
+
                                 switch (acertos) {
                                     case 15:
                                         ganhadores15.add(
-                                                "Apostador ID: " + ApostadorId + " - Números: " + numerosApostados);
+                                                "Apostador ID: " + ApostadorId + " - Números: " + numerosApostados + " - Valor ganho: R$ " + aposta.getDouble("valorGanho"));
                                         break;
                                     case 14:
                                         ganhadores14.add(
-                                                "Apostador ID: " + ApostadorId + " - Números: " + numerosApostados);
+                                                "Apostador ID: " + ApostadorId + " - Números: " + numerosApostados + " - Valor ganho: R$ " + aposta.getDouble("valorGanho"));
                                         break;
                                     case 13:
                                         ganhadores13.add(
-                                                "Apostador ID: " + ApostadorId + " - Números: " + numerosApostados);
+                                                "Apostador ID: " + ApostadorId + " - Números: " + numerosApostados + " - Valor ganho: R$ " + aposta.getDouble("valorGanho"));
                                         break;
                                     case 12:
                                         ganhadores12.add(
-                                                "Apostador ID: " + ApostadorId + " - Números: " + numerosApostados);
+                                                "Apostador ID: " + ApostadorId + " - Números: " + numerosApostados + " - Valor ganho: R$ " + aposta.getDouble("valorGanho"));
                                         break;
                                     case 11:
                                         ganhadores11.add(
-                                                "Apostador ID: " + ApostadorId + " - Números: " + numerosApostados);
+                                                "Apostador ID: " + ApostadorId + " - Números: " + numerosApostados + " - Valor ganho: R$ " + aposta.getDouble("valorGanho"));
                                         break;
                                 }
                             }
                             if (ganhadores15.isEmpty()) {
                                 ganhadores15.add("Nenhum ganhador com 15 acertos");
+                                concurso.put("premioAcumulado", concurso.getInt("premioAcumulado") * 0.10);
                             }
                             if (ganhadores14.isEmpty()) {
                                 ganhadores14.add("Nenhum ganhador com 14 acertos");

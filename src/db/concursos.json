@@ -1,7 +1,7 @@
 [{
-    "situacao": "Encerrado",
+    "situacao": "Ativo",
     "horario": "22:00",
-    "premioAcumulado": 0,
+    "premioAcumulado": 3,
     "numerosSorteados": [
         16,
         24,
