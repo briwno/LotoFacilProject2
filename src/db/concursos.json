@@ -1,45 +1,12 @@
 [
     {
-        "situacao": "Encerrado",
-        "premioAcumulado": 520192.42,
-        "numerosSorteados": [
-            22,
-            25,
-            4,
-            3,
-            18,
-            19,
-            21,
-            2,
-            9,
-            1,
-            7,
-            23,
-            12,
-            20,
-            15
-        ],
-        "dataSorteio": "2024-11-25",
+        "situacao": "Ativo",
+        "horario": "22:00",
+        "premioAcumulado": 0,
+        "numerosSorteados": [],
+        "dataSorteio": "2024-12-03",
         "id": 1,
-        "dataCriacao": "Fri Nov 22 17:52:45 BRT 2024",
-        "apostas": []
-    },
-    {
-        "situacao": "Ativo",
-        "premioAcumulado": 0,
-        "numerosSorteados": [],
-        "dataSorteio": "2024-11-06",
-        "id": 32,
-        "dataCriacao": "Mon Nov 25 21:13:04 BRT 2024",
-        "apostas": []
-    },
-    {
-        "situacao": "Ativo",
-        "premioAcumulado": 0,
-        "numerosSorteados": [],
-        "dataSorteio": "2024-11-06",
-        "id": 32,
-        "dataCriacao": "Mon Nov 25 21:13:10 BRT 2024",
+        "dataCriacao": "Mon Dec 02 11:54:41 BRT 2024",
         "apostas": []
     }
 ]

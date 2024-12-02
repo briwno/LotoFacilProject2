@@ -4,20 +4,38 @@ import java.time.LocalDate;
 import java.util.List;
 
 public class Aposta {
-    private int id;
+    private int idAposta;
+    private int idApostador;
+    private int idConcurso;
     private double valorPago;
     private LocalDate dataCriacao;
     private List<Integer> numerosSelecionados;
     private int qtdeAcertos;
-    private String apostador;
     private double valorGanho;
 
-    public int getId() {
-        return id;
+
+    public int getIdAposta() {
+        return idAposta;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setIdAposta(int idAposta) {
+        this.idAposta = idAposta;
+    }
+
+    public int getIdApostador() {
+        return idApostador;
+    }
+
+    public void setIdApostador(int idApostador) {
+        this.idApostador = idApostador;
+    }
+
+    public int getIdConcurso() {
+        return idConcurso;
+    }
+
+    public void setIdConcurso(int idConcurso) {
+        this.idConcurso = idConcurso;
     }
 
     public double getValorPago() {
@@ -50,14 +68,6 @@ public class Aposta {
 
     public void setQtdeAcertos(int qtdeAcertos) {
         this.qtdeAcertos = qtdeAcertos;
-    }
-
-    public String getApostador() {
-        return apostador;
-    }
-
-    public void setApostador(String apostador) {
-        this.apostador = apostador;
     }
 
     public double getValorGanho() {

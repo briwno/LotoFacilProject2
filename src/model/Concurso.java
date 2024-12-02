@@ -7,6 +7,7 @@ public class Concurso {
     private int id;
     private Date dataCriacao;
     private Date dataSorteio;
+    private String horario;
     private List<Integer> numerosSorteados;
     private String situacao;
     private List<Aposta> apostas;
@@ -35,6 +36,14 @@ public class Concurso {
 
     public void setDataSorteio(Date dataSorteio) {
         this.dataSorteio = dataSorteio;
+    }
+
+    public String getHorario() {
+        return horario;
+    }
+
+    public void setHorario(String horario) {
+        this.horario = horario;
     }
 
     public List<Integer> getNumerosSorteados() {

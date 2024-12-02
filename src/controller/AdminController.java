@@ -7,6 +7,8 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ComboBoxBase;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.ListView;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -58,13 +60,18 @@ public class AdminController {
 
         AnchorPane painelCriar = (AnchorPane) root.lookup("#painelCriar");
         AnchorPane painelVer = (AnchorPane) root.lookup("#painelVer");
+        AnchorPane painelUsers = (AnchorPane) root.lookup("#usersPainel");
+        AnchorPane infoPane = (AnchorPane) root.lookup("#infoPane");
         ChoiceBox concursosBox = (ChoiceBox) root.lookup("#concursosBox");
 
+        infoPane.setVisible(false);
         painelCriar.setVisible(false);
         painelVer.setVisible(false);
+        painelUsers.setVisible(false);
 
         Button criarBotao = (Button) root.lookup("#criarBotao");
         Button verBotao = (Button) root.lookup("#verBotao");
+        Button usersBotao = (Button) root.lookup("#usersButton");
 
         criarBotao.setOnAction(e -> {
             painelCriar.setVisible(true);
@@ -72,13 +79,22 @@ public class AdminController {
 
             TextField idConcurso = (TextField) root.lookup("#idField");
             DatePicker dataConcurso = (DatePicker) root.lookup("#dataField");
+            TextField horarioField = (TextField) root.lookup("#horarioField");
 
-            CheckBox situacao = (CheckBox) root.lookup("#ativarCheck");
+            Button gerarConcursoButton = (Button) root.lookup("#gerarConcursoButton");
             Button salvarConcurso = (Button) root.lookup("#salvarButton");
+
+            idConcurso.setText(String.valueOf(concursos.length() + 1));
+
+            gerarConcursoButton.setOnAction(e2 -> {
+                dataConcurso.setValue(LocalDate.now());
+                horarioField.setText("22:00");
+            });
 
             salvarConcurso.setOnAction(e2 -> {
 
-                if (idConcurso.getText().isEmpty() || dataConcurso.getValue() == null) {
+                if (idConcurso.getText().isEmpty() || dataConcurso.getValue() == null
+                        || horarioField.getText().isEmpty()) {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("Erro ao salvar concurso");
                     alert.setHeaderText("Todos os campos devem ser preenchidos");
@@ -86,10 +102,19 @@ public class AdminController {
                     return;
                 }
 
+                if (java.sql.Date.valueOf(dataConcurso.getValue()).before(new Date())) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Erro ao salvar concurso");
+                    alert.setHeaderText("Data do concurso deve ser futura");
+                    alert.showAndWait();
+                    return;
+                }
+
                 for (int i = 0; i < concursos.length(); i++) {
                     JSONObject concursoExistente = concursos.getJSONObject(i);
                     LocalDate dataExistente = LocalDate.parse(concursoExistente.getString("dataSorteio"));
-                    if (dataExistente.equals(dataConcurso.getValue())) {
+                    if (dataExistente.equals(dataConcurso.getValue())
+                            && horarioField.getText().equals(concursoExistente.getString("horario"))) {
                         Alert alert = new Alert(Alert.AlertType.ERROR);
                         alert.setTitle("Erro ao salvar concurso");
                         alert.setHeaderText("Já existe um concurso na data selecionada");
@@ -102,8 +127,9 @@ public class AdminController {
                 concurso.setId(Integer.parseInt(idConcurso.getText()));
                 concurso.setDataCriacao(new Date());
                 concurso.setDataSorteio(java.sql.Date.valueOf(dataConcurso.getValue()));
+                concurso.setHorario(horarioField.getText());
                 concurso.setNumerosSorteados(new ArrayList<>());
-                concurso.setSituacao(situacao.isSelected() ? "Ativo" : "Inativo");
+                concurso.setSituacao("Ativo");
                 concurso.setPremioAcumulado(0);
                 concurso.setApostas(new ArrayList<>());
 
@@ -114,6 +140,14 @@ public class AdminController {
                 alert.setHeaderText("Concurso salvo com sucesso");
                 alert.showAndWait();
 
+                try {
+                    JSONArray concursosatualizado = Autenticador.carregarConcursos();
+                    idConcurso.setText(String.valueOf(concursosatualizado.length() + 1));
+                    dataConcurso.setValue(null);
+                    horarioField.setText("");
+                } catch (Exception e1) {
+                    e1.printStackTrace();
+                }
             });
         });
 
@@ -176,7 +210,7 @@ public class AdminController {
                             for (int j = 0; j < apostas.length(); j++) {
                                 JSONObject apostaJson = apostas.getJSONObject(j);
                                 Aposta aposta = new Aposta();
-                                aposta.setApostador(apostaJson.getString("apostador"));
+
                                 aposta.setNumerosSelecionados(new ArrayList<>());
                                 for (Object numero : apostaJson.getJSONArray("numerosSelecionados")) {
                                     aposta.getNumerosSelecionados().add((Integer) numero);
@@ -210,7 +244,8 @@ public class AdminController {
                 editarConcursoButton.setVisible(false);
 
                 dataSorteioField.setEditable(true);
-                situacaoCheckBox.setDisable(false);
+                numerosSorteadosField.setEditable(true);
+                premioAcumuladoField.setEditable(true);
             });
 
             concluirEdicaoButton.setOnAction(e4 -> {
@@ -218,7 +253,8 @@ public class AdminController {
                 editarConcursoButton.setVisible(true);
 
                 dataSorteioField.setEditable(false);
-                situacaoCheckBox.setDisable(true);
+                premioAcumuladoField.setEditable(false);
+                numerosSorteadosField.setEditable(false);
 
                 int concursoId = (int) concursosBox.getValue();
 
@@ -226,8 +262,8 @@ public class AdminController {
                     JSONObject concurso = concursosatualizado.getJSONObject(i);
                     if (concurso.getInt("id") == concursoId) {
                         concurso.put("dataSorteio", dataSorteioField.getText());
-                        concurso.put("situacao", situacaoCheckBox.isSelected() ? "Ativo" : "Inativo");
                         concurso.put("premioAcumulado", Integer.parseInt(premioAcumuladoField.getText()));
+                        concurso.put("numerosSorteados", new JSONArray(numerosSorteadosField.getText()));
 
                         try {
                             BufferedWriter writer = new BufferedWriter(new FileWriter(CONCURSOS_FILE));
@@ -321,7 +357,6 @@ public class AdminController {
 
                 StringBuilder resultado = new StringBuilder();
                 boolean TemGanhadore = false;
-                
 
                 for (int i = 0; i < apostas.length(); i++) {
                     JSONObject aposta = apostas.getJSONObject(i);
@@ -345,8 +380,8 @@ public class AdminController {
                             double valorGanho = 0;
                             switch (qtdeAcertos) {
                                 case 15:
-                                    valorGanho = 520192.42 + 
-                                    concurso.getDouble("premioAcumulado");
+                                    valorGanho = 520192.42 +
+                                            concurso.getDouble("premioAcumulado");
                                     break;
                                 case 14:
                                     valorGanho = 2038.74;
@@ -407,8 +442,82 @@ public class AdminController {
                     }
                 }
 
+            });
 
+        });
 
+        usersBotao.setOnAction(e -> {
+
+            painelUsers.setVisible(true);
+            painelCriar.setVisible(false);
+            painelVer.setVisible(false);
+            ListView<String> usersList = (ListView<String>) root.lookup("#usersList");
+
+            JSONArray users = Autenticador.carregarUsuarios();
+            ObservableList<String> usersObs = FXCollections.observableArrayList();
+            for (int i = 0; i < users.length(); i++) {
+                JSONObject user = users.getJSONObject(i);
+                usersObs.add(user.getString("nome") + " - " + user.getString("cpf") + " - " + user.getString("user"));
+            }
+
+            usersList.setItems(usersObs);
+
+            usersList.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2) {
+                    String selectedUser = usersList.getSelectionModel().getSelectedItem();
+                    if (selectedUser != null) {
+                        infoPane.setVisible(true);
+
+                        Button fecharInfoButton = (Button) root.lookup("#fecharInfoButton");
+                        fecharInfoButton.setOnAction(e3 -> {
+                            infoPane.setVisible(false);
+                        });
+                        TextField nomeField = (TextField) root.lookup("#nomeField");
+                        TextField emailField = (TextField) root.lookup("#emailField");
+                        ComboBox generoField = (ComboBox) root.lookup("#generoField");
+                        TextField cpfField = (TextField) root.lookup("#cpfField");
+                        TextField telefoneField = (TextField) root.lookup("#telefoneField");
+                        DatePicker dataNascPicker = (DatePicker) root.lookup("#dataNascField");
+
+                        TextField userField = (TextField) root.lookup("#userField");
+                        PasswordField senhaField = (PasswordField) root.lookup("#senhaField");
+
+                        TextField ufField = (TextField) root.lookup("#ufField");
+                        TextField cidadeField = (TextField) root.lookup("#cidadeField");
+                        TextField bairroField = (TextField) root.lookup("#bairroField");
+                        TextField cepField = (TextField) root.lookup("#cepField");
+                        TextField ruaField = (TextField) root.lookup("#ruaField");
+                        Button verificarCEPButton = (Button) root.lookup("#verificarCEPButton");
+                        verificarCEPButton.setDisable(true);
+
+                        for (int i = 0; i < users.length(); i++) {
+                            JSONObject user = users.getJSONObject(i);
+                            String userString = user.getString("nome") + " - " + user.getString("cpf") + " - "
+                                    + user.getString("user");
+                            if (userString.equals(selectedUser)) {
+                                JSONObject userObj = users.getJSONObject(i);
+                                nomeField.setText(userObj.getString("nome"));
+                                emailField.setText(userObj.getString("email"));
+                                generoField.setValue(userObj.getString("genero"));
+                                cpfField.setText(userObj.getString("cpf"));
+                                telefoneField.setText(userObj.getString("telefone"));
+                                dataNascPicker.setValue(LocalDate.parse(userObj.getString("dataNascimento")));
+                                dataNascPicker.setDisable(true);
+                                JSONObject endereco = userObj.getJSONObject("endereco");
+                                ufField.setText(endereco.getString("estado"));
+                                cidadeField.setText(endereco.getString("cidade"));
+                                bairroField.setText(endereco.getString("bairro"));
+                                cepField.setText(String.valueOf(endereco.getInt("cep")));
+                                ruaField.setText(endereco.getString("rua"));
+
+                                userField.setText(userObj.getString("user"));
+                                senhaField.setText(userObj.getString("senha"));
+
+                            }
+                        }
+
+                    }
+                }
             });
 
         });

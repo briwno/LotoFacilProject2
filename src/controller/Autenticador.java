@@ -108,6 +108,7 @@ public class Autenticador {
         JSONObject json = new JSONObject();
         json.put("id", concurso.getId());
         json.put("dataCriacao", concurso.getDataCriacao());
+        json.put("horario", concurso.getHorario());
         json.put("dataSorteio", concurso.getDataSorteio());
         json.put("numerosSorteados", concurso.getNumerosSorteados());
         json.put("situacao", concurso.getSituacao());
@@ -165,6 +166,20 @@ public class Autenticador {
         }
     }
 
+    public static JSONArray carregarUsuarios() {
+        try {
+            return new JSONArray(new String(Files.readAllBytes(Paths.get(USERS_FILE)), StandardCharsets.UTF_8));
+        } catch (IOException | JSONException e) {
+            e.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Erro ao carregar dados");
+            alert.setHeaderText("Não foi possível carregar os dados dos usuários.");
+            alert.setContentText("Verifique se o arquivo 'users.json' está acessível.");
+            alert.showAndWait();
+            return new JSONArray();
+        }
+    }
+
     public static void salvarAposta(Aposta aposta){
         final String APOSTAS_FILE = "src/db/apostas.json";
 
@@ -200,6 +215,8 @@ public class Autenticador {
         
         
     }
+
+    
 
     public boolean cpfJaRegistrado(String cpf){
         try{
