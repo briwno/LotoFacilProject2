@@ -165,6 +165,7 @@ public class ApostadorController extends Application {
                     Button autoSelect = (Button) escolherRoot.lookup("#autoselectButton");
                     Button limpar = (Button) escolherRoot.lookup("#limparButton");
                     Button okButton = (Button) escolherRoot.lookup("#okButton");
+                    
 
                     ToggleButton[] numeros = new ToggleButton[25];
                     for (int i = 0; i < 25; i++) {

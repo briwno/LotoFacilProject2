@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.text.Font?>
+
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="825.0" prefWidth="911.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Label layoutX="281.0" layoutY="27.0" prefHeight="47.0" prefWidth="369.0" text="Ganhadores do Concurso">
+         <font>
+            <Font size="32.0" />
+         </font>
+      </Label>
+      <TextField id="numeroConcursoField" alignment="CENTER" editable="false" layoutX="722.0" layoutY="62.0" prefHeight="25.0" prefWidth="66.0" />
+      <Label layoutX="722.0" layoutY="33.0" prefHeight="35.0" prefWidth="91.0" text="Número">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <TextField id="dataSorteioField2" alignment="CENTER" editable="false" layoutX="70.0" layoutY="67.0" prefHeight="25.0" prefWidth="128.0" />
+      <Label layoutX="70.0" layoutY="33.0" prefHeight="35.0" prefWidth="128.0" text="Data do Sorteio">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Label layoutX="14.0" layoutY="295.0" prefHeight="35.0" prefWidth="203.0" text="Ganhadores 14 Números">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Label layoutX="373.0" layoutY="308.0" prefHeight="35.0" prefWidth="203.0" text="Ganhadores 15 Números">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Label layoutX="694.0" layoutY="295.0" prefHeight="35.0" prefWidth="203.0" text="Ganhadores 13 Números">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Label layoutX="226.0" layoutY="514.0" prefHeight="35.0" prefWidth="203.0" text="Ganhadores 12 Números">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Label layoutX="493.0" layoutY="514.0" prefHeight="35.0" prefWidth="203.0" text="Ganhadores 11 Números">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <ListView id="14numerosList" layoutX="16.0" layoutY="330.0" prefHeight="184.0" prefWidth="200.0" />
+      <ListView id="11numerosList" layoutX="495.0" layoutY="554.0" prefHeight="210.0" prefWidth="200.0" />
+      <ListView id="15numerosList" layoutX="374.0" layoutY="335.0" prefHeight="139.0" prefWidth="200.0" />
+      <GridPane id="gridPaneNumeros" alignment="CENTER" focusTraversable="true" layoutX="290.0" layoutY="80.0" prefHeight="210.0" prefWidth="369.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Circle fill="#5d4b6100" radius="25.0" stroke="#aa08eb" strokeType="INSIDE" strokeWidth="2.0" />
+            <Circle fill="#5d4b6100" radius="25.0" stroke="#aa08eb" strokeType="INSIDE" strokeWidth="2.0" GridPane.columnIndex="1" />
+            <Circle fill="#5d4b6100" radius="25.0" stroke="#aa08eb" strokeType="INSIDE" strokeWidth="2.0" GridPane.columnIndex="2" />
+            <Circle fill="#5d4b6100" radius="25.0" stroke="#aa08eb" strokeType="INSIDE" strokeWidth="2.0" GridPane.columnIndex="3" />
+            <Circle fill="#5d4b6100" radius="25.0" stroke="#aa08eb" strokeType="INSIDE" strokeWidth="2.0" GridPane.columnIndex="4" />
+            <Circle fill="#5d4b6100" radius="25.0" stroke="#aa08eb" strokeType="INSIDE" strokeWidth="2.0" GridPane.rowIndex="1" />
+            <Circle fill="#5d4b6100" radius="25.0" stroke="#aa08eb" strokeType="INSIDE" strokeWidth="2.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <Circle fill="#5d4b6100" radius="25.0" stroke="#aa08eb" strokeType="INSIDE" strokeWidth="2.0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+            <Circle fill="#5d4b6100" radius="25.0" stroke="#aa08eb" strokeType="INSIDE" strokeWidth="2.0" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+            <Circle fill="#5d4b6100" radius="25.0" stroke="#aa08eb" strokeType="INSIDE" strokeWidth="2.0" GridPane.columnIndex="4" GridPane.rowIndex="1" />
+            <Circle fill="#5d4b6100" radius="25.0" stroke="#aa08eb" strokeType="INSIDE" strokeWidth="2.0" GridPane.rowIndex="2" />
+            <Circle fill="#5d4b6100" radius="25.0" stroke="#aa08eb" strokeType="INSIDE" strokeWidth="2.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <Circle fill="#5d4b6100" radius="25.0" stroke="#aa08eb" strokeType="INSIDE" strokeWidth="2.0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+            <Circle fill="#5d4b6100" radius="25.0" stroke="#aa08eb" strokeType="INSIDE" strokeWidth="2.0" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+            <Circle fill="#5d4b6100" radius="25.0" stroke="#aa08eb" strokeType="INSIDE" strokeWidth="2.0" GridPane.columnIndex="4" GridPane.rowIndex="2" />
+            <Label id="numero1" alignment="CENTER" contentDisplay="CENTER" nodeOrientation="LEFT_TO_RIGHT" prefHeight="17.0" prefWidth="51.0" text="1" textAlignment="CENTER" />
+            <Label id="numero2" alignment="CENTER" contentDisplay="CENTER" nodeOrientation="LEFT_TO_RIGHT" prefHeight="17.0" prefWidth="51.0" text="1" textAlignment="CENTER" GridPane.columnIndex="1" />
+            <Label id="numero6" alignment="CENTER" contentDisplay="CENTER" nodeOrientation="LEFT_TO_RIGHT" prefHeight="17.0" prefWidth="51.0" text="1" textAlignment="CENTER" GridPane.rowIndex="1" />
+            <Label id="numero7" alignment="CENTER" contentDisplay="CENTER" nodeOrientation="LEFT_TO_RIGHT" prefHeight="17.0" prefWidth="51.0" text="1" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <Label id="numero3" alignment="CENTER" contentDisplay="CENTER" nodeOrientation="LEFT_TO_RIGHT" prefHeight="17.0" prefWidth="51.0" text="1" textAlignment="CENTER" GridPane.columnIndex="2" />
+            <Label id="numero8" alignment="CENTER" contentDisplay="CENTER" nodeOrientation="LEFT_TO_RIGHT" prefHeight="17.0" prefWidth="51.0" text="1" textAlignment="CENTER" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+            <Label id="numero11" alignment="CENTER" contentDisplay="CENTER" nodeOrientation="LEFT_TO_RIGHT" prefHeight="17.0" prefWidth="51.0" text="1" textAlignment="CENTER" GridPane.rowIndex="2" />
+            <Label id="numero12" alignment="CENTER" contentDisplay="CENTER" nodeOrientation="LEFT_TO_RIGHT" prefHeight="17.0" prefWidth="51.0" text="1" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <Label id="numero13" alignment="CENTER" contentDisplay="CENTER" nodeOrientation="LEFT_TO_RIGHT" prefHeight="17.0" prefWidth="51.0" text="1" textAlignment="CENTER" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+            <Label id="numero4" alignment="CENTER" contentDisplay="CENTER" nodeOrientation="LEFT_TO_RIGHT" prefHeight="17.0" prefWidth="51.0" text="1" textAlignment="CENTER" GridPane.columnIndex="3" />
+            <Label id="numero9" alignment="CENTER" contentDisplay="CENTER" nodeOrientation="LEFT_TO_RIGHT" prefHeight="17.0" prefWidth="51.0" text="1" textAlignment="CENTER" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+            <Label id="numero14" alignment="CENTER" contentDisplay="CENTER" nodeOrientation="LEFT_TO_RIGHT" prefHeight="17.0" prefWidth="51.0" text="1" textAlignment="CENTER" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+            <Label id="numero5" alignment="CENTER" contentDisplay="CENTER" nodeOrientation="LEFT_TO_RIGHT" prefHeight="17.0" prefWidth="51.0" text="1" textAlignment="CENTER" GridPane.columnIndex="4" />
+            <Label id="numero10" alignment="CENTER" contentDisplay="CENTER" nodeOrientation="LEFT_TO_RIGHT" prefHeight="17.0" prefWidth="51.0" text="1" textAlignment="CENTER" GridPane.columnIndex="4" GridPane.rowIndex="1" />
+            <Label id="numero15" alignment="CENTER" contentDisplay="CENTER" nodeOrientation="LEFT_TO_RIGHT" prefHeight="17.0" prefWidth="51.0" text="1" textAlignment="CENTER" GridPane.columnIndex="4" GridPane.rowIndex="2" />
+         </children>
+      </GridPane>
+      <ListView id="13numerosList" layoutX="696.0" layoutY="326.0" prefHeight="184.0" prefWidth="200.0" />
+      <ListView id="12numerosList" layoutX="228.0" layoutY="549.0" prefHeight="210.0" prefWidth="200.0" />
+      <Button layoutX="385.0" layoutY="777.0" mnemonicParsing="false" text="Encerrar Concurso">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Button>
+      <Separator layoutX="169.0" layoutY="294.0" prefHeight="0.0" prefWidth="563.0" />
+      <AnchorPane id="infoPane2" layoutX="76.0" layoutY="161.0" prefHeight="487.0" prefWidth="797.0" style="-fx-background-color: gray;" visible="false">
+         <children>
+            <Label layoutX="328.0" layoutY="24.0" text="Informaçoes de Apostador">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label layoutX="373.0" layoutY="288.0" text="Endereço">
+               <font>
+                  <Font size="21.0" />
+               </font>
+            </Label>
+            <Label id="ufLabel" layoutX="235.0" layoutY="328.0" prefHeight="27.0" prefWidth="57.0" text="UF">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <TextField id="ufField2" layoutX="235.0" layoutY="355.0" prefHeight="27.0" prefWidth="40.0" />
+            <Label id="cidadeLabel" layoutX="287.0" layoutY="328.0" prefHeight="27.0" prefWidth="57.0" text="Cidade">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <TextField id="cidadeField2" layoutX="287.0" layoutY="355.0" prefHeight="27.0" prefWidth="181.0" />
+            <Label id="cepLabel" layoutX="485.0" layoutY="328.0" prefHeight="27.0" prefWidth="57.0" text="CEP">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <TextField id="cepField2" layoutX="485.0" layoutY="355.0" prefHeight="27.0" prefWidth="122.0" />
+            <Label id="ruaLabel" layoutX="235.0" layoutY="382.0" prefHeight="27.0" prefWidth="57.0" text="Rua">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <TextField id="ruaField2" layoutX="235.0" layoutY="409.0" prefHeight="27.0" prefWidth="232.0" />
+            <Label id="bairroLabel" layoutX="485.0" layoutY="382.0" prefHeight="27.0" prefWidth="57.0" text="Bairro">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <TextField id="bairroField2" layoutX="487.0" layoutY="409.0" prefHeight="27.0" prefWidth="122.0" />
+            <Label id="nomeLabel" layoutX="27.0" layoutY="77.0" prefHeight="27.0" prefWidth="57.0" text="Nome">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <TextField id="nomeField2" layoutX="25.0" layoutY="103.0" prefHeight="27.0" prefWidth="181.0" />
+            <ComboBox id="generoField2" layoutX="222.0" layoutY="103.0" prefWidth="150.0" />
+            <TextField id="emailField2" layoutX="25.0" layoutY="155.0" prefHeight="27.0" prefWidth="181.0" />
+            <Label id="generoLabel" layoutX="223.0" layoutY="77.0" prefHeight="27.0" prefWidth="57.0" text="Gênero">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label id="emailLabel" layoutX="27.0" layoutY="128.0" prefHeight="27.0" prefWidth="57.0" text="E-mail">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label id="cpfLabel" layoutX="223.0" layoutY="128.0" prefHeight="27.0" prefWidth="57.0" text="CPF">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <TextField id="cpfField2" layoutX="222.0" layoutY="155.0" prefHeight="27.0" prefWidth="181.0" />
+            <Label id="telefoneLabel" layoutX="27.0" layoutY="182.0" prefHeight="27.0" prefWidth="57.0" text="Telefone">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label id="dataLabel" layoutX="223.0" layoutY="182.0" prefHeight="27.0" prefWidth="131.0" text="Data de Nascimento">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <TextField id="telefoneField2" layoutX="25.0" layoutY="208.0" prefHeight="27.0" prefWidth="181.0" />
+            <DatePicker id="dataNascField2" layoutX="221.0" layoutY="209.0" prefHeight="25.0" prefWidth="181.0" />
+            <Label id="userLabel" layoutX="540.0" layoutY="96.0" prefHeight="27.0" prefWidth="111.0" text="Nome de usuário">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <TextField id="userField2" layoutX="540.0" layoutY="123.0" prefHeight="27.0" prefWidth="181.0" />
+            <Label id="senhaLabel" layoutX="540.0" layoutY="160.0" prefHeight="27.0" prefWidth="111.0" text="Senha">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <PasswordField id="senhaField2" layoutX="543.0" layoutY="188.0" prefHeight="25.0" prefWidth="181.0" />
+            <Button id="fecharInfoButton2" layoutX="771.0" layoutY="2.0" mnemonicParsing="false" text="X" />
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>

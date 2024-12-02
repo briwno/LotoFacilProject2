@@ -20,12 +20,18 @@ import model.Concurso;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
+
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.ArrayList;
 import java.io.IOException;
+import javafx.scene.control.Label;
+import java.lang.classfile.components.ClassPrinter.Node;
+import java.lang.reflect.Array;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDate;
@@ -138,7 +144,8 @@ public class AdminController {
                     if (concursoExistente.getString("situacao").equals("Ativo")) {
                         Alert alert = new Alert(Alert.AlertType.ERROR);
                         alert.setTitle("Erro ao salvar concurso");
-                        alert.setHeaderText("Já existe um concurso ativo. Por favor, apague o concurso ativo ou defina-o como Inativo.");
+                        alert.setHeaderText(
+                                "Já existe um concurso ativo. Por favor, apague o concurso ativo ou defina-o como Inativo.");
                         alert.showAndWait();
                         return;
                     }
@@ -197,7 +204,7 @@ public class AdminController {
             TextField valoresApostadosField = (TextField) root.lookup("#valoresApostadosField");
 
             concursosBox.setOnAction(e -> {
-                
+
                 Integer concursoId = (Integer) concursosBox.getValue();
                 if (concursoId != null) {
                     for (int i = 0; i < concursosatualizado.length(); i++) {
@@ -210,10 +217,14 @@ public class AdminController {
 
                             TableView<Aposta> tabelaApostadores = (TableView<Aposta>) root.lookup("#tabelaApostadores");
 
-                            TableColumn<Aposta, String> idApostadores = (TableColumn<Aposta, String>) ((TableView<?>) root.lookup("#tabelaApostadores")).getColumns().get(0);
-                            TableColumn<Aposta, String> numerosApostadores = (TableColumn<Aposta, String>) ((TableView<?>) root.lookup("#tabelaApostadores")).getColumns().get(1);
-                            TableColumn<Aposta, LocalDate> dataAposta = (TableColumn<Aposta, LocalDate>) ((TableView<?>) root.lookup("#tabelaApostadores")).getColumns().get(2);
-                            TableColumn<Aposta, Double> valorAposta = (TableColumn<Aposta, Double>) ((TableView<?>) root.lookup("#tabelaApostadores")).getColumns().get(3);
+                            TableColumn<Aposta, String> idApostadores = (TableColumn<Aposta, String>) ((TableView<?>) root
+                                    .lookup("#tabelaApostadores")).getColumns().get(0);
+                            TableColumn<Aposta, String> numerosApostadores = (TableColumn<Aposta, String>) ((TableView<?>) root
+                                    .lookup("#tabelaApostadores")).getColumns().get(1);
+                            TableColumn<Aposta, LocalDate> dataAposta = (TableColumn<Aposta, LocalDate>) ((TableView<?>) root
+                                    .lookup("#tabelaApostadores")).getColumns().get(2);
+                            TableColumn<Aposta, Double> valorAposta = (TableColumn<Aposta, Double>) ((TableView<?>) root
+                                    .lookup("#tabelaApostadores")).getColumns().get(3);
 
                             JSONArray apostas = Autenticador.carregarApostas();
                             ObservableList<Aposta> apostasList = FXCollections.observableArrayList();
@@ -390,116 +401,220 @@ public class AdminController {
                 dataCriacaoField.setText("");
                 valoresApostadosField.setText("");
 
-
-
-
             });
 
             verificarGanhadorButton.setOnAction(e7 -> {
+
+                infoPane.setVisible(false);
+
                 int concursoId = (int) concursosBox.getValue();
-                JSONArray apostas = Autenticador.carregarApostas();
 
-                JSONObject concurso = null;
-                List<Integer> numerosSorteados = new ArrayList<>();
-                for (int i = 0; i < concursosatualizado.length(); i++) {
-                    concurso = concursosatualizado.getJSONObject(i);
+                JSONArray users = Autenticador.carregarUsuarios();
+
+                
+                if (concursosBox.getValue() == null) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Erro");
+                    alert.setHeaderText("Selecione um concurso");
+                    alert.setContentText("Por favor, selecione um concurso para verificar os ganhadores");
+                    alert.showAndWait();
+                    return;
+                }
+
+                for (int i = 0; i < concursos.length(); i++) {
+                    JSONObject concurso = concursos.getJSONObject(i);
+                    
+
                     if (concurso.getInt("id") == concursoId) {
-                        numerosSorteados = new ArrayList<>();
-                        JSONArray numerosArray = concurso.getJSONArray("numerosSorteados");
-                        for (int j = 0; j < numerosArray.length(); j++) {
-                            numerosSorteados.add(numerosArray.getInt(j));
-                        }
-                        break;
-                    }
-                }
 
-                StringBuilder resultado = new StringBuilder();
-                boolean TemGanhadore = false;
+                        try {
+                            // Carrega o FXML
+                            FXMLLoader ganhadoresLoader = new FXMLLoader(
+                                    getClass().getResource("/view/ganhadoresTela.fxml"));
+                            Parent ganhadoresRoot = ganhadoresLoader.load();
 
-                for (int i = 0; i < apostas.length(); i++) {
-                    JSONObject aposta = apostas.getJSONObject(i);
-                    if (aposta.getInt("id") == concursoId) {
-                        List<Integer> numerosApostados = new ArrayList<>();
-                        JSONArray numerosArray = aposta.getJSONArray("numerosSelecionados");
-                        for (int j = 0; j < numerosArray.length(); j++) {
-                            numerosApostados.add(numerosArray.getInt(j));
-                        }
-                        int qtdeAcertos = 0;
-                        for (Integer numero : numerosApostados) {
-                            if (numerosSorteados.contains(numero)) {
-                                qtdeAcertos++;
+                            TextField numeroConcursoField = (TextField) ganhadoresRoot.lookup("#numeroConcursoField");
+                            numeroConcursoField.setText(String.valueOf(concursoId));
+                            TextField dataSorteioField2 = (TextField) ganhadoresRoot.lookup("#dataSorteioField2");
+                            dataSorteioField2.setText(concurso.getString("dataSorteio"));
+                            AnchorPane infoPane2 = (AnchorPane) ganhadoresRoot.lookup("#infoPane2");
+
+                            ListView<String> numerosList15 = (ListView<String>) ganhadoresRoot.lookup("#15numerosList");
+                            ListView<String> numerosList14 = (ListView<String>) ganhadoresRoot.lookup("#14numerosList");
+                            ListView<String> numerosList13 = (ListView<String>) ganhadoresRoot.lookup("#13numerosList");
+                            ListView<String> numerosList12 = (ListView<String>) ganhadoresRoot.lookup("#12numerosList");
+                            ListView<String> numerosList11 = (ListView<String>) ganhadoresRoot.lookup("#11numerosList");
+
+                            JSONArray apostas = Autenticador.carregarApostas();
+
+                            // Cria uma nova cena com o root carregado
+                            Scene ganhadoresScene = new Scene(ganhadoresRoot);
+
+                            // Configura o Stage
+                            Stage escolherStage = new Stage();
+                            escolherStage.setTitle("Escolher Números");
+                            escolherStage.setScene(ganhadoresScene); // Define a cena
+                            escolherStage.show();
+
+                            GridPane gridPane = (GridPane) ganhadoresRoot.lookup("#gridPaneNumeros");
+                            if (gridPane != null) {
+                                // Percorre os números de 1 a 15
+                                for (int j = 1; j <= 15; j++) {
+                                    Label label = (Label) ganhadoresRoot.lookup("#numero" + j);
+                                    if (label != null) {
+                                        label.setText(String.valueOf(j));
+                                        label.setAlignment(Pos.CENTER);
+                                        label.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
+                                    }
+                                }
+                                List<Integer> numerosSorteados = concurso.getJSONArray("numerosSorteados").toList()
+                                        .stream()
+                                        .map(num -> (Integer) num)
+                                        .collect(Collectors.toList());
+
+                                for (int j = 0; j < numerosSorteados.size(); j++) {
+                                    Label label = (Label) ganhadoresRoot.lookup("#numero" + (j + 1));
+                                    if (label != null) {
+                                        label.setText(String.valueOf(numerosSorteados.get(j)));
+                                    }
+                                }
                             }
-                        }
 
-                        aposta.put("qtdeAcertos", qtdeAcertos);
+                            List<String> ganhadores15 = new ArrayList<>();
+                            List<String> ganhadores14 = new ArrayList<>();
+                            List<String> ganhadores13 = new ArrayList<>();
+                            List<String> ganhadores12 = new ArrayList<>();
+                            List<String> ganhadores11 = new ArrayList<>();
 
-                        if (qtdeAcertos >= 11) {
-                            TemGanhadore = true;
-                            double valorGanho = 0;
-                            switch (qtdeAcertos) {
-                                case 15:
-                                    valorGanho = 520192.42 +
-                                            concurso.getDouble("premioAcumulado");
-                                    break;
-                                case 14:
-                                    valorGanho = 2038.74;
-                                    break;
-                                case 13:
-                                    valorGanho = 30.00;
-                                    break;
-                                case 12:
-                                    valorGanho = 12.00;
-                                    break;
-                                case 11:
-                                    valorGanho = 6.00;
-                                    break;
+                            for (int j = 0; j < apostas.length(); j++) {
+
+                                List<Integer> numerosSorteados = concurso.getJSONArray("numerosSorteados").toList()
+                                        .stream()
+                                        .map(num -> (Integer) num)
+                                        .collect(Collectors.toList());
+
+                                JSONObject aposta = apostas.getJSONObject(j);
+                                List<Integer> numerosApostados = aposta.getJSONArray("numerosSelecionados").toList()
+                                        .stream()
+                                        .map(num -> (Integer) num)
+                                        .collect(Collectors.toList());
+
+                                int acertos = (int) numerosApostados.stream()
+                                        .filter(numerosSorteados::contains)
+                                        .count();
+
+                                int ApostadorId = aposta.getInt("idApostador");
+
+                                switch (acertos) {
+                                    case 15:
+                                        ganhadores15.add(
+                                                "Apostador ID: " + ApostadorId + " - Números: " + numerosApostados);
+                                        break;
+                                    case 14:
+                                        ganhadores14.add(
+                                                "Apostador ID: " + ApostadorId + " - Números: " + numerosApostados);
+                                        break;
+                                    case 13:
+                                        ganhadores13.add(
+                                                "Apostador ID: " + ApostadorId + " - Números: " + numerosApostados);
+                                        break;
+                                    case 12:
+                                        ganhadores12.add(
+                                                "Apostador ID: " + ApostadorId + " - Números: " + numerosApostados);
+                                        break;
+                                    case 11:
+                                        ganhadores11.add(
+                                                "Apostador ID: " + ApostadorId + " - Números: " + numerosApostados);
+                                        break;
+                                }
+                            }
+                            if (ganhadores15.isEmpty()) {
+                                ganhadores15.add("Nenhum ganhador com 15 acertos");
+                            }
+                            if (ganhadores14.isEmpty()) {
+                                ganhadores14.add("Nenhum ganhador com 14 acertos");
+                            }
+                            if (ganhadores13.isEmpty()) {
+                                ganhadores13.add("Nenhum ganhador com 13 acertos");
+                            }
+                            if (ganhadores12.isEmpty()) {
+                                ganhadores12.add("Nenhum ganhador com 12 acertos");
+                            }
+                            if (ganhadores11.isEmpty()) {
+                                ganhadores11.add("Nenhum ganhador com 11 acertos");
                             }
 
-                            aposta.put("valorGanho", valorGanho);
+                            numerosList15.setItems(FXCollections.observableArrayList(ganhadores15));
+                            numerosList14.setItems(FXCollections.observableArrayList(ganhadores14));
+                            numerosList13.setItems(FXCollections.observableArrayList(ganhadores13));
+                            numerosList12.setItems(FXCollections.observableArrayList(ganhadores12));
+                            numerosList11.setItems(FXCollections.observableArrayList(ganhadores11));
 
-                            resultado.append("Apostador: ").append(aposta.getString("apostador"))
-                                    .append("\nQuantidade de acertos: ").append(qtdeAcertos)
-                                    .append("\nValor ganho: R$ ").append(String.format("%,.2f", valorGanho))
-                                    .append("\n\n");
+                            numerosList15.setOnMouseClicked(event -> {
+                                if (event.getClickCount() == 2) {
+                                    String selectedGanhador = numerosList15.getSelectionModel().getSelectedItem();
+                                    if (selectedGanhador != null && !selectedGanhador.equals("Nenhum ganhador com 15 acertos")) {
+                                        infoPane2.setVisible(true);
+
+                                        int ApostadorId = Integer.parseInt(selectedGanhador.split(" ")[2]);
+                            
+                                        // Botão para fechar o painel de informações
+                                        Button fecharInfoButton2 = (Button) ganhadoresRoot.lookup("#fecharInfoButton2");
+                                        fecharInfoButton2.setOnAction(e -> {
+                                            infoPane2.setVisible(false);
+                                        });
+                            
+                                        // Campos de informações do ganhador
+                                        TextField nomeField2 = (TextField) ganhadoresRoot.lookup("#nomeField2");
+                                        TextField emailField2 = (TextField) ganhadoresRoot.lookup("#emailField2");
+                                        ComboBox generoField2 = (ComboBox) ganhadoresRoot.lookup("#generoField2");
+                                        TextField cpfField2 = (TextField) ganhadoresRoot.lookup("#cpfField2");
+                                        TextField telefoneField2 = (TextField) ganhadoresRoot.lookup("#telefoneField2");
+                                        DatePicker dataNascPicker2 = (DatePicker) ganhadoresRoot.lookup("#dataNascField2");
+
+                                        TextField userField2 = (TextField) ganhadoresRoot.lookup("#userField2");
+                                        PasswordField senhaField2 = (PasswordField) ganhadoresRoot.lookup("#senhaField2");
+
+                                        TextField ufField2 = (TextField) ganhadoresRoot.lookup("#ufField2");
+                                        TextField cidadeField2 = (TextField) ganhadoresRoot.lookup("#cidadeField2");
+                                        TextField bairroField2 = (TextField) ganhadoresRoot.lookup("#bairroField2");
+                                        TextField cepField2  = (TextField) ganhadoresRoot.lookup("#cepField2");
+                                        TextField ruaField2  = (TextField) ganhadoresRoot.lookup("#ruaField2");
+                                     
+
+                                        for (int j = 0; j < users.length(); j++) {
+                                            JSONObject user = users.getJSONObject(j);
+                                            if (user.getInt("id") == ApostadorId) {
+                                                nomeField2.setText(user.getString("nome"));
+                                                emailField2.setText(user.getString("email"));
+                                                generoField2.setValue(user.getString("genero"));
+                                                cpfField2.setText(user.getString("cpf"));
+                                                telefoneField2.setText(user.getString("telefone"));
+                                                dataNascPicker2.setValue(LocalDate.parse(user.getString("dataNascimento")));
+                                                dataNascPicker2.setDisable(true);
+                                                JSONObject endereco = user.getJSONObject("endereco");
+                                                ufField2.setText(endereco.getString("estado"));
+                                                cidadeField2.setText(endereco.getString("cidade"));
+                                                bairroField2.setText(endereco.getString("bairro"));
+                                                cepField2.setText(String.valueOf(endereco.getInt("cep")));
+                                                ruaField2.setText(endereco.getString("rua"));
+
+                                                userField2.setText(user.getString("user"));
+                                                senhaField2.setText(user.getString("senha"));
+                                            }
+                                        }
+
+                                    }
+                                }
+                            });
+
+                           
+
+                        } catch (IOException ex) {
+                            ex.printStackTrace();
                         }
                     }
                 }
-
-                try {
-                    BufferedWriter writer = new BufferedWriter(new FileWriter(APOSTAS_FILE));
-                    writer.write(apostas.toString(4));
-                    writer.close();
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                }
-
-                if (TemGanhadore) {
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setTitle("Apostas verificadas");
-                    alert.setHeaderText("Apostas verificadas com sucesso");
-                    alert.setContentText(resultado.toString());
-                    alert.showAndWait();
-                } else {
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setTitle("Apostas verificadas");
-                    alert.setHeaderText("Nenhum ganhador encontrado");
-                    alert.showAndWait();
-
-                    boolean nenhumAcertou15 = true;
-                    for (int i = 0; i < apostas.length(); i++) {
-                        JSONObject aposta = apostas.getJSONObject(i);
-                        if (aposta.getInt("id") == concursoId && aposta.getInt("qtdeAcertos") == 15) {
-                            nenhumAcertou15 = false;
-                            break;
-                        }
-                    }
-
-                    if (nenhumAcertou15) {
-                        Double valorAcumulado = concurso.getDouble("premioAcumulado") + 520192.42;
-                        concurso.put("premioAcumulado", valorAcumulado);
-                    }
-                }
-
             });
 
         });
