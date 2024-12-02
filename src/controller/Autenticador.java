@@ -184,12 +184,13 @@ public class Autenticador {
         final String APOSTAS_FILE = "src/db/apostas.json";
 
         JSONObject json = new JSONObject();
-        json.put("id", aposta.getId());
+        json.put("idAposta", aposta.getIdAposta());
+        json.put("idConcurso", aposta.getIdConcurso());
         json.put("valorPago", aposta.getValorPago());
         json.put("dataCriacao", aposta.getDataCriacao());
         json.put("numerosSelecionados", aposta.getNumerosSelecionados());
         json.put("qtdeAcertos", aposta.getQtdeAcertos());
-        json.put("apostador", aposta.getApostador());
+        json.put("idApostador", aposta.getIdApostador());
         json.put("valorGanho", aposta.getValorGanho());
 
         try{

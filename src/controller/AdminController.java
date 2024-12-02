@@ -2,6 +2,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
@@ -80,6 +81,8 @@ public class AdminController {
             TextField idConcurso = (TextField) root.lookup("#idField");
             DatePicker dataConcurso = (DatePicker) root.lookup("#dataField");
             TextField horarioField = (TextField) root.lookup("#horarioField");
+            ChoiceBox situacaoChoiceBox = (ChoiceBox) root.lookup("#situacaoChoiceBox");
+            situacaoChoiceBox.getItems().addAll("Ativo", "Inativo");
 
             Button gerarConcursoButton = (Button) root.lookup("#gerarConcursoButton");
             Button salvarConcurso = (Button) root.lookup("#salvarButton");
@@ -129,7 +132,17 @@ public class AdminController {
                 concurso.setDataSorteio(java.sql.Date.valueOf(dataConcurso.getValue()));
                 concurso.setHorario(horarioField.getText());
                 concurso.setNumerosSorteados(new ArrayList<>());
-                concurso.setSituacao("Ativo");
+                concurso.setSituacao(situacaoChoiceBox.getValue().toString());
+                for (int i = 0; i < concursos.length(); i++) {
+                    JSONObject concursoExistente = concursos.getJSONObject(i);
+                    if (concursoExistente.getString("situacao").equals("Ativo")) {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Erro ao salvar concurso");
+                        alert.setHeaderText("Já existe um concurso ativo. Por favor, apague o concurso ativo ou defina-o como Inativo.");
+                        alert.showAndWait();
+                        return;
+                    }
+                }
                 concurso.setPremioAcumulado(0);
                 concurso.setApostas(new ArrayList<>());
 
@@ -165,6 +178,7 @@ public class AdminController {
             }
 
             Button encerrarApostasButton = (Button) root.lookup("#encerrarApostasButton");
+            Button apagarConcursoButton = (Button) root.lookup("#apagarConcursoButton");
             Button editarConcursoButton = (Button) root.lookup("#editarConcursoButton");
             Button concluirEdicaoButton = (Button) root.lookup("#concluirEdicaoButton");
             Button sortearButton = (Button) root.lookup("#sortearButton");
@@ -183,6 +197,7 @@ public class AdminController {
             TextField valoresApostadosField = (TextField) root.lookup("#valoresApostadosField");
 
             concursosBox.setOnAction(e -> {
+                
                 Integer concursoId = (Integer) concursosBox.getValue();
                 if (concursoId != null) {
                     for (int i = 0; i < concursosatualizado.length(); i++) {
@@ -190,20 +205,15 @@ public class AdminController {
                         if (concurso.getInt("id") == concursoId) {
                             dataSorteioField.setText(concurso.getString("dataSorteio"));
                             dataCriacaoField.setText(concurso.getString("dataCriacao"));
-                            situacaoCheckBox.setSelected(concurso.getString("situacao").equals("Ativo"));
                             premioAcumuladoField.setText(String.valueOf(concurso.getInt("premioAcumulado")));
                             numerosSorteadosField.setText(concurso.getJSONArray("numerosSorteados").toString());
 
                             TableView<Aposta> tabelaApostadores = (TableView<Aposta>) root.lookup("#tabelaApostadores");
 
-                            TableColumn<Aposta, String> nomeApostadores = (TableColumn<Aposta, String>) ((TableView<?>) root
-                                    .lookup("#tabelaApostadores")).getColumns().get(0);
-                            TableColumn<Aposta, String> numerosApostadores = (TableColumn<Aposta, String>) ((TableView<?>) root
-                                    .lookup("#tabelaApostadores")).getColumns().get(1);
-                            TableColumn<Aposta, LocalDate> dataAposta = (TableColumn<Aposta, LocalDate>) ((TableView<?>) root
-                                    .lookup("#tabelaApostadores")).getColumns().get(2);
-                            TableColumn<Aposta, Double> valorAposta = (TableColumn<Aposta, Double>) ((TableView<?>) root
-                                    .lookup("#tabelaApostadores")).getColumns().get(3);
+                            TableColumn<Aposta, String> idApostadores = (TableColumn<Aposta, String>) ((TableView<?>) root.lookup("#tabelaApostadores")).getColumns().get(0);
+                            TableColumn<Aposta, String> numerosApostadores = (TableColumn<Aposta, String>) ((TableView<?>) root.lookup("#tabelaApostadores")).getColumns().get(1);
+                            TableColumn<Aposta, LocalDate> dataAposta = (TableColumn<Aposta, LocalDate>) ((TableView<?>) root.lookup("#tabelaApostadores")).getColumns().get(2);
+                            TableColumn<Aposta, Double> valorAposta = (TableColumn<Aposta, Double>) ((TableView<?>) root.lookup("#tabelaApostadores")).getColumns().get(3);
 
                             JSONArray apostas = Autenticador.carregarApostas();
                             ObservableList<Aposta> apostasList = FXCollections.observableArrayList();
@@ -220,7 +230,7 @@ public class AdminController {
                                 apostasList.add(aposta);
                             }
 
-                            nomeApostadores.setCellValueFactory(new PropertyValueFactory<>("apostador"));
+                            idApostadores.setCellValueFactory(new PropertyValueFactory<>("idApostador"));
                             numerosApostadores.setCellValueFactory(new PropertyValueFactory<>("numerosSelecionados"));
                             dataAposta.setCellValueFactory(new PropertyValueFactory<>("dataCriacao"));
                             valorAposta.setCellValueFactory(new PropertyValueFactory<>("valorPago"));
@@ -334,6 +344,54 @@ public class AdminController {
                         numerosSorteadosField.setText(numerosSorteados.toString());
                     }
                 }
+
+            });
+
+            apagarConcursoButton.setOnAction(e6 -> {
+                Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
+                confirmAlert.setTitle("Confirmação de exclusão");
+                confirmAlert.setHeaderText("Você tem certeza que deseja apagar este concurso?");
+                confirmAlert.setContentText("Esta ação não pode ser desfeita.");
+
+                if (confirmAlert.showAndWait().get() != ButtonType.OK) {
+                    return;
+                }
+                int concursoId = (int) concursosBox.getValue();
+                JSONArray concursosAtualizado = new JSONArray();
+                for (int i = 0; i < concursos.length(); i++) {
+                    JSONObject concurso = concursos.getJSONObject(i);
+                    if (concurso.getInt("id") != concursoId) {
+                        concursosAtualizado.put(concurso);
+                    }
+                }
+
+                try {
+                    BufferedWriter writer = new BufferedWriter(new FileWriter(CONCURSOS_FILE));
+                    writer.write(concursosAtualizado.toString(4));
+                    writer.close();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Concurso apagado");
+                alert.setHeaderText("Concurso apagado com sucesso");
+                alert.showAndWait();
+
+                concursosBox.getItems().clear();
+                for (int i = 0; i < concursosAtualizado.length(); i++) {
+                    JSONObject concurso = concursosAtualizado.getJSONObject(i);
+                    concursosBox.getItems().add(concurso.getInt("id"));
+                }
+
+                dataSorteioField.setText("");
+                premioAcumuladoField.setText("");
+                numerosSorteadosField.setText("");
+                dataCriacaoField.setText("");
+                valoresApostadosField.setText("");
+
+
+
 
             });
 

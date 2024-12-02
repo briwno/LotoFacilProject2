@@ -1,12 +1,10 @@
-[
-    {
-        "situacao": "Ativo",
-        "horario": "22:00",
-        "premioAcumulado": 0,
-        "numerosSorteados": [],
-        "dataSorteio": "2024-12-03",
-        "id": 1,
-        "dataCriacao": "Mon Dec 02 11:54:41 BRT 2024",
-        "apostas": []
-    }
-]
+[{
+    "situacao": "Ativo",
+    "horario": "22:00",
+    "premioAcumulado": 0,
+    "numerosSorteados": [],
+    "dataSorteio": "2024-12-03",
+    "id": 1,
+    "dataCriacao": "Mon Dec 02 14:50:07 BRT 2024",
+    "apostas": []
+}]

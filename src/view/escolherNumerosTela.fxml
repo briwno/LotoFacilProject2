@@ -44,7 +44,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Button id="okButton" layoutX="275.0" layoutY="350.0" mnemonicParsing="false" text="OK" />
+      <Button id="okButton" layoutX="275.0" layoutY="370.0" mnemonicParsing="false" text="OK" />
       <GridPane layoutX="50.0" layoutY="125.0">
         <columnConstraints>
           <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -98,5 +98,7 @@
          </font>
       </Label>
       <Label layoutX="180.0" layoutY="98.0" text="Mais números, maior o valor da aposta" />
+      <Label layoutX="228.0" layoutY="337.0" text="Custo da Aposta em R$:" />
+      <TextField id="custoField" editable="false" layoutX="358.0" layoutY="333.0" prefHeight="25.0" prefWidth="84.0" promptText="R$ 36.512,00" />
    </children>
 </AnchorPane>
