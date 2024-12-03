@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import org.json.JSONArray;
@@ -237,6 +238,8 @@ public class Autenticador {
         return false;
     }
 
+    
+
     public boolean usuarioJaRegistrado(String user){
         try{
             String content = new String(Files.readAllBytes(Paths.get(USERS_FILE)));
@@ -279,5 +282,18 @@ public class Autenticador {
         }
 
         return false;
+    }
+
+
+
+    public int calcularIdade(LocalDate dataNascimento) {
+        LocalDate dataAtual = LocalDate.now();
+        int idade = dataAtual.getYear() - dataNascimento.getYear();
+        if (dataAtual.getMonthValue() < dataNascimento.getMonthValue()
+                || (dataAtual.getMonthValue() == dataNascimento.getMonthValue()
+                        && dataAtual.getDayOfMonth() < dataNascimento.getDayOfMonth())) {
+            idade--;
+        }
+        return idade;
     }
 }

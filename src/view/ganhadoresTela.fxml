@@ -15,15 +15,14 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="825.0" prefWidth="911.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="825.0" prefWidth="911.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <Label layoutX="281.0" layoutY="27.0" prefHeight="47.0" prefWidth="369.0" text="Ganhadores do Concurso">
          <font>
             <Font size="32.0" />
          </font>
       </Label>
-      <TextField id="numeroConcursoField" alignment="CENTER" editable="false" layoutX="722.0" layoutY="62.0" prefHeight="25.0" prefWidth="66.0" />
+      <TextField id="numeroConcursoField" alignment="CENTER" editable="false" layoutX="732.0" layoutY="62.0" prefHeight="25.0" prefWidth="66.0" />
       <Label layoutX="722.0" layoutY="33.0" prefHeight="35.0" prefWidth="91.0" text="Número">
          <font>
             <Font size="18.0" />

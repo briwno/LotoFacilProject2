@@ -1,6 +1,6 @@
 [
     {
-        "senha": "1234",
+        "senha": "123",
         "telefone": "123456789",
         "endereco": {
             "cidade": "Araucária",
@@ -12,10 +12,48 @@
         "genero": "Masculino",
         "cpf": "10861552970",
         "nome": "Bruno Alves Bezerra",
-        "id": 0,
+        "id": 1,
         "dataNascimento": "2006-10-07",
         "user": "briuno",
         "email": "brunoalvesbezerra.ba@gmail.com",
         "timestamp": "2024/10/31 14:42:07"
+    },
+    {
+        "senha": "123",
+        "telefone": "11111",
+        "endereco": {
+            "cidade": "a",
+            "estado": "a",
+            "bairro": "a",
+            "rua": "aa",
+            "cep": 1
+        },
+        "genero": "Masculino",
+        "cpf": "12345678911",
+        "nome": "aaaa",
+        "id": 3,
+        "dataNascimento": "2004-12-23",
+        "user": "aaaa",
+        "email": "aaaa",
+        "timestamp": "2024/12/02 19:30:38"
+    },
+    {
+        "senha": "123",
+        "telefone": "11111111111",
+        "endereco": {
+            "cidade": "Araucária",
+            "estado": "PR",
+            "bairro": "Costeira",
+            "rua": "Rua Isidoro Ksiazkiewicz",
+            "cep": 83708750
+        },
+        "genero": "Masculino",
+        "cpf": "12345678910",
+        "nome": "Nicolas",
+        "id": 4,
+        "dataNascimento": "2006-11-06",
+        "user": "nicolas",
+        "email": "aaaaa",
+        "timestamp": "2024/12/02 19:40:08"
     }
 ]

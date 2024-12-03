@@ -1,10 +1,13 @@
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import javax.swing.plaf.basic.BasicOptionPaneUI.ButtonAreaLayout;
 
@@ -325,7 +328,17 @@ public class ApostadorController extends Application {
                 Aposta aposta = new Aposta();
                 aposta.setIdConcurso(Integer.parseInt(idField.getText()));
                 aposta.setIdApostador(Integer.parseInt(idLogado));
-                aposta.setValorPago(Double.parseDouble(((TextField) root.lookup("#custoField")).getText().replace(",", ".")));
+             
+                
+    String valorPagoStr = ((TextField) root.lookup("#custoField")).getText();
+    NumberFormat format = NumberFormat.getInstance(new Locale("pt", "BR"));
+    try {
+        Number number = format.parse(valorPagoStr);
+        aposta.setValorPago(number.doubleValue());
+    } catch (ParseException e6) {
+        e6.printStackTrace();
+        // Adicione um alerta ou tratamento de erro adequado aqui
+    }
                 aposta.setDataCriacao(LocalDate.now());
                 aposta.setNumerosSelecionados(new ArrayList<>());
                 String numeros = numerosField.getText().replace("[", "").replace("]", "");
@@ -357,8 +370,8 @@ public class ApostadorController extends Application {
 
             for (int i = 0; i < apostasArray.length(); i++) {
                 JSONObject aposta = apostasArray.getJSONObject(i);
-                if (aposta.getString("apostador").equals(usuarioLogado)) {
-                String apostaInfo = "Concurso: " + aposta.getInt("id") + ", Números: " + aposta.getJSONArray("numerosSelecionados").toString() + ", Data: " + aposta.getString("dataCriacao") + ", Valor Pago: " + aposta.getDouble("valorPago");
+                if (aposta.getInt("idApostador") == Integer.parseInt(idLogado)) {
+                String apostaInfo = "Concurso: " + aposta.getInt("idConcurso") + ", Números: " + aposta.getJSONArray("numerosSelecionados").toString() + ", Data: " + aposta.getString("dataCriacao") + ", Valor Pago: " + aposta.getDouble("valorPago");
                 apostasList.getItems().add(apostaInfo);
                 }
             }

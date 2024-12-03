@@ -1,1 +1,26 @@
-[{"qtdeAcertos":15,"idConcurso":1,"valorPago":3,"numerosSelecionados":[16,24,12,1,13,10,7,19,20,4,21,6,18,2,11],"dataCriacao":"2024-12-02","idApostador":0,"valorGanho":1.8599999999999999,"idAposta":10}]
+[{
+    "qtdeAcertos": 0,
+    "idConcurso": 1,
+    "valorPago": 3,
+    "numerosSelecionados": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        21,
+        22,
+        23,
+        24
+    ],
+    "dataCriacao": "2024-12-02",
+    "idApostador": 1,
+    "valorGanho": 0,
+    "idAposta": 0
+}]

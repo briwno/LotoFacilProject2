@@ -81,6 +81,7 @@ public class AdminController {
         Button usersBotao = (Button) root.lookup("#usersButton");
 
         criarBotao.setOnAction(e -> {
+            painelUsers.setVisible(false);
             painelCriar.setVisible(true);
             painelVer.setVisible(false);
 
@@ -174,6 +175,7 @@ public class AdminController {
         // painel de ver e editar concursos
         verBotao.setOnAction(e2 -> {
 
+            painelUsers.setVisible(false);
             painelCriar.setVisible(false);
             painelVer.setVisible(true);
 
@@ -252,6 +254,7 @@ public class AdminController {
                                 JSONObject apostaJson = apostas.getJSONObject(j);
                                 Aposta aposta = new Aposta();
 
+                                aposta.setIdApostador(apostaJson.getInt("idApostador"));
                                 aposta.setNumerosSelecionados(new ArrayList<>());
                                 for (Object numero : apostaJson.getJSONArray("numerosSelecionados")) {
                                     aposta.getNumerosSelecionados().add((Integer) numero);
@@ -452,10 +455,8 @@ public class AdminController {
 
                         try {
                             // Carrega o FXML
-                            FXMLLoader ganhadoresLoader = new FXMLLoader(
-                                    getClass().getResource("/view/ganhadoresTela.fxml"));
+                            FXMLLoader ganhadoresLoader = new FXMLLoader(getClass().getResource("/view/ganhadoresTela.fxml"));
                             Parent ganhadoresRoot = ganhadoresLoader.load();
-
                             TextField numeroConcursoField = (TextField) ganhadoresRoot.lookup("#numeroConcursoField");
                             numeroConcursoField.setText(String.valueOf(concursoId));
                             TextField dataSorteioField2 = (TextField) ganhadoresRoot.lookup("#dataSorteioField2");
@@ -567,12 +568,12 @@ public class AdminController {
                                     Files.write(Paths.get(APOSTAS_FILE), apostas.toString(4).getBytes(StandardCharsets.UTF_8));
                                     break;
                                     case 14:
-                                        aposta.put("valorGanho", concurso.getInt("premioAcumulado") * 0.13);
+                                        aposta.put("valorGanho", 500);
                                         aposta.put("qtdeAcertos", 14);
                                         Files.write(Paths.get(APOSTAS_FILE), apostas.toString(4).getBytes(StandardCharsets.UTF_8));
                                         break;
                                     case 15:
-                                        aposta.put("valorGanho", concurso.getInt("premioAcumulado") * 0.62);
+                                        aposta.put("valorGanho", 1200);
                                         aposta.put("qtdeAcertos", 15);
                                         Files.write(Paths.get(APOSTAS_FILE), apostas.toString(4).getBytes(StandardCharsets.UTF_8));
                                         break;
@@ -624,7 +625,7 @@ public class AdminController {
                             numerosList12.setItems(FXCollections.observableArrayList(ganhadores12));
                             numerosList11.setItems(FXCollections.observableArrayList(ganhadores11));
 
-                            numerosList15.setOnMouseClicked(event -> {
+                            numerosList11.setOnMouseClicked(event -> {
                                 if (event.getClickCount() == 2) {
                                     String selectedGanhador = numerosList15.getSelectionModel().getSelectedItem();
                                     if (selectedGanhador != null && !selectedGanhador.equals("Nenhum ganhador com 15 acertos")) {
@@ -681,6 +682,8 @@ public class AdminController {
                                     }
                                 }
                             });
+
+                            
 
                            
 

@@ -2,6 +2,7 @@
 import org.json.JSONObject; // Para manipular objetos JSON
 import java.net.HttpURLConnection; // Para criar e gerenciar conexões HTTP
 import java.net.URL; // Para representar URLs
+import java.time.LocalDate;
 
 import javafx.application.Application; // Classe base para criar aplicações JavaFX
 import javafx.fxml.FXMLLoader; // Para carregar layouts definidos em arquivos FXML
@@ -129,6 +130,17 @@ public class RegistrarController extends Application {
                 alert.setTitle("Erro");
                 alert.setHeaderText("CPF inválido");
                 alert.setContentText("O CPF deve conter 11 dígitos");
+                alert.show();
+                return;
+            }
+
+            //verificar se tem mais de 18 anos
+            LocalDate dataNascimento = dataField.getValue();
+            if (autenticador.calcularIdade(dataNascimento) < 18) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Erro");
+                alert.setHeaderText("Idade inválida");
+                alert.setContentText("Você deve ter mais de 18 anos para se cadastrar");
                 alert.show();
                 return;
             }
