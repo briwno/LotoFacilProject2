@@ -1,3 +1,64 @@
 [
-
+    {
+        "qtdeAcertos": 0,
+        "idConcurso": 1,
+        "valorPago": 46512,
+        "numerosSelecionados": [
+            1,
+            2,
+            3,
+            5,
+            6,
+            8,
+            9,
+            10,
+            12,
+            13,
+            14,
+            16,
+            17,
+            18,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25
+        ],
+        "dataCriacao": "2024-12-04",
+        "idApostador": 1,
+        "valorGanho": 0,
+        "idAposta": 0
+    },
+    {
+        "qtdeAcertos": 0,
+        "idConcurso": 1,
+        "valorPago": 46512,
+        "numerosSelecionados": [
+            1,
+            2,
+            3,
+            5,
+            6,
+            8,
+            9,
+            10,
+            12,
+            13,
+            14,
+            16,
+            17,
+            18,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25
+        ],
+        "dataCriacao": "2024-12-04",
+        "idApostador": 1,
+        "valorGanho": 0,
+        "idAposta": 0
+    }
 ]

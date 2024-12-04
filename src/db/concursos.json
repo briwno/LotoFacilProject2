@@ -1,3 +1,10 @@
-[
-    
-]
+[{
+    "situacao": "Ativo",
+    "horario": "22:00",
+    "premioAcumulado": 93024,
+    "numerosSorteados": [],
+    "dataSorteio": "2024-12-05",
+    "id": 1,
+    "dataCriacao": "Wed Dec 04 17:45:04 BRT 2024",
+    "apostas": []
+}]
