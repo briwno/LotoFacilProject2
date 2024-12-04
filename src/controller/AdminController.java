@@ -5,6 +5,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ComboBoxBase;
 import javafx.scene.control.DatePicker;
@@ -199,14 +200,11 @@ public class AdminController {
 
             TextField numerosSorteadosField = (TextField) root.lookup("#numerosSorteadosField");
 
-            
-
             TextField dataSorteioField = (TextField) root.lookup("#dataSorteioField");
             TextField dataCriacaoField = (TextField) root.lookup("#datacriacaoField");
             TextField valoresApostadosField = (TextField) root.lookup("#valoresApostadosField");
 
             concursosBox.setOnAction(e -> {
-
 
                 Integer concursoId = (Integer) concursosBox.getValue();
                 if (concursoId != null) {
@@ -223,18 +221,20 @@ public class AdminController {
                             }
                             dataSorteioField.setText(concurso.getString("dataSorteio"));
                             dataCriacaoField.setText(concurso.getString("dataCriacao"));
-                            
-                            numerosSorteadosField.setText(concurso.getJSONArray("numerosSorteados").toString());}
-                        };
 
+                            numerosSorteadosField.setText(concurso.getJSONArray("numerosSorteados").toString());
+                        }
                     }
+                    ;
+
+                }
                 if (concursoId != null) {
                     for (int i = 0; i < concursosatualizado.length(); i++) {
                         JSONObject concurso = concursosatualizado.getJSONObject(i);
                         if (concurso.getInt("id") == concursoId) {
                             dataSorteioField.setText(concurso.getString("dataSorteio"));
                             dataCriacaoField.setText(concurso.getString("dataCriacao"));
-                            
+
                             numerosSorteadosField.setText(concurso.getJSONArray("numerosSorteados").toString());
 
                             TableView<Aposta> tabelaApostadores = (TableView<Aposta>) root.lookup("#tabelaApostadores");
@@ -285,7 +285,6 @@ public class AdminController {
                             } catch (IOException ex) {
                                 ex.printStackTrace();
                             }
-                            
 
                         }
                     }
@@ -300,8 +299,7 @@ public class AdminController {
                 dataSorteioField.setEditable(true);
                 numerosSorteadosField.setEditable(true);
                 valoresApostadosField.setEditable(true);
-                
-                
+
             });
 
             concluirEdicaoButton.setOnAction(e4 -> {
@@ -309,7 +307,7 @@ public class AdminController {
                 editarConcursoButton.setVisible(true);
 
                 dataSorteioField.setEditable(false);
-                
+
                 numerosSorteadosField.setEditable(false);
 
                 valoresApostadosField.setEditable(false);
@@ -320,10 +318,11 @@ public class AdminController {
                     JSONObject concurso = concursosatualizado.getJSONObject(i);
                     if (concurso.getInt("id") == concursoId) {
                         concurso.put("dataSorteio", dataSorteioField.getText());
-                        
+
                         concurso.put("numerosSorteados", new JSONArray(numerosSorteadosField.getText()));
 
-                        concurso.put("premioAcumulado", Double.parseDouble(valoresApostadosField.getText().replace("R$ ", "").replace(",", "")));
+                        concurso.put("premioAcumulado", Double
+                                .parseDouble(valoresApostadosField.getText().replace("R$ ", "").replace(",", "")));
 
                         try {
                             BufferedWriter writer = new BufferedWriter(new FileWriter(CONCURSOS_FILE));
@@ -435,7 +434,7 @@ public class AdminController {
                 }
 
                 dataSorteioField.setText("");
-                
+
                 numerosSorteadosField.setText("");
                 dataCriacaoField.setText("");
                 valoresApostadosField.setText("");
@@ -450,7 +449,6 @@ public class AdminController {
 
                 JSONArray users = Autenticador.carregarUsuarios();
 
-                
                 if (concursosBox.getValue() == null) {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("Erro");
@@ -460,24 +458,22 @@ public class AdminController {
                     return;
                 }
 
-                
-
                 for (int i = 0; i < concursos.length(); i++) {
                     JSONObject concurso = concursos.getJSONObject(i);
-                    
 
                     if (concurso.getInt("id") == concursoId) {
 
                         try {
                             // Carrega o FXML
-                            FXMLLoader ganhadoresLoader = new FXMLLoader(getClass().getResource("/view/ganhadoresTela.fxml"));
+                            FXMLLoader ganhadoresLoader = new FXMLLoader(
+                                    getClass().getResource("/view/ganhadoresTela.fxml"));
                             Parent ganhadoresRoot = ganhadoresLoader.load();
                             TextField numeroConcursoField = (TextField) ganhadoresRoot.lookup("#numeroConcursoField");
                             numeroConcursoField.setText(String.valueOf(concursoId));
                             TextField dataSorteioField2 = (TextField) ganhadoresRoot.lookup("#dataSorteioField2");
                             dataSorteioField2.setText(concurso.getString("dataSorteio"));
                             AnchorPane infoPane2 = (AnchorPane) ganhadoresRoot.lookup("#infoPane2");
-                        
+
                             Button encerrarConcursoButton = (Button) ganhadoresRoot.lookup("#encerrarConcursoButton");
 
                             encerrarConcursoButton.setOnAction(e8 -> {
@@ -565,57 +561,66 @@ public class AdminController {
 
                                 int ApostadorId = aposta.getInt("idApostador");
 
-                                
-                                switch (acertos){
+                                switch (acertos) {
                                     case 11:
-                                    aposta.put("valorGanho", 6.00);
-                                    aposta.put("qtdeAcertos", 11);
-                                    Files.write(Paths.get(APOSTAS_FILE), apostas.toString(4).getBytes(StandardCharsets.UTF_8));
-                                    break;
+                                        aposta.put("valorGanho", 6.00);
+                                        aposta.put("qtdeAcertos", 11);
+                                        Files.write(Paths.get(APOSTAS_FILE),
+                                                apostas.toString(4).getBytes(StandardCharsets.UTF_8));
+                                        break;
                                     case 12:
-                                    aposta.put("valorGanho", 12.00);
-                                    aposta.put("qtdeAcertos", 12);
-                                    Files.write(Paths.get(APOSTAS_FILE), apostas.toString(4).getBytes(StandardCharsets.UTF_8));
-                                    break;
+                                        aposta.put("valorGanho", 12.00);
+                                        aposta.put("qtdeAcertos", 12);
+                                        Files.write(Paths.get(APOSTAS_FILE),
+                                                apostas.toString(4).getBytes(StandardCharsets.UTF_8));
+                                        break;
                                     case 13:
-                                    aposta.put("valorGanho", 30.00);
-                                    aposta.put("qtdeAcertos", 13);
-                                    Files.write(Paths.get(APOSTAS_FILE), apostas.toString(4).getBytes(StandardCharsets.UTF_8));
-                                    break;
+                                        aposta.put("valorGanho", 30.00);
+                                        aposta.put("qtdeAcertos", 13);
+                                        Files.write(Paths.get(APOSTAS_FILE),
+                                                apostas.toString(4).getBytes(StandardCharsets.UTF_8));
+                                        break;
                                     case 14:
                                         aposta.put("valorGanho", concurso.getDouble("premioAcumulado") * 0.4335 * 0.32);
                                         aposta.put("qtdeAcertos", 14);
-                                        Files.write(Paths.get(APOSTAS_FILE), apostas.toString(4).getBytes(StandardCharsets.UTF_8));
+                                        Files.write(Paths.get(APOSTAS_FILE),
+                                                apostas.toString(4).getBytes(StandardCharsets.UTF_8));
                                         System.out.println(concurso.getDouble("premioAcumulado") * 0.4335 * 0.32);
                                         break;
                                     case 15:
                                         aposta.put("valorGanho", concurso.getDouble("premioAcumulado") * 0.4335 * 0.68);
                                         aposta.put("qtdeAcertos", 15);
                                         System.out.println(concurso.getDouble("premioAcumulado") * 0.4335 * 0.68);
-                                        Files.write(Paths.get(APOSTAS_FILE), apostas.toString(4).getBytes(StandardCharsets.UTF_8));
+                                        Files.write(Paths.get(APOSTAS_FILE),
+                                                apostas.toString(4).getBytes(StandardCharsets.UTF_8));
                                         break;
                                 }
 
                                 switch (acertos) {
                                     case 15:
                                         ganhadores15.add(
-                                                "Apostador ID: " + ApostadorId + " - Números: " + numerosApostados + " - Valor ganho: R$ " + aposta.getDouble("valorGanho"));
+                                                "Apostador ID: " + ApostadorId + " - Números: " + numerosApostados
+                                                        + " - Valor ganho: R$ " + aposta.getDouble("valorGanho"));
                                         break;
                                     case 14:
                                         ganhadores14.add(
-                                                "Apostador ID: " + ApostadorId + " - Números: " + numerosApostados + " - Valor ganho: R$ " + aposta.getDouble("valorGanho"));
+                                                "Apostador ID: " + ApostadorId + " - Números: " + numerosApostados
+                                                        + " - Valor ganho: R$ " + aposta.getDouble("valorGanho"));
                                         break;
                                     case 13:
                                         ganhadores13.add(
-                                                "Apostador ID: " + ApostadorId + " - Números: " + numerosApostados + " - Valor ganho: R$ " + aposta.getDouble("valorGanho"));
+                                                "Apostador ID: " + ApostadorId + " - Números: " + numerosApostados
+                                                        + " - Valor ganho: R$ " + aposta.getDouble("valorGanho"));
                                         break;
                                     case 12:
                                         ganhadores12.add(
-                                                "Apostador ID: " + ApostadorId + " - Números: " + numerosApostados + " - Valor ganho: R$ " + aposta.getDouble("valorGanho"));
+                                                "Apostador ID: " + ApostadorId + " - Números: " + numerosApostados
+                                                        + " - Valor ganho: R$ " + aposta.getDouble("valorGanho"));
                                         break;
                                     case 11:
                                         ganhadores11.add(
-                                                "Apostador ID: " + ApostadorId + " - Números: " + numerosApostados + " - Valor ganho: R$ " + aposta.getDouble("valorGanho"));
+                                                "Apostador ID: " + ApostadorId + " - Números: " + numerosApostados
+                                                        + " - Valor ganho: R$ " + aposta.getDouble("valorGanho"));
                                         break;
                                 }
                             }
@@ -645,34 +650,36 @@ public class AdminController {
                             numerosList11.setOnMouseClicked(event -> {
                                 if (event.getClickCount() == 2) {
                                     String selectedGanhador = numerosList11.getSelectionModel().getSelectedItem();
-                                    if (selectedGanhador != null && !selectedGanhador.equals("Nenhum ganhador com 11 acertos")) {
+                                    if (selectedGanhador != null
+                                            && !selectedGanhador.equals("Nenhum ganhador com 11 acertos")) {
                                         infoPane2.setVisible(true);
 
                                         int ApostadorId = Integer.parseInt(selectedGanhador.split(" ")[2]);
-                            
+
                                         // Botão para fechar o painel de informações
                                         Button fecharInfoButton2 = (Button) ganhadoresRoot.lookup("#fecharInfoButton2");
                                         fecharInfoButton2.setOnAction(e -> {
                                             infoPane2.setVisible(false);
                                         });
-                            
+
                                         // Campos de informações do ganhador
                                         TextField nomeField2 = (TextField) ganhadoresRoot.lookup("#nomeField2");
                                         TextField emailField2 = (TextField) ganhadoresRoot.lookup("#emailField2");
                                         ComboBox generoField2 = (ComboBox) ganhadoresRoot.lookup("#generoField2");
                                         TextField cpfField2 = (TextField) ganhadoresRoot.lookup("#cpfField2");
                                         TextField telefoneField2 = (TextField) ganhadoresRoot.lookup("#telefoneField2");
-                                        DatePicker dataNascPicker2 = (DatePicker) ganhadoresRoot.lookup("#dataNascField2");
+                                        DatePicker dataNascPicker2 = (DatePicker) ganhadoresRoot
+                                                .lookup("#dataNascField2");
 
                                         TextField userField2 = (TextField) ganhadoresRoot.lookup("#userField2");
-                                        PasswordField senhaField2 = (PasswordField) ganhadoresRoot.lookup("#senhaField2");
+                                        PasswordField senhaField2 = (PasswordField) ganhadoresRoot
+                                                .lookup("#senhaField2");
 
                                         TextField ufField2 = (TextField) ganhadoresRoot.lookup("#ufField2");
                                         TextField cidadeField2 = (TextField) ganhadoresRoot.lookup("#cidadeField2");
                                         TextField bairroField2 = (TextField) ganhadoresRoot.lookup("#bairroField2");
-                                        TextField cepField2  = (TextField) ganhadoresRoot.lookup("#cepField2");
-                                        TextField ruaField2  = (TextField) ganhadoresRoot.lookup("#ruaField2");
-                                     
+                                        TextField cepField2 = (TextField) ganhadoresRoot.lookup("#cepField2");
+                                        TextField ruaField2 = (TextField) ganhadoresRoot.lookup("#ruaField2");
 
                                         for (int j = 0; j < users.length(); j++) {
                                             JSONObject user = users.getJSONObject(j);
@@ -682,7 +689,8 @@ public class AdminController {
                                                 generoField2.setValue(user.getString("genero"));
                                                 cpfField2.setText(user.getString("cpf"));
                                                 telefoneField2.setText(user.getString("telefone"));
-                                                dataNascPicker2.setValue(LocalDate.parse(user.getString("dataNascimento")));
+                                                dataNascPicker2
+                                                        .setValue(LocalDate.parse(user.getString("dataNascimento")));
                                                 dataNascPicker2.setDisable(true);
                                                 JSONObject endereco = user.getJSONObject("endereco");
                                                 ufField2.setText(endereco.getString("estado"));
@@ -703,34 +711,36 @@ public class AdminController {
                             numerosList12.setOnMouseClicked(event -> {
                                 if (event.getClickCount() == 2) {
                                     String selectedGanhador = numerosList12.getSelectionModel().getSelectedItem();
-                                    if (selectedGanhador != null && !selectedGanhador.equals("Nenhum ganhador com 12 acertos")) {
+                                    if (selectedGanhador != null
+                                            && !selectedGanhador.equals("Nenhum ganhador com 12 acertos")) {
                                         infoPane2.setVisible(true);
 
                                         int ApostadorId = Integer.parseInt(selectedGanhador.split(" ")[2]);
-                            
+
                                         // Botão para fechar o painel de informações
                                         Button fecharInfoButton2 = (Button) ganhadoresRoot.lookup("#fecharInfoButton2");
                                         fecharInfoButton2.setOnAction(e -> {
                                             infoPane2.setVisible(false);
                                         });
-                            
+
                                         // Campos de informações do ganhador
                                         TextField nomeField2 = (TextField) ganhadoresRoot.lookup("#nomeField2");
                                         TextField emailField2 = (TextField) ganhadoresRoot.lookup("#emailField2");
                                         ComboBox generoField2 = (ComboBox) ganhadoresRoot.lookup("#generoField2");
                                         TextField cpfField2 = (TextField) ganhadoresRoot.lookup("#cpfField2");
                                         TextField telefoneField2 = (TextField) ganhadoresRoot.lookup("#telefoneField2");
-                                        DatePicker dataNascPicker2 = (DatePicker) ganhadoresRoot.lookup("#dataNascField2");
+                                        DatePicker dataNascPicker2 = (DatePicker) ganhadoresRoot
+                                                .lookup("#dataNascField2");
 
                                         TextField userField2 = (TextField) ganhadoresRoot.lookup("#userField2");
-                                        PasswordField senhaField2 = (PasswordField) ganhadoresRoot.lookup("#senhaField2");
+                                        PasswordField senhaField2 = (PasswordField) ganhadoresRoot
+                                                .lookup("#senhaField2");
 
                                         TextField ufField2 = (TextField) ganhadoresRoot.lookup("#ufField2");
                                         TextField cidadeField2 = (TextField) ganhadoresRoot.lookup("#cidadeField2");
                                         TextField bairroField2 = (TextField) ganhadoresRoot.lookup("#bairroField2");
-                                        TextField cepField2  = (TextField) ganhadoresRoot.lookup("#cepField2");
-                                        TextField ruaField2  = (TextField) ganhadoresRoot.lookup("#ruaField2");
-                                     
+                                        TextField cepField2 = (TextField) ganhadoresRoot.lookup("#cepField2");
+                                        TextField ruaField2 = (TextField) ganhadoresRoot.lookup("#ruaField2");
 
                                         for (int j = 0; j < users.length(); j++) {
                                             JSONObject user = users.getJSONObject(j);
@@ -740,7 +750,8 @@ public class AdminController {
                                                 generoField2.setValue(user.getString("genero"));
                                                 cpfField2.setText(user.getString("cpf"));
                                                 telefoneField2.setText(user.getString("telefone"));
-                                                dataNascPicker2.setValue(LocalDate.parse(user.getString("dataNascimento")));
+                                                dataNascPicker2
+                                                        .setValue(LocalDate.parse(user.getString("dataNascimento")));
                                                 dataNascPicker2.setDisable(true);
                                                 JSONObject endereco = user.getJSONObject("endereco");
                                                 ufField2.setText(endereco.getString("estado"));
@@ -761,34 +772,36 @@ public class AdminController {
                             numerosList13.setOnMouseClicked(event -> {
                                 if (event.getClickCount() == 2) {
                                     String selectedGanhador = numerosList13.getSelectionModel().getSelectedItem();
-                                    if (selectedGanhador != null && !selectedGanhador.equals("Nenhum ganhador com 13 acertos")) {
+                                    if (selectedGanhador != null
+                                            && !selectedGanhador.equals("Nenhum ganhador com 13 acertos")) {
                                         infoPane2.setVisible(true);
 
                                         int ApostadorId = Integer.parseInt(selectedGanhador.split(" ")[2]);
-                            
+
                                         // Botão para fechar o painel de informações
                                         Button fecharInfoButton2 = (Button) ganhadoresRoot.lookup("#fecharInfoButton2");
                                         fecharInfoButton2.setOnAction(e -> {
                                             infoPane2.setVisible(false);
                                         });
-                            
+
                                         // Campos de informações do ganhador
                                         TextField nomeField2 = (TextField) ganhadoresRoot.lookup("#nomeField2");
                                         TextField emailField2 = (TextField) ganhadoresRoot.lookup("#emailField2");
                                         ComboBox generoField2 = (ComboBox) ganhadoresRoot.lookup("#generoField2");
                                         TextField cpfField2 = (TextField) ganhadoresRoot.lookup("#cpfField2");
                                         TextField telefoneField2 = (TextField) ganhadoresRoot.lookup("#telefoneField2");
-                                        DatePicker dataNascPicker2 = (DatePicker) ganhadoresRoot.lookup("#dataNascField2");
+                                        DatePicker dataNascPicker2 = (DatePicker) ganhadoresRoot
+                                                .lookup("#dataNascField2");
 
                                         TextField userField2 = (TextField) ganhadoresRoot.lookup("#userField2");
-                                        PasswordField senhaField2 = (PasswordField) ganhadoresRoot.lookup("#senhaField2");
+                                        PasswordField senhaField2 = (PasswordField) ganhadoresRoot
+                                                .lookup("#senhaField2");
 
                                         TextField ufField2 = (TextField) ganhadoresRoot.lookup("#ufField2");
                                         TextField cidadeField2 = (TextField) ganhadoresRoot.lookup("#cidadeField2");
                                         TextField bairroField2 = (TextField) ganhadoresRoot.lookup("#bairroField2");
-                                        TextField cepField2  = (TextField) ganhadoresRoot.lookup("#cepField2");
-                                        TextField ruaField2  = (TextField) ganhadoresRoot.lookup("#ruaField2");
-                                     
+                                        TextField cepField2 = (TextField) ganhadoresRoot.lookup("#cepField2");
+                                        TextField ruaField2 = (TextField) ganhadoresRoot.lookup("#ruaField2");
 
                                         for (int j = 0; j < users.length(); j++) {
                                             JSONObject user = users.getJSONObject(j);
@@ -798,7 +811,8 @@ public class AdminController {
                                                 generoField2.setValue(user.getString("genero"));
                                                 cpfField2.setText(user.getString("cpf"));
                                                 telefoneField2.setText(user.getString("telefone"));
-                                                dataNascPicker2.setValue(LocalDate.parse(user.getString("dataNascimento")));
+                                                dataNascPicker2
+                                                        .setValue(LocalDate.parse(user.getString("dataNascimento")));
                                                 dataNascPicker2.setDisable(true);
                                                 JSONObject endereco = user.getJSONObject("endereco");
                                                 ufField2.setText(endereco.getString("estado"));
@@ -819,34 +833,36 @@ public class AdminController {
                             numerosList14.setOnMouseClicked(event -> {
                                 if (event.getClickCount() == 2) {
                                     String selectedGanhador = numerosList14.getSelectionModel().getSelectedItem();
-                                    if (selectedGanhador != null && !selectedGanhador.equals("Nenhum ganhador com 14 acertos")) {
+                                    if (selectedGanhador != null
+                                            && !selectedGanhador.equals("Nenhum ganhador com 14 acertos")) {
                                         infoPane2.setVisible(true);
 
                                         int ApostadorId = Integer.parseInt(selectedGanhador.split(" ")[2]);
-                            
+
                                         // Botão para fechar o painel de informações
                                         Button fecharInfoButton2 = (Button) ganhadoresRoot.lookup("#fecharInfoButton2");
                                         fecharInfoButton2.setOnAction(e -> {
                                             infoPane2.setVisible(false);
                                         });
-                            
+
                                         // Campos de informações do ganhador
                                         TextField nomeField2 = (TextField) ganhadoresRoot.lookup("#nomeField2");
                                         TextField emailField2 = (TextField) ganhadoresRoot.lookup("#emailField2");
                                         ComboBox generoField2 = (ComboBox) ganhadoresRoot.lookup("#generoField2");
                                         TextField cpfField2 = (TextField) ganhadoresRoot.lookup("#cpfField2");
                                         TextField telefoneField2 = (TextField) ganhadoresRoot.lookup("#telefoneField2");
-                                        DatePicker dataNascPicker2 = (DatePicker) ganhadoresRoot.lookup("#dataNascField2");
+                                        DatePicker dataNascPicker2 = (DatePicker) ganhadoresRoot
+                                                .lookup("#dataNascField2");
 
                                         TextField userField2 = (TextField) ganhadoresRoot.lookup("#userField2");
-                                        PasswordField senhaField2 = (PasswordField) ganhadoresRoot.lookup("#senhaField2");
+                                        PasswordField senhaField2 = (PasswordField) ganhadoresRoot
+                                                .lookup("#senhaField2");
 
                                         TextField ufField2 = (TextField) ganhadoresRoot.lookup("#ufField2");
                                         TextField cidadeField2 = (TextField) ganhadoresRoot.lookup("#cidadeField2");
                                         TextField bairroField2 = (TextField) ganhadoresRoot.lookup("#bairroField2");
-                                        TextField cepField2  = (TextField) ganhadoresRoot.lookup("#cepField2");
-                                        TextField ruaField2  = (TextField) ganhadoresRoot.lookup("#ruaField2");
-                                     
+                                        TextField cepField2 = (TextField) ganhadoresRoot.lookup("#cepField2");
+                                        TextField ruaField2 = (TextField) ganhadoresRoot.lookup("#ruaField2");
 
                                         for (int j = 0; j < users.length(); j++) {
                                             JSONObject user = users.getJSONObject(j);
@@ -856,7 +872,8 @@ public class AdminController {
                                                 generoField2.setValue(user.getString("genero"));
                                                 cpfField2.setText(user.getString("cpf"));
                                                 telefoneField2.setText(user.getString("telefone"));
-                                                dataNascPicker2.setValue(LocalDate.parse(user.getString("dataNascimento")));
+                                                dataNascPicker2
+                                                        .setValue(LocalDate.parse(user.getString("dataNascimento")));
                                                 dataNascPicker2.setDisable(true);
                                                 JSONObject endereco = user.getJSONObject("endereco");
                                                 ufField2.setText(endereco.getString("estado"));
@@ -877,34 +894,36 @@ public class AdminController {
                             numerosList15.setOnMouseClicked(event -> {
                                 if (event.getClickCount() == 2) {
                                     String selectedGanhador = numerosList15.getSelectionModel().getSelectedItem();
-                                    if (selectedGanhador != null && !selectedGanhador.equals("Nenhum ganhador com 15 acertos")) {
+                                    if (selectedGanhador != null
+                                            && !selectedGanhador.equals("Nenhum ganhador com 15 acertos")) {
                                         infoPane2.setVisible(true);
 
                                         int ApostadorId = Integer.parseInt(selectedGanhador.split(" ")[2]);
-                            
+
                                         // Botão para fechar o painel de informações
                                         Button fecharInfoButton2 = (Button) ganhadoresRoot.lookup("#fecharInfoButton2");
                                         fecharInfoButton2.setOnAction(e -> {
                                             infoPane2.setVisible(false);
                                         });
-                            
+
                                         // Campos de informações do ganhador
                                         TextField nomeField2 = (TextField) ganhadoresRoot.lookup("#nomeField2");
                                         TextField emailField2 = (TextField) ganhadoresRoot.lookup("#emailField2");
                                         ComboBox generoField2 = (ComboBox) ganhadoresRoot.lookup("#generoField2");
                                         TextField cpfField2 = (TextField) ganhadoresRoot.lookup("#cpfField2");
                                         TextField telefoneField2 = (TextField) ganhadoresRoot.lookup("#telefoneField2");
-                                        DatePicker dataNascPicker2 = (DatePicker) ganhadoresRoot.lookup("#dataNascField2");
+                                        DatePicker dataNascPicker2 = (DatePicker) ganhadoresRoot
+                                                .lookup("#dataNascField2");
 
                                         TextField userField2 = (TextField) ganhadoresRoot.lookup("#userField2");
-                                        PasswordField senhaField2 = (PasswordField) ganhadoresRoot.lookup("#senhaField2");
+                                        PasswordField senhaField2 = (PasswordField) ganhadoresRoot
+                                                .lookup("#senhaField2");
 
                                         TextField ufField2 = (TextField) ganhadoresRoot.lookup("#ufField2");
                                         TextField cidadeField2 = (TextField) ganhadoresRoot.lookup("#cidadeField2");
                                         TextField bairroField2 = (TextField) ganhadoresRoot.lookup("#bairroField2");
-                                        TextField cepField2  = (TextField) ganhadoresRoot.lookup("#cepField2");
-                                        TextField ruaField2  = (TextField) ganhadoresRoot.lookup("#ruaField2");
-                                     
+                                        TextField cepField2 = (TextField) ganhadoresRoot.lookup("#cepField2");
+                                        TextField ruaField2 = (TextField) ganhadoresRoot.lookup("#ruaField2");
 
                                         for (int j = 0; j < users.length(); j++) {
                                             JSONObject user = users.getJSONObject(j);
@@ -914,7 +933,8 @@ public class AdminController {
                                                 generoField2.setValue(user.getString("genero"));
                                                 cpfField2.setText(user.getString("cpf"));
                                                 telefoneField2.setText(user.getString("telefone"));
-                                                dataNascPicker2.setValue(LocalDate.parse(user.getString("dataNascimento")));
+                                                dataNascPicker2
+                                                        .setValue(LocalDate.parse(user.getString("dataNascimento")));
                                                 dataNascPicker2.setDisable(true);
                                                 JSONObject endereco = user.getJSONObject("endereco");
                                                 ufField2.setText(endereco.getString("estado"));
@@ -931,10 +951,6 @@ public class AdminController {
                                     }
                                 }
                             });
-
-                            
-
-                           
 
                         } catch (IOException ex) {
                             ex.printStackTrace();
@@ -1019,6 +1035,26 @@ public class AdminController {
                 }
             });
 
+        });
+
+        Button DeslogarButton = (Button) root.lookup("#DeslogarButton");
+
+        DeslogarButton.setOnAction(e -> {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Deseja realmente sair?", ButtonType.YES,
+                    ButtonType.NO);
+            alert.setTitle("Sair");
+            alert.setHeaderText("Confirmação");
+
+            alert.showAndWait().ifPresent(response -> {
+                if (response == ButtonType.YES) {
+                    LoginController login = new LoginController();
+                    try {
+                        login.start(tela);
+                    } catch (Exception e1) {
+                        e1.printStackTrace();
+                    }
+                }
+            });
         });
 
     }
