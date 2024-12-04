@@ -1,5 +1,11 @@
 // Importa as classes necessárias para manipulação de JSON, conexão HTTP, e elementos do JavaFX
+import org.json.JSONArray;
 import org.json.JSONObject; // Para manipular objetos JSON
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.net.HttpURLConnection; // Para criar e gerenciar conexões HTTP
 import java.net.URL; // Para representar URLs
 import java.time.LocalDate;
@@ -148,7 +154,9 @@ public class RegistrarController extends Application {
             // Verifica se os termos foram aceitos
             if (termosCheck.isSelected()) {
                 // Cria um novo apostador com os dados fornecidos
+                
                 Apostador apostador = new Apostador();
+                apostador.setId(autenticador.getNextId());
                 apostador.setNome(nomeField.getText());
                 apostador.setEmail(emailField.getText());
                 apostador.setCpf(cpfField.getText());

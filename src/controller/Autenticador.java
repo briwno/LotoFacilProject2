@@ -50,6 +50,7 @@ public class Autenticador {
     
 
 
+
     public void registrarUsuario(Apostador apostador) {
 
         JSONObject json = new JSONObject();
@@ -101,6 +102,28 @@ public class Autenticador {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+    
+    public int getNextId() {
+        try {
+            String content = new String(Files.readAllBytes(Paths.get(USERS_FILE)));
+            JSONArray usersArray = new JSONArray(content);
+
+            int maxId = 0;
+            for (int i = 0; i < usersArray.length(); i++) {
+                JSONObject usuario = usersArray.getJSONObject(i);
+                int id = usuario.getInt("id");
+                if (id > maxId) {
+                    maxId = id;
+                }
+            }
+
+            return maxId + 1;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return 1;
+        }
+        
     }
 
     public static void salvarConcurso(Concurso concurso){

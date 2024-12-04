@@ -55,5 +55,24 @@
         "user": "nicolas",
         "email": "aaaaa",
         "timestamp": "2024/12/02 19:40:08"
+    },
+    {
+        "senha": "a2",
+        "telefone": "a",
+        "endereco": {
+            "cidade": "Araucária",
+            "estado": "PR",
+            "bairro": "Costeira",
+            "rua": "Rua Isidoro Ksiazkiewicz",
+            "cep": 83708750
+        },
+        "genero": "Feminino",
+        "cpf": "12345678999",
+        "nome": "a",
+        "id": 4,
+        "dataNascimento": "2000-12-07",
+        "user": "a2",
+        "email": "a",
+        "timestamp": "2024/12/04 18:03:28"
     }
 ]

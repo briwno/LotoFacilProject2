@@ -57,13 +57,11 @@ public class LoginController extends Application {
         loginButton.setOnAction(e -> {
             String username = user.getText();
             String senha = password.getText();
-        
+            
+            try{
             StringBuilder sb = autenticador.autenticarUsuario(username, senha);
             String usuarioLogado = sb.substring(0, sb.indexOf(";"));
             String idLogado = sb.substring(sb.indexOf(";") + 1);
-
-            
-        
             // abrir tela de apostador daquele usuario
             if (usuarioLogado != null) {
                 ApostadorController apostador = new ApostadorController();
@@ -83,6 +81,15 @@ public class LoginController extends Application {
                 alerta.setHeaderText("Usuário ou senha inválidos");
                 alerta.show();
             }
+            }catch(Exception ex){
+                Alert alerta = new Alert(Alert.AlertType.ERROR);
+                alerta.setHeaderText("Usuário ou senha inválidos");
+                alerta.show();
+            }
+
+            
+        
+            
         });
 
         registerButton.setOnAction(e -> {
