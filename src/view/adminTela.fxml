@@ -165,8 +165,6 @@
             <Label layoutX="667.0" layoutY="181.0" text="Numeros Sorteados" />
             <TextField id="numerosSorteadosField" editable="false" layoutX="560.0" layoutY="198.0" prefHeight="25.0" prefWidth="339.0" />
             <Button id="concluirEdicaoButton" layoutX="494.0" layoutY="481.0" mnemonicParsing="false" text="Concluir Edição" />
-            <Label layoutX="778.0" layoutY="51.0" text="Premio Acumulado em R$" />
-            <TextField id="premioAcumuladoField" editable="false" layoutX="773.0" layoutY="67.0" />
             <TableView id="tabelaApostadores" layoutX="14.0" layoutY="46.0" prefHeight="466.0" prefWidth="471.0">
               <columns>
                 <TableColumn id="nomeApostadores" prefWidth="124.0" text="Id do Apostador" />

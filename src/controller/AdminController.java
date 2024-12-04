@@ -199,7 +199,7 @@ public class AdminController {
 
             TextField numerosSorteadosField = (TextField) root.lookup("#numerosSorteadosField");
 
-            TextField premioAcumuladoField = (TextField) root.lookup("#premioAcumuladoField");
+            
 
             TextField dataSorteioField = (TextField) root.lookup("#dataSorteioField");
             TextField dataCriacaoField = (TextField) root.lookup("#datacriacaoField");
@@ -223,7 +223,7 @@ public class AdminController {
                             }
                             dataSorteioField.setText(concurso.getString("dataSorteio"));
                             dataCriacaoField.setText(concurso.getString("dataCriacao"));
-                            premioAcumuladoField.setText(String.valueOf(concurso.getInt("premioAcumulado")));
+                            
                             numerosSorteadosField.setText(concurso.getJSONArray("numerosSorteados").toString());}
                         };
 
@@ -234,7 +234,7 @@ public class AdminController {
                         if (concurso.getInt("id") == concursoId) {
                             dataSorteioField.setText(concurso.getString("dataSorteio"));
                             dataCriacaoField.setText(concurso.getString("dataCriacao"));
-                            premioAcumuladoField.setText(String.valueOf(concurso.getInt("premioAcumulado")));
+                            
                             numerosSorteadosField.setText(concurso.getJSONArray("numerosSorteados").toString());
 
                             TableView<Aposta> tabelaApostadores = (TableView<Aposta>) root.lookup("#tabelaApostadores");
@@ -276,6 +276,15 @@ public class AdminController {
                                 totalValoresApostados += aposta.getValorPago();
                             }
                             valoresApostadosField.setText(String.format("R$ %,.2f", totalValoresApostados));
+                            concurso.put("premioAcumulado", totalValoresApostados);
+
+                            try {
+                                BufferedWriter writer = new BufferedWriter(new FileWriter(CONCURSOS_FILE));
+                                writer.write(concursosatualizado.toString(4));
+                                writer.close();
+                            } catch (IOException ex) {
+                                ex.printStackTrace();
+                            }
                             
 
                         }
@@ -290,7 +299,9 @@ public class AdminController {
 
                 dataSorteioField.setEditable(true);
                 numerosSorteadosField.setEditable(true);
-                premioAcumuladoField.setEditable(true);
+                valoresApostadosField.setEditable(true);
+                
+                
             });
 
             concluirEdicaoButton.setOnAction(e4 -> {
@@ -298,8 +309,10 @@ public class AdminController {
                 editarConcursoButton.setVisible(true);
 
                 dataSorteioField.setEditable(false);
-                premioAcumuladoField.setEditable(false);
+                
                 numerosSorteadosField.setEditable(false);
+
+                valoresApostadosField.setEditable(false);
 
                 int concursoId = (int) concursosBox.getValue();
 
@@ -307,8 +320,10 @@ public class AdminController {
                     JSONObject concurso = concursosatualizado.getJSONObject(i);
                     if (concurso.getInt("id") == concursoId) {
                         concurso.put("dataSorteio", dataSorteioField.getText());
-                        concurso.put("premioAcumulado", Double.parseDouble(premioAcumuladoField.getText()));
+                        
                         concurso.put("numerosSorteados", new JSONArray(numerosSorteadosField.getText()));
+
+                        concurso.put("premioAcumulado", Double.parseDouble(valoresApostadosField.getText().replace("R$ ", "").replace(",", "")));
 
                         try {
                             BufferedWriter writer = new BufferedWriter(new FileWriter(CONCURSOS_FILE));
@@ -420,7 +435,7 @@ public class AdminController {
                 }
 
                 dataSorteioField.setText("");
-                premioAcumuladoField.setText("");
+                
                 numerosSorteadosField.setText("");
                 dataCriacaoField.setText("");
                 valoresApostadosField.setText("");
@@ -568,13 +583,15 @@ public class AdminController {
                                     Files.write(Paths.get(APOSTAS_FILE), apostas.toString(4).getBytes(StandardCharsets.UTF_8));
                                     break;
                                     case 14:
-                                        aposta.put("valorGanho", 500);
+                                        aposta.put("valorGanho", concurso.getDouble("premioAcumulado") * 0.4335 * 0.32);
                                         aposta.put("qtdeAcertos", 14);
                                         Files.write(Paths.get(APOSTAS_FILE), apostas.toString(4).getBytes(StandardCharsets.UTF_8));
+                                        System.out.println(concurso.getDouble("premioAcumulado") * 0.4335 * 0.32);
                                         break;
                                     case 15:
-                                        aposta.put("valorGanho", 1200);
+                                        aposta.put("valorGanho", concurso.getDouble("premioAcumulado") * 0.4335 * 0.68);
                                         aposta.put("qtdeAcertos", 15);
+                                        System.out.println(concurso.getDouble("premioAcumulado") * 0.4335 * 0.68);
                                         Files.write(Paths.get(APOSTAS_FILE), apostas.toString(4).getBytes(StandardCharsets.UTF_8));
                                         break;
                                 }
@@ -626,6 +643,238 @@ public class AdminController {
                             numerosList11.setItems(FXCollections.observableArrayList(ganhadores11));
 
                             numerosList11.setOnMouseClicked(event -> {
+                                if (event.getClickCount() == 2) {
+                                    String selectedGanhador = numerosList11.getSelectionModel().getSelectedItem();
+                                    if (selectedGanhador != null && !selectedGanhador.equals("Nenhum ganhador com 11 acertos")) {
+                                        infoPane2.setVisible(true);
+
+                                        int ApostadorId = Integer.parseInt(selectedGanhador.split(" ")[2]);
+                            
+                                        // Botão para fechar o painel de informações
+                                        Button fecharInfoButton2 = (Button) ganhadoresRoot.lookup("#fecharInfoButton2");
+                                        fecharInfoButton2.setOnAction(e -> {
+                                            infoPane2.setVisible(false);
+                                        });
+                            
+                                        // Campos de informações do ganhador
+                                        TextField nomeField2 = (TextField) ganhadoresRoot.lookup("#nomeField2");
+                                        TextField emailField2 = (TextField) ganhadoresRoot.lookup("#emailField2");
+                                        ComboBox generoField2 = (ComboBox) ganhadoresRoot.lookup("#generoField2");
+                                        TextField cpfField2 = (TextField) ganhadoresRoot.lookup("#cpfField2");
+                                        TextField telefoneField2 = (TextField) ganhadoresRoot.lookup("#telefoneField2");
+                                        DatePicker dataNascPicker2 = (DatePicker) ganhadoresRoot.lookup("#dataNascField2");
+
+                                        TextField userField2 = (TextField) ganhadoresRoot.lookup("#userField2");
+                                        PasswordField senhaField2 = (PasswordField) ganhadoresRoot.lookup("#senhaField2");
+
+                                        TextField ufField2 = (TextField) ganhadoresRoot.lookup("#ufField2");
+                                        TextField cidadeField2 = (TextField) ganhadoresRoot.lookup("#cidadeField2");
+                                        TextField bairroField2 = (TextField) ganhadoresRoot.lookup("#bairroField2");
+                                        TextField cepField2  = (TextField) ganhadoresRoot.lookup("#cepField2");
+                                        TextField ruaField2  = (TextField) ganhadoresRoot.lookup("#ruaField2");
+                                     
+
+                                        for (int j = 0; j < users.length(); j++) {
+                                            JSONObject user = users.getJSONObject(j);
+                                            if (user.getInt("id") == ApostadorId) {
+                                                nomeField2.setText(user.getString("nome"));
+                                                emailField2.setText(user.getString("email"));
+                                                generoField2.setValue(user.getString("genero"));
+                                                cpfField2.setText(user.getString("cpf"));
+                                                telefoneField2.setText(user.getString("telefone"));
+                                                dataNascPicker2.setValue(LocalDate.parse(user.getString("dataNascimento")));
+                                                dataNascPicker2.setDisable(true);
+                                                JSONObject endereco = user.getJSONObject("endereco");
+                                                ufField2.setText(endereco.getString("estado"));
+                                                cidadeField2.setText(endereco.getString("cidade"));
+                                                bairroField2.setText(endereco.getString("bairro"));
+                                                cepField2.setText(String.valueOf(endereco.getInt("cep")));
+                                                ruaField2.setText(endereco.getString("rua"));
+
+                                                userField2.setText(user.getString("user"));
+                                                senhaField2.setText(user.getString("senha"));
+                                            }
+                                        }
+
+                                    }
+                                }
+                            });
+
+                            numerosList12.setOnMouseClicked(event -> {
+                                if (event.getClickCount() == 2) {
+                                    String selectedGanhador = numerosList12.getSelectionModel().getSelectedItem();
+                                    if (selectedGanhador != null && !selectedGanhador.equals("Nenhum ganhador com 12 acertos")) {
+                                        infoPane2.setVisible(true);
+
+                                        int ApostadorId = Integer.parseInt(selectedGanhador.split(" ")[2]);
+                            
+                                        // Botão para fechar o painel de informações
+                                        Button fecharInfoButton2 = (Button) ganhadoresRoot.lookup("#fecharInfoButton2");
+                                        fecharInfoButton2.setOnAction(e -> {
+                                            infoPane2.setVisible(false);
+                                        });
+                            
+                                        // Campos de informações do ganhador
+                                        TextField nomeField2 = (TextField) ganhadoresRoot.lookup("#nomeField2");
+                                        TextField emailField2 = (TextField) ganhadoresRoot.lookup("#emailField2");
+                                        ComboBox generoField2 = (ComboBox) ganhadoresRoot.lookup("#generoField2");
+                                        TextField cpfField2 = (TextField) ganhadoresRoot.lookup("#cpfField2");
+                                        TextField telefoneField2 = (TextField) ganhadoresRoot.lookup("#telefoneField2");
+                                        DatePicker dataNascPicker2 = (DatePicker) ganhadoresRoot.lookup("#dataNascField2");
+
+                                        TextField userField2 = (TextField) ganhadoresRoot.lookup("#userField2");
+                                        PasswordField senhaField2 = (PasswordField) ganhadoresRoot.lookup("#senhaField2");
+
+                                        TextField ufField2 = (TextField) ganhadoresRoot.lookup("#ufField2");
+                                        TextField cidadeField2 = (TextField) ganhadoresRoot.lookup("#cidadeField2");
+                                        TextField bairroField2 = (TextField) ganhadoresRoot.lookup("#bairroField2");
+                                        TextField cepField2  = (TextField) ganhadoresRoot.lookup("#cepField2");
+                                        TextField ruaField2  = (TextField) ganhadoresRoot.lookup("#ruaField2");
+                                     
+
+                                        for (int j = 0; j < users.length(); j++) {
+                                            JSONObject user = users.getJSONObject(j);
+                                            if (user.getInt("id") == ApostadorId) {
+                                                nomeField2.setText(user.getString("nome"));
+                                                emailField2.setText(user.getString("email"));
+                                                generoField2.setValue(user.getString("genero"));
+                                                cpfField2.setText(user.getString("cpf"));
+                                                telefoneField2.setText(user.getString("telefone"));
+                                                dataNascPicker2.setValue(LocalDate.parse(user.getString("dataNascimento")));
+                                                dataNascPicker2.setDisable(true);
+                                                JSONObject endereco = user.getJSONObject("endereco");
+                                                ufField2.setText(endereco.getString("estado"));
+                                                cidadeField2.setText(endereco.getString("cidade"));
+                                                bairroField2.setText(endereco.getString("bairro"));
+                                                cepField2.setText(String.valueOf(endereco.getInt("cep")));
+                                                ruaField2.setText(endereco.getString("rua"));
+
+                                                userField2.setText(user.getString("user"));
+                                                senhaField2.setText(user.getString("senha"));
+                                            }
+                                        }
+
+                                    }
+                                }
+                            });
+
+                            numerosList13.setOnMouseClicked(event -> {
+                                if (event.getClickCount() == 2) {
+                                    String selectedGanhador = numerosList13.getSelectionModel().getSelectedItem();
+                                    if (selectedGanhador != null && !selectedGanhador.equals("Nenhum ganhador com 13 acertos")) {
+                                        infoPane2.setVisible(true);
+
+                                        int ApostadorId = Integer.parseInt(selectedGanhador.split(" ")[2]);
+                            
+                                        // Botão para fechar o painel de informações
+                                        Button fecharInfoButton2 = (Button) ganhadoresRoot.lookup("#fecharInfoButton2");
+                                        fecharInfoButton2.setOnAction(e -> {
+                                            infoPane2.setVisible(false);
+                                        });
+                            
+                                        // Campos de informações do ganhador
+                                        TextField nomeField2 = (TextField) ganhadoresRoot.lookup("#nomeField2");
+                                        TextField emailField2 = (TextField) ganhadoresRoot.lookup("#emailField2");
+                                        ComboBox generoField2 = (ComboBox) ganhadoresRoot.lookup("#generoField2");
+                                        TextField cpfField2 = (TextField) ganhadoresRoot.lookup("#cpfField2");
+                                        TextField telefoneField2 = (TextField) ganhadoresRoot.lookup("#telefoneField2");
+                                        DatePicker dataNascPicker2 = (DatePicker) ganhadoresRoot.lookup("#dataNascField2");
+
+                                        TextField userField2 = (TextField) ganhadoresRoot.lookup("#userField2");
+                                        PasswordField senhaField2 = (PasswordField) ganhadoresRoot.lookup("#senhaField2");
+
+                                        TextField ufField2 = (TextField) ganhadoresRoot.lookup("#ufField2");
+                                        TextField cidadeField2 = (TextField) ganhadoresRoot.lookup("#cidadeField2");
+                                        TextField bairroField2 = (TextField) ganhadoresRoot.lookup("#bairroField2");
+                                        TextField cepField2  = (TextField) ganhadoresRoot.lookup("#cepField2");
+                                        TextField ruaField2  = (TextField) ganhadoresRoot.lookup("#ruaField2");
+                                     
+
+                                        for (int j = 0; j < users.length(); j++) {
+                                            JSONObject user = users.getJSONObject(j);
+                                            if (user.getInt("id") == ApostadorId) {
+                                                nomeField2.setText(user.getString("nome"));
+                                                emailField2.setText(user.getString("email"));
+                                                generoField2.setValue(user.getString("genero"));
+                                                cpfField2.setText(user.getString("cpf"));
+                                                telefoneField2.setText(user.getString("telefone"));
+                                                dataNascPicker2.setValue(LocalDate.parse(user.getString("dataNascimento")));
+                                                dataNascPicker2.setDisable(true);
+                                                JSONObject endereco = user.getJSONObject("endereco");
+                                                ufField2.setText(endereco.getString("estado"));
+                                                cidadeField2.setText(endereco.getString("cidade"));
+                                                bairroField2.setText(endereco.getString("bairro"));
+                                                cepField2.setText(String.valueOf(endereco.getInt("cep")));
+                                                ruaField2.setText(endereco.getString("rua"));
+
+                                                userField2.setText(user.getString("user"));
+                                                senhaField2.setText(user.getString("senha"));
+                                            }
+                                        }
+
+                                    }
+                                }
+                            });
+
+                            numerosList14.setOnMouseClicked(event -> {
+                                if (event.getClickCount() == 2) {
+                                    String selectedGanhador = numerosList14.getSelectionModel().getSelectedItem();
+                                    if (selectedGanhador != null && !selectedGanhador.equals("Nenhum ganhador com 14 acertos")) {
+                                        infoPane2.setVisible(true);
+
+                                        int ApostadorId = Integer.parseInt(selectedGanhador.split(" ")[2]);
+                            
+                                        // Botão para fechar o painel de informações
+                                        Button fecharInfoButton2 = (Button) ganhadoresRoot.lookup("#fecharInfoButton2");
+                                        fecharInfoButton2.setOnAction(e -> {
+                                            infoPane2.setVisible(false);
+                                        });
+                            
+                                        // Campos de informações do ganhador
+                                        TextField nomeField2 = (TextField) ganhadoresRoot.lookup("#nomeField2");
+                                        TextField emailField2 = (TextField) ganhadoresRoot.lookup("#emailField2");
+                                        ComboBox generoField2 = (ComboBox) ganhadoresRoot.lookup("#generoField2");
+                                        TextField cpfField2 = (TextField) ganhadoresRoot.lookup("#cpfField2");
+                                        TextField telefoneField2 = (TextField) ganhadoresRoot.lookup("#telefoneField2");
+                                        DatePicker dataNascPicker2 = (DatePicker) ganhadoresRoot.lookup("#dataNascField2");
+
+                                        TextField userField2 = (TextField) ganhadoresRoot.lookup("#userField2");
+                                        PasswordField senhaField2 = (PasswordField) ganhadoresRoot.lookup("#senhaField2");
+
+                                        TextField ufField2 = (TextField) ganhadoresRoot.lookup("#ufField2");
+                                        TextField cidadeField2 = (TextField) ganhadoresRoot.lookup("#cidadeField2");
+                                        TextField bairroField2 = (TextField) ganhadoresRoot.lookup("#bairroField2");
+                                        TextField cepField2  = (TextField) ganhadoresRoot.lookup("#cepField2");
+                                        TextField ruaField2  = (TextField) ganhadoresRoot.lookup("#ruaField2");
+                                     
+
+                                        for (int j = 0; j < users.length(); j++) {
+                                            JSONObject user = users.getJSONObject(j);
+                                            if (user.getInt("id") == ApostadorId) {
+                                                nomeField2.setText(user.getString("nome"));
+                                                emailField2.setText(user.getString("email"));
+                                                generoField2.setValue(user.getString("genero"));
+                                                cpfField2.setText(user.getString("cpf"));
+                                                telefoneField2.setText(user.getString("telefone"));
+                                                dataNascPicker2.setValue(LocalDate.parse(user.getString("dataNascimento")));
+                                                dataNascPicker2.setDisable(true);
+                                                JSONObject endereco = user.getJSONObject("endereco");
+                                                ufField2.setText(endereco.getString("estado"));
+                                                cidadeField2.setText(endereco.getString("cidade"));
+                                                bairroField2.setText(endereco.getString("bairro"));
+                                                cepField2.setText(String.valueOf(endereco.getInt("cep")));
+                                                ruaField2.setText(endereco.getString("rua"));
+
+                                                userField2.setText(user.getString("user"));
+                                                senhaField2.setText(user.getString("senha"));
+                                            }
+                                        }
+
+                                    }
+                                }
+                            });
+
+                            numerosList15.setOnMouseClicked(event -> {
                                 if (event.getClickCount() == 2) {
                                     String selectedGanhador = numerosList15.getSelectionModel().getSelectedItem();
                                     if (selectedGanhador != null && !selectedGanhador.equals("Nenhum ganhador com 15 acertos")) {
@@ -718,7 +967,7 @@ public class AdminController {
                     if (selectedUser != null) {
                         infoPane.setVisible(true);
 
-                        Button fecharInfoButton = (Button) root.lookup("#fecharInfoButton");
+                        Button fecharInfoButton = (Button) root.lookup("#fecharInfoButton2");
                         fecharInfoButton.setOnAction(e3 -> {
                             infoPane.setVisible(false);
                         });
